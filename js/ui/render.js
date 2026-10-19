@@ -29,14 +29,33 @@ function ttGridHTML(){
 function miniHTML(){return STATS.map(([k,l])=>`<span class="${S.s[k]<25?"low":""}"><small>${l}</small><b class="mono">${S.s[k]}</b></span>`).join("")+`<span class="${S.kane<0?"low":""}"><small>所持金</small><b class="mono">${(Math.round(S.kane*10)/10).toFixed(1)}万</b></span>`}
 /* 学生証のゲージが画面の上に消えたときだけ、上の帯に数字を出す */
 function watchMeters(){
-  const el=document.querySelector("#idc .meters");
-  document.documentElement.classList.toggle("hud-off",!!el&&el.getBoundingClientRect().bottom<70);
+  const el=document.querySelector("#idc .meters"),h=document.documentElement;
+  if(!el){h.classList.remove("hud-off");return}
+  const b=el.getBoundingClientRect().bottom;
+  if(b<40)h.classList.add("hud-off");else if(b>130)h.classList.remove("hud-off");
 }
-function refreshHud(){const c=$("#idc");if(c){c.innerHTML=idHTML();const d=$("#ttd");if(d)d.ontoggle=()=>S.ttOpen=d.open;watchMeters()}const m=$("#mini");if(m)m.innerHTML=miniHTML()}
+let _hudCache="";
+function refreshHud(){
+  const c=$("#idc");
+  if(c){
+    const html=idHTML();
+    if(html!==_hudCache){
+      const i=html.indexOf('<div class="hud">'),head=i>=0?html.slice(0,i):html,hud=i>=0?html.slice(i):"";
+      const oldHead=_hudCache.indexOf('<div class="hud">')>=0?_hudCache.slice(0,_hudCache.indexOf('<div class="hud">')):"";
+      const cur=c.querySelector(".hud");
+      if(cur&&head===oldHead){const tmp=document.createElement("div");tmp.innerHTML=hud;cur.replaceWith(tmp.firstElementChild)}
+      else c.innerHTML=html;
+      _hudCache=html;
+      const d=$("#ttd");if(d)d.ontoggle=()=>S.ttOpen=d.open;
+    }
+    watchMeters();
+  }
+  const m=$("#mini");if(m){const mh=miniHTML();if(m.innerHTML!==mh)m.innerHTML=mh}
+}
 function polHTML(){return POL.map(p=>{const ok=reqOK(p.req);return `<button data-pol="${p.id}" aria-pressed="${S.pol===p.id}" ${ok?"":"disabled"} title="${esc(p.t+(ok?"":"（"+reqTxt(p.req)+"が必要）"))}">${p.n}</button>`}).join("")}
 function refreshPol(){const el=$("#pol");if(!el)return;el.innerHTML=polHTML();el.querySelectorAll("[data-pol]").forEach(b=>b.onclick=()=>{S.pol=b.dataset.pol;refreshPol();syncCtrl()})}
 function renderLife(){
-  setLap();
+  setLap();_hudCache="";
   app.innerHTML=`
   <section class="clock" aria-label="日付と再生">
     <div class="clock-row">
@@ -232,6 +251,7 @@ function renderGrades(){
   document.body.append(ov);document.documentElement.classList.add("noscroll");sfx("page");bgmDuck(.35);
   const tb=$("#gt");let i=0,gp=0,gu=0,got=0,f=[];
   const step=()=>{
+    if(!$("#gt"))return;
     if(i>=pd.rows.length)return finish();
     const r=pd.rows[i++];
     gu+=r.c;gp+=GP[r.g]*r.c;

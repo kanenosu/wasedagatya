@@ -71,6 +71,7 @@ function run(){
   stop();
   if(S.busy||S.ending||S.userPaused)return syncCtrl();
   timer=setInterval(tick,SPEEDS[spd()].ms);
+  document.documentElement.classList.toggle("fast",spd()>=2);
   syncCtrl();
 }
 function stop(){if(timer){clearInterval(timer);timer=null}}
