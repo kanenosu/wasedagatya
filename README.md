@@ -54,6 +54,13 @@ https://kanenosu.github.io/wasedagatya/
 | `js/events/dilemma.js` | 手遅れになる選択肢と、どちらかを選ぶともう片方が閉じる二者択一 | 重い選択 |
 | `js/events/fate-more.js` | 不可避・奇跡の追加分 | 不可避・奇跡を足すならここ |
 | `js/main.js` | 起動 | 触らない |
+| `js/ui/exam-ui.js` | 試験期間ミニゲーム（5日間で科目ごとの準備度を上げる） |
+| `js/events/shinkan.js` | 新歓のビラ制サークル選び、掛け持ち、絞り込み |
+| `js/events/vice.js` | 酒・タバコの出来事（未成年は必ず代償あり） |
+| `js/events/love.js` | 恋愛の出来事 |
+| `js/events/meshi.js` | ワセメシ（実在の飯屋） |
+| `js/events/naitei.js` | 内定後のやらかし → 内定取り消し |
+| `js/events/rival.js` | ライバル（同期）との成績・就活比較 |
 
 ## イベントの書き方
 選択イベントは次の形。`random.js` の `POOL` に足せばランダムで出る。

@@ -199,12 +199,12 @@ button:focus-visible{outline:3px solid var(--enji);outline-offset:2px}
 .g-A{color:var(--good)}
 .g-F{color:var(--bad);animation:shake .4s}
 @keyframes shake{0%,100%{transform:none}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-.gsum{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.gsum{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
 .gsum div{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 8px;min-width:0}
 .gsum small{display:block;font-size:11px;color:var(--muted)}
 .gsum b{font-family:var(--f-mono);font-size:18px}
 .gsum b span{font-size:12px;color:var(--muted)}
-@media (max-width:420px){.gsum{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:420px){.gsum{grid-template-columns:repeat(3,1fr)}}
 /* 学生証 */
 .idwrap{min-width:0}
 .idcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 1px 0 var(--line),0 6px 18px -12px rgba(60,20,30,.35)}
@@ -368,3 +368,15 @@ button,.choice,.kw{touch-action:manipulation;-webkit-tap-highlight-color:transpa
 .ttl .k1::before{background:var(--gold-soft,#F3E7C6)}.ttl .k2::before{background:#F6D5D5}.ttl .k3::before{background:#D9E8F5}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .ttg .tc.k2{background:#4a2323;color:#f3d0d0}:root:not([data-theme="light"]) .ttg .tc.k3{background:#22374d;color:#d5e6f7}}
 :root[data-theme="dark"] .ttg .tc.k2{background:#4a2323;color:#f3d0d0}:root[data-theme="dark"] .ttg .tc.k3{background:#22374d;color:#d5e6f7}
+/* 試験期間 */
+.xrows{display:flex;flex-direction:column;gap:3px;margin:8px 0 10px}
+.xr{display:grid;grid-template-columns:1fr 70px 2.2em;gap:6px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:4px 8px;text-align:left;color:var(--ink);font-size:12px}
+.xr.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.xr.drop{opacity:.45;text-decoration:line-through}
+.xr .xn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.xr .xb{height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.xr .xb span{display:block;height:100%;border-radius:4px;background:var(--accent);transition:width .25s}
+.xr .xb .hi{background:#2e8b57}.xr .xb .mid{background:#c9a227}.xr .xb .lo{background:#b23a3a}
+.xr .xp{text-align:right;font-size:11px;color:var(--muted)}
+.xday{font-size:13px}.xlog{font-size:12px;color:var(--muted);border-left:3px solid var(--line);padding-left:8px;margin:4px 0}
+.exam .choices{gap:6px}.exam .choice{padding:8px 12px}.exam .choice .l small{font-size:11px}

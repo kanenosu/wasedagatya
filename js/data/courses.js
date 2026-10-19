@@ -45,7 +45,7 @@ function buildTT(T){
   if(T>=3&&S.zemi&&S.zemi!=="なし")add(`専門演習（${S.zemi}）`,2,"必修");
   if(T>=5&&S.fac.sci)add("研究室ゼミ",2,"必修");
   const pool=[];
-  for(const sfx of SUFFIX)for(const b of [...(FAC_EL[S.fac.s]||[]),...OPEN])pool.push(b+sfx);
+  for(const sfx of SUFFIX)for(const b of [...(FAC_EL[S.fac.s]||[]),...(FAC_EL[S.fac.s]||[]),...OPEN])pool.push(b+sfx);
   const target=creditTarget(T);
   let guard=0;
   while(list.reduce((a,o)=>a+o.c,0)<target&&guard++<80){

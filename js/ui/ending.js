@@ -56,6 +56,7 @@ function renderEnd(){
       <tr><td>第二外国語</td><td>${S.lang.n}</td></tr>
       <tr><td>高校時代</td><td>${S.past.n}</td></tr>
       <tr><td>地頭</td><td>${S.brain.n}</td></tr>
+      ${S.rival?`<tr><td>ライバル</td><td>${esc(S.rival.n)}${S.rival.job?`（${esc(S.rival.job)}）`:""}・${S.rival.win>S.rival.lose?"勝ち越し":S.rival.win<S.rival.lose?"負け越し":"五分"}</td></tr>`:""}
       <tr><td>サークル</td><td>${esc(cname(S))}${S.post?`（${S.post}）`:""}${S.circle2?`、${esc(S.circle2.n)}`:""}</td></tr>
       ${S.zemi?`<tr><td>ゼミ</td><td>${S.zemi}</td></tr>`:""}
       <tr><td>取得単位</td><td class="mono">${S.cr} / ${NEED}</td></tr>

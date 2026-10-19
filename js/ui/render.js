@@ -242,7 +242,7 @@ function renderGrades(){
     S.grades.push({T:pd.T,gpa:tg,got,f:f.length});
     log(`${TERMS[pd.T]}成績：GPA ${tg.toFixed(2)}、${got}単位取得${f.length?`、${f.length}科目落単`:"、フル単"}`);
     feed(`${TERMS[pd.T]}の成績発表。学期GPA ${tg.toFixed(2)}、${got}単位取得${f.length?`、${f.length}科目落とした`:"、フル単"}。`,ds,"key");
-    $("#gsum").innerHTML=`<div class="gsum"><div><small>学期GPA</small><b>${tg.toFixed(2)}</b></div><div><small>取得単位</small><b>${got}<span>/${gu}</span></b></div><div><small>累計GPA</small><b>${gpa().toFixed(2)}</b></div><div><small>累計単位</small><b>${S.cr}<span>/${NEED}</span></b></div></div>
+    $("#gsum").innerHTML=`<div class="gsum"><div><small>学期GPA</small><b>${tg.toFixed(2)}</b></div><div><small>取得単位</small><b>${got}<span>/${gu}</span></b></div><div><small>累計GPA</small><b>${gpa().toFixed(2)}</b></div><div><small>累計単位</small><b>${S.cr}<span>/${NEED}</span></b></div><div><small>学部内の目安</small><b>上位${Math.max(1,Math.min(99,Math.round(100-(tg/4)*95+rnd(-3,3))))}%</b></div></div>
       <p>${esc(comment)}</p>${ds.length?chips(ds):""}<div class="actions"><button class="btn" id="nx">MyWasedaを閉じる</button></div>`;
     refreshHud();
     const b=$("#nx");try{b.scrollIntoView({block:"nearest"})}catch(e){}
