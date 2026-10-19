@@ -39,8 +39,10 @@ function renderExam(){
       <button class="xa" data-a="drop" ${sel.drop||sel.kind==="必修"||sel.kind==="再履修"?"disabled":""}><b>捨てる</b><small>${sel.kind==="必修"||sel.kind==="再履修"?"必修は不可":"落とす代わりに他+5"}</small></button>
       ${left===1?`<button class="xa warn" data-a="cheat"><b>カンペ</b><small>最後の手段</small></button>`:""}`;
     ov.innerHTML=`<div class="ov-inner xin">
+      <div class="xhead">
       <div class="mw-bar"><span class="mw-logo">${esc(name)}</span><span class="mw-user">${X.done?"試験終了":`${X.day}日目／${X.days}日`}</span></div>
       <div class="xstat"><span>体力 <b class="mono ${S.s.tai<20?"neg":""}">${S.s.tai}</b></span><span>メンタル <b class="mono ${S.s.men<25?"neg":""}">${S.s.men}</b></span><span>学力 <b class="mono">${S.s.gaku}</b></span><span>残り <b class="mono">${X.done?0:left}</b>日</span></div>
+      </div>
       <p class="xlog">${X.log.length?esc(X.log[0]):"科目を選んで、今日の過ごし方を決める。"}</p>
       <div class="xcards">${rows}</div>
       ${X.done?`<div class="xres"><p>${esc(X.feel)}</p><p class="muted">成績はMyWasedaで${S.T%2===0?"9月上旬":"3月上旬"}に発表される。</p>${X.ds&&X.ds.length?chips(X.ds):""}<div class="actions"><button class="btn" id="nx">試験期間を終える</button></div></div>`:""}

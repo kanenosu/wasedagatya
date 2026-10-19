@@ -26,7 +26,8 @@ function ttGridHTML(){
   for(let p=1;p<=maxP;p++){h+=`<b>${p}</b>`;for(const d of days){const o=at(d,p);h+=o?`<span class="tc ${o.kind==="必修"?"k1":o.kind==="再履修"?"k2":o.kind==="全学"?"k3":""}" title="${esc(o.n)}／${esc(o.prof.n)}／${o.c}単位"><em>${esc(o.n.replace(/（.*?）/g,"").slice(0,9))}</em><small>${esc(o.prof.n.slice(0,4))}</small></span>`:`<span class="tc e"></span>`}}
   return h+`</div><div class="ttl"><span class="k1">必修</span><span class="k2">再履修</span><span class="k3">全学</span><span>選択</span></div>`;
 }
-function refreshHud(){const c=$("#idc");if(c){c.innerHTML=idHTML();const d=$("#ttd");if(d)d.ontoggle=()=>S.ttOpen=d.open}}
+function miniHTML(){return STATS.map(([k,l])=>`<span class="${S.s[k]<25?"low":""}"><small>${l}</small><b class="mono">${S.s[k]}</b></span>`).join("")+`<span class="${S.kane<0?"low":""}"><small>所持金</small><b class="mono">${(Math.round(S.kane*10)/10).toFixed(1)}万</b></span>`}
+function refreshHud(){const c=$("#idc");if(c){c.innerHTML=idHTML();const d=$("#ttd");if(d)d.ontoggle=()=>S.ttOpen=d.open}const m=$("#mini");if(m)m.innerHTML=miniHTML()}
 function polHTML(){return POL.map(p=>{const ok=reqOK(p.req);return `<button data-pol="${p.id}" aria-pressed="${S.pol===p.id}" ${ok?"":"disabled"} title="${esc(p.t+(ok?"":"（"+reqTxt(p.req)+"が必要）"))}">${p.n}</button>`}).join("")}
 function refreshPol(){const el=$("#pol");if(!el)return;el.innerHTML=polHTML();el.querySelectorAll("[data-pol]").forEach(b=>b.onclick=()=>{S.pol=b.dataset.pol;refreshPol();syncCtrl()})}
 function renderLife(){
@@ -37,6 +38,7 @@ function renderLife(){
       <div class="date"><span id="date">${fmtLong(S.date)}</span><span class="season" id="season">${seasonLabel(S.date)}</span></div>
       <div class="ctrl"><button class="play" id="pp">停止</button>${SPEEDS.map((s,i)=>`<button data-sp="${i}" aria-pressed="${spd()===i}">${s.n}</button>`).join("")}</div>
     </div>
+    <div class="mini" id="mini"></div>
     <div class="status" id="status"></div>
     <div class="pol-wrap"><span class="pol-label">行動方針</span><div class="pol" id="pol"></div></div>
   </section>
@@ -212,11 +214,13 @@ function renderGrades(){
   syncCtrl();
   const ov=document.createElement("div");ov.className="overlay";ov.id="ov";ov.setAttribute("role","dialog");ov.setAttribute("aria-label","成績発表");
   ov.innerHTML=`<div class="ov-inner">
+    <div class="ghead">
     <div class="mw-bar"><span class="mw-logo">MyWaseda</span><span class="mw-user">${esc(S.name)}</span></div>
+    <div class="mw-live"><span id="gprog">0/${pd.rows.length}科目</span><span>${TERMS[pd.T]}</span><span>集計中のGPA <b id="glive">—</b></span></div>
+    </div>
     <div class="mw-crumb">成績照会 ＞ ${BASE_Y+Math.floor(pd.T/2)}年度 ${name} ＞ ${S.fac.n}</div>
     <h2 class="mw-title">${TERMS[pd.T]}の成績</h2>
     <p class="muted">${fmtLong(S.date)} 正午。成績が公開された。震える指で成績照会を開く。</p>${pd.void?`<p class="void">${esc(pd.void)}</p>`:""}
-    <div class="mw-live"><span id="gprog">0/${pd.rows.length}科目</span><span>集計中のGPA <b id="glive">—</b></span></div>
     <div class="tt-wrap"><table class="gtable big"><thead><tr><th>科目名</th><th>区分</th><th>単位</th><th>評価</th></tr></thead><tbody id="gt"></tbody></table></div>
     <div id="gsum"></div>
   </div>`;
