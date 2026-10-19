@@ -26,8 +26,8 @@ EV.shinkan={title:"新歓期",text:s=>`4月のキャンパスはビラと勧誘�
   {label:"ビラを全部断る",ok:{t:"新歓期が終わると、教室で話す相手がいないことに気づいた。",d:{men:-5,gaku:6},f:s=>{s.circle=null;s.flyers=[]}}},
  ]};
 EV.flyer={when:s=>{if(s.flyDone){s.flyers.shift();s.flyDone=0}return !!curFly()},
- title:s=>{const c=curFly();return `ビラ：${CAT_N(c.cat)}`},
- text:s=>{const c=curFly(),n=s.flyers.length;return `「${c.n}です！ 新歓やってます！」${c.t?` ${c.t}。`:""}${s.circle?` 今は${s.circle.n}${s.circle2?`と${s.circle2.n}`:""}に入っている。`:""}${n>1?`（あと${n-1}枚）`:"（最後の1枚）"}`},
+ title:s=>curFly().n,
+ text:s=>{const c=curFly(),n=s.flyers.length;return `【${CAT_N(c.cat)}】「${c.n}です！ 新歓やってます！」${c.t?` ${c.t}。`:""}${s.circle?` 今は${s.circle.n}${s.circle2?`と${s.circle2.n}`:""}に入っている。`:""}${n>1?`（あと${n-1}枚）`:"（最後の1枚）"}`},
  choices:s=>{const c=curFly();const full=s.circle&&s.circle2;const isTai=c.cat==="tai";return[
   ...(full?[{label:"もう2つ入っている",sub:"掛け持ちは2つまで",ok:{t:"丁重に断った。",d:{},f:s=>nextFlyer()}}]:
    isTai?[{label:s.circle?"掛け持ちで入部する":"入部する",sub:"体力勝負",chance:s=>pc(s.s.tai,c.diff||60),ok:{t:"",d:{},f:s=>{joinFromFlyer(c);s._txt=`${c.n}に入部した。${c.t}。朝練の生活が始まる。`;nextFlyer()}},ng:{t:"",d:{men:-4},f:s=>{s._txt=`${c.n}の練習に参加したが、レベルが違いすぎた。入部は見送った。`;nextFlyer()}}}]:
