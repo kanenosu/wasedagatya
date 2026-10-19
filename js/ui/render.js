@@ -1,5 +1,6 @@
 /* 画面の描画（ホーム、入学ガチャ、プレイ画面、イベントのポップアップ、試験、成績発表） */
 /* ---------- 描画 ---------- */
+const OKUMA_SVG=`<svg viewBox="0 0 320 130" preserveAspectRatio="xMidYMax meet"><g fill="currentColor"><rect x="24" y="18" width="40" height="112"/><path d="M22 18 L44 2 L66 18Z"/><rect x="0" y="108" width="320" height="22"/><rect x="64" y="56" width="256" height="52"/><rect x="80" y="40" width="224" height="18"/></g><g fill="var(--bg)"><circle cx="44" cy="34" r="8"/><rect x="34" y="60" width="6" height="14"/><rect x="48" y="60" width="6" height="14"/><rect x="34" y="84" width="6" height="14"/><rect x="48" y="84" width="6" height="14"/>${[0,1,2,3,4,5,6,7,8,9].map(i=>`<path d="M${84+i*23} 100 V76 a7 7 0 0 1 14 0 V100Z"/>`).join("")}</g><g stroke="currentColor" stroke-width="1.6" fill="none"><path d="M44 34 V28 M44 34 L48 36"/></g></svg>`;
 function fmtLong(d){return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${WD[d.getDay()]}）`}
 function hudHTML(){
   const t=S.T;
@@ -75,21 +76,16 @@ function renderHome(){
   const h=meta.history.slice(0,8);
   app.innerHTML=`
   <section class="hero">
-    <span class="eyebrow">早稲田大学 4年間シミュレーター</span>
-    <h2>早稲田の4年間は<br><em>運ゲー</em>か、<em>努力ゲー</em>か。</h2>
-    <p>学部も入試方式も、第二外国語も実家の太さも選べない。入るサークルもガチャ。日付は勝手に進み、大事な場面が来たら止まって選択を迫られる。新歓から卒論まで、早稲田生のありがちな4年間を生き抜く。</p>
-    <div class="row"><button class="btn" id="go">入学ガチャを回す</button>${meta.runs?`<span class="muted">これまで ${meta.runs} 回入学した</span>`:""}</div>
-  </section>
-  <section class="howto">
-    <div><b>入学ガチャ</b><span>学部、入試方式、住まい、仕送り、第二外国語、高校時代の6連ガチャ。顔写真つきの学生証が発行される</span></div>
-    <div><b>時間は勝手に進む</b><span>400種類以上の出来事が流れ、選択イベントが来たら一時停止。年度末には1年の振り返り</span></div>
-    <div><b>名前のある人間関係</b><span>親友、先輩、後輩、恋人、親。借りた金は返ってこないし、別れた相手からは連絡が来る</span></div>
-    <div><b>サークルガチャ</b><span>テニサー、ダンス、文化系、体育会、界隈（ガーディアン、昂揚会、運スタ、早慶戦支援会、便利舎、鵬志会など）</span></div>
-    <div><b>実在の科目で履修</b><span>憲法Ⅰ、基礎会計学、数学B2など。成績発表はMyWaseda風の全画面</span></div>
-    <div><b>行動方針と難易度</b><span>勉強漬け、バイト漬け、節約生活など。難易度はゆるめ・ふつう・シビア</span></div>
-    <div><b>酒・タバコ・停学</b><span>20歳未満の飲酒は発覚すれば処分。カンニングや部費の横領がバレたら停学</span></div>
-    <div><b>不可避と奇跡</b><span>実家の倒産、オンライン授業化、宝くじ、スカウト。避けられない出来事と、たまに来る奇跡</span></div>
-    <div><b>エンディングいろいろ</b><span>商社、公務員、法曹、海外大学院、芸能界、インフルエンサー、留年、除籍、逮捕まで</span></div>
+    <div class="okuma" aria-hidden="true">${OKUMA_SVG}</div>
+    <h2>早稲田ガチャ</h2>
+    <p class="lead">学部も、サークルも、実家の太さも選べない。<br>早稲田の4年間を、引いて生きる。</p>
+    <div class="row"><button class="btn big" id="go">入学ガチャを回す</button></div>
+    <ul class="hints">
+      <li>日付は勝手に進み、大事な場面で止まる</li>
+      <li>実在の科目、サークル、行事。400種類以上の出来事</li>
+      <li>金が尽きれば借金、心が尽きれば休学。結末はいろいろ</li>
+    </ul>
+    ${meta.runs?`<span class="muted small">これまで ${meta.runs} 回入学した</span>`:""}
   </section>
   ${meta.titles&&Object.keys(meta.titles).length?`<section class="card hist"><h4>集めた称号・${Object.keys(meta.titles).length}種類</h4><div class="titles">${Object.entries(meta.titles).sort((a,b)=>b[1]-a[1]).slice(0,16).map(([t,n])=>`<span>${esc(t)}${n>1?`<small>×${n}</small>`:""}</span>`).join("")}</div></section>`:""}
   ${h.length?`<section class="card hist"><h4>これまでの早稲田生活</h4><ul>${h.map(x=>`<li><span class="mono muted">${x.n}周目</span><span class="r">${esc(x.rank)}</span><span>${esc(x.fac)}・${esc(x.out)}</span></li>`).join("")}</ul>${meta.firstS?`<p class="muted" style="margin:8px 0 0;font-size:13px">初めてSランクを取ったのは ${meta.firstS} 周目</p>`:""}</section>`:""}`;
@@ -117,7 +113,7 @@ function renderGacha(){
     <div class="sex-row">${[["m","男性"],["f","女性"],["x","答えない"]].map(([k,l])=>`<button class="kw sx" data-sx="${k}" aria-pressed="${S.sex===k}">${l}</button>`).join("")}</div>
     <span class="lbl">難易度</span>
     <div class="sex-row">${Object.entries(DIFF).map(([k,d])=>`<button class="kw df" data-df="${k}" aria-pressed="${S.diff===k}"><b>${d.n}</b><small>${d.t}</small></button>`).join("")}</div>
-    <p class="muted" style="margin:0;font-size:13px">生年月日は${S.by}年${S.bd.m}月${S.bd.d}日。${S.ronin?"1浪して入学した。":"現役で入学した。"}20歳になるまで酒とタバコは違法だ。</p>
+    <p class="muted" style="margin:0;font-size:13px">${S.ronin?"1浪して入学。":"現役で入学。"}20歳になるまで酒とタバコは違法だ。</p>
    </div>
    <div id="idprev"></div>
   </section>
@@ -211,7 +207,7 @@ function renderGrades(){
   syncCtrl();
   const ov=document.createElement("div");ov.className="overlay";ov.id="ov";ov.setAttribute("role","dialog");ov.setAttribute("aria-label","成績発表");
   ov.innerHTML=`<div class="ov-inner">
-    <div class="mw-bar"><span class="mw-logo">MyWaseda</span><span class="mw-user">${esc(S.name)}・${S.sid}</span></div>
+    <div class="mw-bar"><span class="mw-logo">MyWaseda</span><span class="mw-user">${esc(S.name)}</span></div>
     <div class="mw-crumb">成績照会 ＞ ${BASE_Y+Math.floor(pd.T/2)}年度 ${name} ＞ ${S.fac.n}</div>
     <h2 class="mw-title">${TERMS[pd.T]}の成績</h2>
     <p class="muted">${fmtLong(S.date)} 正午。成績が公開された。震える指で成績照会を開く。</p>${pd.void?`<p class="void">${esc(pd.void)}</p>`:""}

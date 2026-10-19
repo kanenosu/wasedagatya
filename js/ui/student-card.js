@@ -1,7 +1,7 @@
 /* 名前・顔写真・学生証の描画 */
 /* ---------- 名前・学籍番号・顔写真 ---------- */
-const SEI=["佐藤","鈴木","高橋","田中","伊藤","渡辺","山本","中村","小林","加藤","吉田","山田","佐々木","松本","井上","木村","清水","斎藤","森","池田"];
-const MEI=["ひかる","優","翼","葵","遥","蓮","陽向","涼","真琴","晴","湊","千尋","薫","渚","歩","樹","光","瑞希","悠","颯"];
+const SEI=["佐藤","鈴木","高橋","田中","伊藤","渡辺","山本","中村","小林","加藤","吉田","山田","佐々木","松本","井上","木村","清水","斎藤","森","池田","橋本","石川","前田","藤田","岡田","長谷川","村上","近藤","石井","遠藤","青木","坂本","福田","太田","西村","藤井","岡本","三浦","中島","金子","原田","竹内","和田","上田","中野","宮崎","杉山","大野","柴田","久保","今井","河野","野口","松田","菊地","新井","小野","渡部","谷口","内田","石田","丸山","増田","平野","阿部","千葉","服部","五十嵐","二宮","大塚"];
+const MEI=["ひかる","優","翼","葵","遥","蓮","陽向","涼","真琴","晴","湊","千尋","薫","渚","歩","樹","光","瑞希","悠","颯","大輝","拓海","翔太","健太","涼介","裕也","駿","亮","慎一","航","海斗","直樹","結衣","美咲","陽菜","さくら","莉子","彩花","愛","杏","凛","芽衣","七海","美月","琴音","奈々","楓","茜","このみ","紬","千夏","智也","圭","碧","朝陽","律","澪","文乃","日向","柚葉","まなか","航平","琉生","怜","暁"];
 const SKINS=["#F6D9C2","#EEC7A6","#E0B08A","#C8946C"];
 const HAIRS=["#1E1A1A","#2E231D","#3F2D22"];
 const DYED=["#9A6A3A","#B98B4E","#7A4A2E"];
@@ -41,7 +41,7 @@ function faceSVG(f,st){
 function idHTML(){
   const yr=S.started?Math.min(S.ay+1,5):1;
   return `<div class="idcard">
-   <div class="id-top"><span class="id-uni">早稲田大学</span><span class="id-kind">学生証 STUDENT ID</span></div>
+   <div class="id-top"><span class="id-uni">早稲田大学</span><span class="id-kind">学生証・${S.n}周目</span></div>
    <div class="id-circ">${S.circle?`<span class="circ-name">${esc(S.circle.n)}</span>${S.post?`<span class="kind">${S.post}</span>`:""}`:`<span class="circ-name muted">サークル未所属</span>`}${S.circle2?`<small class="muted">＋${esc(S.circle2.n)}</small>`:""}</div>
    <div class="id-main">
     <div class="id-info">
@@ -49,14 +49,11 @@ function idHTML(){
      <dl>
       <dt>学部</dt><dd>${S.fac.n}</dd>
       <dt>学年</dt><dd>${yr}年${S.ay>=4?"（留年）":""}・${S.fac.c}キャンパス</dd>
-      <dt>生年月日</dt><dd>${S.by}年${S.bd.m}月${S.bd.d}日（${S.date?age():18}歳）</dd>
-      <dt>学籍番号</dt><dd class="mono">${S.sid}</dd>
 ${S.susp>0?`<dt>処分</dt><dd class="neg">停学中（あと${S.susp}日）</dd>`:(S.flags.teigaku?`<dt>処分歴</dt><dd class="neg">停学${S.flags.teigaku}回</dd>`:"")}
      </dl>
     </div>
     <div class="id-photo">${faceSVG(S.face,S.s)}</div>
    </div>
    ${S.started?`<div class="id-stats">${hudHTML()}</div>`:""}
-   <div class="id-foot"><span>有効期限 ${BASE_Y+4}年3月31日${S.ay>=4?"（延長）":""}</span><span class="mono">${S.n}周目</span></div>
   </div>`;
 }

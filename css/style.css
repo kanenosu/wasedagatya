@@ -325,3 +325,23 @@ button,.choice,.kw{touch-action:manipulation;-webkit-tap-highlight-color:transpa
 .titles small{margin-left:4px;font-weight:400;opacity:.8}
 .gsum b.neg{color:var(--bad)}
 @media (max-width:480px){.season{font-size:10px;padding:1px 7px}.story{font-size:14px}}
+/* ---------- タイトル画面（すっきり）と学生証の簡素化 ---------- */
+.hero{align-items:center;text-align:center;padding-block:22px 10px;gap:12px}
+.okuma{width:min(300px,78vw);color:var(--enji);opacity:.92}
+.okuma svg{display:block;width:100%;height:auto}
+.hero h2{font-size:clamp(34px,10vw,52px);letter-spacing:.06em;line-height:1.1}
+.hero .lead{font-size:15px;color:var(--muted);line-height:1.8;max-width:30em}
+.btn.big{padding:16px 34px;font-size:17px;border-radius:999px;box-shadow:0 8px 20px -12px var(--enji)}
+.hints{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+.hints li::before{content:"・";color:var(--enji)}
+.small{font-size:12px}
+.id-main{padding-bottom:12px}
+.id-info dl{grid-template-columns:3.2em 1fr}
+@media (max-width:480px){
+  .hero{padding-block:14px 6px}
+  .okuma{width:min(260px,74vw)}
+  .hero .lead{font-size:14px}
+  .id-main{grid-template-columns:1fr 70px;gap:10px}
+  .id-photo svg{width:70px;height:88px}
+  .id-name{font-size:21px}
+}

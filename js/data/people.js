@@ -2,7 +2,7 @@
 
 /* ---------- 人物 ---------- */
 // 役割: friend=同期の親友 / senpai=サークルや学科の先輩 / kohai=後輩 / lover=恋人 / parent=親
-const KOHAI_N=["結衣","大翔","美月","悠真","陽菜","颯太","心春","碧","莉子","悠人"];
+const KOHAI_N=["結衣","大翔","美月","悠真","陽菜","颯太","心春","碧","莉子","悠人","蒼","凪","陽翔","紗良","結月","朔","玲","杏奈","湊斗","ひなた","咲良","蓮斗","澪","琥珀"];
 function newPerson(role){
   const sei=pick(SEI),mei=role==="kohai"?pick(KOHAI_N):pick(MEI);
   return {n:`${sei}${mei}`,s:mei,role,since:S.T,met:S.date?fmtLong(S.date):""};
