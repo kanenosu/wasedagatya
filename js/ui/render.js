@@ -27,7 +27,12 @@ function ttGridHTML(){
   return h+`</div><div class="ttl"><span class="k1">必修</span><span class="k2">再履修</span><span class="k3">全学</span><span>選択</span></div>`;
 }
 function miniHTML(){return STATS.map(([k,l])=>`<span class="${S.s[k]<25?"low":""}"><small>${l}</small><b class="mono">${S.s[k]}</b></span>`).join("")+`<span class="${S.kane<0?"low":""}"><small>所持金</small><b class="mono">${(Math.round(S.kane*10)/10).toFixed(1)}万</b></span>`}
-function refreshHud(){const c=$("#idc");if(c){c.innerHTML=idHTML();const d=$("#ttd");if(d)d.ontoggle=()=>S.ttOpen=d.open}const m=$("#mini");if(m)m.innerHTML=miniHTML()}
+/* 学生証のゲージが画面の上に消えたときだけ、上の帯に数字を出す */
+function watchMeters(){
+  const el=document.querySelector("#idc .meters");
+  document.documentElement.classList.toggle("hud-off",!!el&&el.getBoundingClientRect().bottom<70);
+}
+function refreshHud(){const c=$("#idc");if(c){c.innerHTML=idHTML();const d=$("#ttd");if(d)d.ontoggle=()=>S.ttOpen=d.open;watchMeters()}const m=$("#mini");if(m)m.innerHTML=miniHTML()}
 function polHTML(){return POL.map(p=>{const ok=reqOK(p.req);return `<button data-pol="${p.id}" aria-pressed="${S.pol===p.id}" ${ok?"":"disabled"} title="${esc(p.t+(ok?"":"（"+reqTxt(p.req)+"が必要）"))}">${p.n}</button>`}).join("")}
 function refreshPol(){const el=$("#pol");if(!el)return;el.innerHTML=polHTML();el.querySelectorAll("[data-pol]").forEach(b=>b.onclick=()=>{S.pol=b.dataset.pol;refreshPol();syncCtrl()})}
 function renderLife(){
@@ -80,7 +85,7 @@ function logBox(){
   return `<section class="card log"><h4>年表</h4><ol>${S.log.slice().reverse().map(l=>`<li><span>${esc(l.term)}</span><span>${esc(l.t)}</span></li>`).join("")}</ol></section>`;
 }
 
-function renderHome(){
+function renderHome(){document.documentElement.classList.remove("hud-off");
   setLap();
   const h=meta.history.slice(0,8);
   app.innerHTML=`

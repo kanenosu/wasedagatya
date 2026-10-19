@@ -61,7 +61,7 @@ renderEnd=function(){
   if(S._endShown)return _renderEnd0();
   stop();clearRun();S.busy=true;
   const e=S.ending.type,rank=rankOf(),ttl=title();
-  document.documentElement.classList.add("noscroll");const old=$("#ov");if(old)old.remove();if($("#panel"))$("#panel").innerHTML="";const xo=$("#xov");if(xo)xo.remove();
+  document.documentElement.classList.add("noscroll");document.documentElement.classList.remove("hud-off");const old=$("#ov");if(old)old.remove();if($("#panel"))$("#panel").innerHTML="";const xo=$("#xov");if(xo)xo.remove();
   const ov=document.createElement("div");ov.className="overlay endov";ov.id="ov";document.body.append(ov);
   bgmDuck(1);
   const head=e==="grad"?(S.ay>=4?"1年遅れの卒業式":"卒業式"):e==="kamen"?"退学届":e==="kyugaku"?"休学届":e==="joseki"?"除籍通知":e==="taiho"?"逮捕":e==="taigaku"?"退学処分":e==="kyugakuWork"?"休学届":e==="stuck"?"6年目の春":ENDINGS[e]?ENDINGS[e].head:"最後の日";
