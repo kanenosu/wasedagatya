@@ -54,10 +54,11 @@ function sfx(name){
   }catch(e){}
 }
 /* ---------- BGM（8小節ループの簡単なシーケンサー） ---------- */
-const PROG={normal:[[60,64,67],[55,59,62],[57,60,64],[53,57,60]],exam:[[57,60,64],[53,57,60],[52,55,59],[55,59,62]],summer:[[60,64,67,71],[65,69,72],[62,65,69],[67,71,74]],winter:[[57,60,64],[55,59,62],[53,57,60],[52,55,59]]};
-const BPM={normal:104,exam:128,summer:88,winter:96};
+const PROG={normal:[[60,64,67],[55,59,62],[57,60,64],[53,57,60]],exam:[[57,60,64],[53,57,60],[52,55,59],[55,59,62]],cram:[[57,60,64],[57,60,64],[53,57,60],[56,59,64]],summer:[[60,64,67,71],[65,69,72],[62,65,69],[67,71,74]],winter:[[57,60,64],[55,59,62],[53,57,60],[52,55,59]]};
+const BPM={normal:104,exam:128,summer:88,winter:96,cram:140};
 function bgmMood(){
   const l=S&&S.date?seasonLabel(S.date):"春";
+  if(S&&S._exam&&!S._exam.done)return "cram";
   return l==="試験期間"?"exam":l==="夏休み"||l==="夏"?"summer":l==="冬"||l==="年末"||l==="正月"||l==="春休み"?"winter":"normal";
 }
 function bgmStart(){
@@ -81,6 +82,7 @@ function bgmTick(){
     if(beat%2===0){const n=chord[(st/2)%chord.length];tone(NOTE(n+12),t,spb*1.6,"triangle",.22,AU.bgm)} // アルペジオ
     if(mood!=="winter"&&beat%4===2)noise(t,.03,.07,AU.bgm);                               // ハイハット
     if(mood==="exam"&&beat%8===4)tone(NOTE(chord[0]),t,spb*2,"square",.08,AU.bgm);
+    if(mood==="cram"){if(beat%4===0)noise(t,.015,.12,AU.bgm);if(beat%8===6)tone(NOTE(chord[1]-12),t,spb*1.2,"sawtooth",.06,AU.bgm);if(beat===12)tone(NOTE(chord[2]+12),t,spb*3,"square",.05,AU.bgm)}
     if(beat===0&&Math.random()<.5)tone(NOTE(chord[2]+24),t,spb*6,"sine",.08,AU.bgm);    // たまに高音
     AU.next+=spb;AU.step++;
   }

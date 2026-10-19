@@ -368,15 +368,31 @@ button,.choice,.kw{touch-action:manipulation;-webkit-tap-highlight-color:transpa
 .ttl .k1::before{background:var(--gold-soft,#F3E7C6)}.ttl .k2::before{background:#F6D5D5}.ttl .k3::before{background:#D9E8F5}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .ttg .tc.k2{background:#4a2323;color:#f3d0d0}:root:not([data-theme="light"]) .ttg .tc.k3{background:#22374d;color:#d5e6f7}}
 :root[data-theme="dark"] .ttg .tc.k2{background:#4a2323;color:#f3d0d0}:root[data-theme="dark"] .ttg .tc.k3{background:#22374d;color:#d5e6f7}
-/* 試験期間 */
-.xrows{display:flex;flex-direction:column;gap:3px;margin:8px 0 10px}
-.xr{display:grid;grid-template-columns:1fr 70px 2.2em;gap:6px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:4px 8px;text-align:left;color:var(--ink);font-size:12px}
-.xr.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
-.xr.drop{opacity:.45;text-decoration:line-through}
-.xr .xn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.xr .xb{height:7px;background:var(--line);border-radius:4px;overflow:hidden}
-.xr .xb span{display:block;height:100%;border-radius:4px;background:var(--accent);transition:width .25s}
-.xr .xb .hi{background:#2e8b57}.xr .xb .mid{background:#c9a227}.xr .xb .lo{background:#b23a3a}
-.xr .xp{text-align:right;font-size:11px;color:var(--muted)}
-.xday{font-size:13px}.xlog{font-size:12px;color:var(--muted);border-left:3px solid var(--line);padding-left:8px;margin:4px 0}
-.exam .choices{gap:6px}.exam .choice{padding:8px 12px}.exam .choice .l small{font-size:11px}
+/* 試験期間（全画面） */
+.xov{padding-bottom:0}
+.xin{padding-bottom:170px}
+.xstat{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.xstat b{color:var(--ink);font-size:14px}.xstat .neg{color:#b23a3a}
+.xlog{font-size:13px;border-left:3px solid var(--enji);padding-left:10px;margin:0;min-height:1.4em}
+.xcards{display:flex;flex-direction:column;gap:6px}
+.xc{display:flex;flex-direction:column;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;text-align:left;color:var(--ink);font-size:13px;width:100%}
+.xc.on{border-color:var(--enji);box-shadow:0 0 0 2px var(--enji) inset}
+.xc.drop{opacity:.45}.xc.drop .xn{text-decoration:line-through}
+.xc-h{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.xc .xn{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.xc .xtag{display:flex;gap:4px;flex-shrink:0}
+.xc-b{display:grid;grid-template-columns:1fr 6.2em;gap:8px;align-items:center}
+.xc .xb{height:10px;background:var(--line);border-radius:5px;overflow:hidden}
+.xc .xb span{display:block;height:100%;border-radius:5px;background:var(--enji);transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.xc .xb .hi{background:#2e8b57}.xc .xb .mid{background:#c9a227}.xc .xb .lo{background:#b23a3a}
+.xc .xp{font-size:11px;color:var(--muted);text-align:right;white-space:nowrap}
+.xc .xprof{color:var(--muted);font-size:11px}
+.xbar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:8px max(12px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));z-index:61;box-shadow:0 -6px 20px rgba(0,0,0,.08)}
+.xsel{max-width:720px;margin:0 auto 6px;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xsel b{color:var(--ink)}
+.xbar-in{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.xa{background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:52px}
+.xa b{font-size:13px}.xa small{font-size:10px;color:var(--muted);text-align:center;line-height:1.2}
+.xa:disabled{opacity:.4}.xa.warn{border-color:#b23a3a;color:#b23a3a}
+.xa:not(:disabled):active{transform:scale(.97)}
+.xres{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+@media (min-width:640px){.xbar-in{grid-template-columns:repeat(6,1fr)}.xin{padding-bottom:100px}}

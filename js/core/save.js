@@ -28,7 +28,7 @@ function saveRun(){
   if(!S||S.ending||!S.started)return;
   try{
     const out={...S};
-    delete out._k;delete out._txt;delete out._hd;delete out._rar;delete out._after;delete out._afterExam;delete out._exam;delete out._rv;
+    delete out._k;delete out._txt;delete out._hd;delete out._rar;delete out._after;delete out._afterExam;delete out._rv;
     out.date=S.date.toISOString();
     out.circle=S.circle?S.circle.id:null;out.circle2=S.circle2?S.circle2.id:null;
     out.fac=FACS.indexOf(S.fac);out.route=ROUTES.indexOf(S.route);out.home=HOMES.findIndex(h=>h.n===S.home.n);out.wealth=S.wealth;out.lang=LANGS.indexOf(S.lang);out.past=PASTS.indexOf(S.past);out.brain=BRAINS.indexOf(S.brain);
@@ -62,5 +62,6 @@ function resumeRun(){
   S.sched=(r.sched||[]).map(it=>({k:it.k,ev:evFromRef(it.ref)})).filter(it=>it.ev);
   S.today=(r.today||[]).map(evFromRef).filter(Boolean);
   S.busy=false;S.userPaused=false;S.ending=null;
+  if(S._exam&&!S._exam.done&&!S.today.includes("exam"))S.today.unshift("exam");
   return true;
 }
