@@ -93,7 +93,7 @@ const POOL=[
   ]},
  {w:3,terms:[0,7],when:s=>s.fac.c==="戸山",title:"戸山の丘",text:"授業終わり、戸山の丘で同期と話し込んだ。",
   choices:[{label:"日が暮れるまで語る",ok:{t:"将来の話をした。少しだけ前向きになれた。",d:{men:6,jin:4}}}]},
- {w:4,terms:[0,5],when:s=>s.wealth.n==="細い"&&!s.flags.shou,title:"奨学金",text:"給付型奨学金の募集が出ていた。",
+ {w:4,terms:[0,5],when:s=>s.wealth.tier==="細い"&&!s.flags.shou,title:"奨学金",text:"給付型奨学金の募集が出ていた。",
   choices:[
    {label:"応募する",chance:s=>pc(s.s.gaku,55),ok:{t:"採用された。生活が少しだけ楽になる。",d:{kane:30,men:5},f:s=>s.flags.shou=1},ng:{t:"不採用だった。",d:{men:-5},f:s=>s.flags.shou=1}},
    {label:"見送る",ok:{t:"申請書を書く気力がなかった。",d:{}}},

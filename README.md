@@ -15,6 +15,9 @@ https://kanenosu.github.io/wasedagatya/
 | `css/style.css` | 見た目すべて（末尾にスマホ用の調整） | デザイン、スマホ表示 |
 | `js/util.js` | 乱数、確率、保存などの共通関数 | ほぼ触らない |
 | `js/data/people.js` | 名前つきの登場人物（親友・先輩・後輩・恋人）、季節ラベル、エンディングの物語文 | 人物の仕組み |
+| `js/data/origin.js` | 実在の出身高校（都道府県つき）と実家の種類 | 高校・実家を足すならここ |
+| `js/data/stations.js` | 最寄り駅ガチャ（駅、路線、通学時間、家賃差） | 駅を足すならここ |
+| `js/data/companies.js` | 内定先の実在企業名（業界×ランク） | 企業を足すならここ |
 | `js/data/setup.js` | 学部、入試方式、住まい、仕送り、第二外国語、高校時代 | 入学ガチャの中身や出やすさ |
 | `js/data/circles.js` | サークル一覧（テニサー、ダンス、文化系、体育会、界隈など）と看板イベント | サークルの追加・修正 |
 | `js/data/professors.js` | 教授ガチャの種類 | 試験の難しさ |
@@ -46,6 +49,9 @@ https://kanenosu.github.io/wasedagatya/
 | `js/ui/recap.js` | 年度末の振り返り画面 | 振り返りの中身 |
 | `js/ui/ending.js` | 結末、称号、ランク、成績証明書 | エンディング画面 |
 | `js/events/fate.js` | 不可避イベント、奇跡イベント、追加の進路とエンディング | 不可避・奇跡・エンディング |
+| `js/events/shukatsu.js` | 志望業界、早期化した就活の流れ、段階制の選考、特別選択肢 | 就活まわり |
+| `js/events/move.js` | 引っ越し、寮の退去、ルームシェア、同棲、住まいのトラブル | 住まいのイベント |
+| `js/events/dilemma.js` | 手遅れになる選択肢と、どちらかを選ぶともう片方が閉じる二者択一 | 重い選択 |
 | `js/events/fate-more.js` | 不可避・奇跡の追加分 | 不可避・奇跡を足すならここ |
 | `js/main.js` | 起動 | 触らない |
 

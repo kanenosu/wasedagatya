@@ -82,7 +82,7 @@ function renderHome(){
     <div class="row">${(()=>{const r=loadRun();return r?`<button class="btn big" id="resume">続きから（${new Date(r.date).getFullYear()}年${new Date(r.date).getMonth()+1}月・${esc(r.name)}）</button><button class="btn ghost" id="go">新しく入学する</button>`:`<button class="btn big" id="go">入学ガチャを回す</button>`})()}</div>
     <ul class="hints">
       <li>日付は勝手に進み、大事な場面で止まる</li>
-      <li>実在の科目、サークル、行事。500種類以上の出来事</li>
+      <li>実在の科目、サークル、企業、高校、駅。600種類以上の出来事</li>
       <li>金が尽きれば借金、心が尽きれば休学。結末はいろいろ</li>
     </ul>
     ${meta.runs?`<span class="muted small">これまで ${meta.runs} 回入学した</span>`:""}
@@ -96,9 +96,8 @@ function renderHome(){
 
 function renderGacha(){
   setLap();
-  const homeName=S.home.n==="学生寮"?"学生寮":`${S.home.n}（${S.area.n}）`;
-  const slots=[["学部",S.fac.n,`${S.fac.c}キャンパス`],["入試方式",S.route.n,S.route.t],["住まい",homeName,S.area.t||S.home.t],["実家の太さ",S.wealth.n,S.wealth.t],["第二外国語",S.lang.n,S.lang.t],["高校時代",S.past.n,S.past.t],["地頭",S.brain.n,S.brain.t]];
-  const pools=[FACS.map(x=>x.n),ROUTES.map(x=>x.n),HOMES.map(x=>x.n),WEALTH.map(x=>x.n),LANGS.map(x=>x.n),PASTS.map(x=>x.n),BRAINS.map(x=>x.n)];
+  const slots=[["学部",S.fac.n,`${S.fac.c}キャンパス`],["入試方式",S.route.n,S.route.t],["住まい",S.home.n,S.home.t],["最寄り駅",`${S.area.n}（${S.area.line}）`,`キャンパスまで${S.area.min}分・${S.area.t}`],["実家の太さ",S.wealth.n,S.wealth.t],["第二外国語",S.lang.n,S.lang.t],["出身高校",S.school.n,`${S.school.pref}${S.school.kind==="附属"?"・附属／系属":""}`],["高校時代",S.past.n,S.past.t],["地頭",S.brain.n,S.brain.t]];
+  const pools=[FACS.map(x=>x.n),ROUTES.map(x=>x.n),HOMES.map(x=>x.n),Object.values(STATIONS).flat().map(x=>x.n),WEALTH.map(x=>x.n),LANGS.map(x=>x.n),HIGHSCHOOLS.map(x=>x.n),PASTS.map(x=>x.n),BRAINS.map(x=>x.n)];
   app.innerHTML=`
   <section class="card">
    <div class="id-band"><span>入学ガチャ</span><span>${S.n}周目</span></div>
@@ -112,8 +111,6 @@ function renderGacha(){
    <div class="setup-row">
     <span class="lbl">性別（昂揚会など、入会条件がある団体の判定にだけ使う）</span>
     <div class="sex-row">${[["m","男性"],["f","女性"],["x","答えない"]].map(([k,l])=>`<button class="kw sx" data-sx="${k}" aria-pressed="${S.sex===k}">${l}</button>`).join("")}</div>
-    <span class="lbl">難易度</span>
-    <div class="sex-row">${Object.entries(DIFF).map(([k,d])=>`<button class="kw df" data-df="${k}" aria-pressed="${S.diff===k}"><b>${d.n}</b><small>${d.t}</small></button>`).join("")}</div>
     <p class="muted" style="margin:0;font-size:13px">${S.ronin?"1浪して入学。":"現役で入学。"}20歳になるまで酒とタバコは違法だ。</p>
    </div>
    <div id="idprev"></div>
@@ -130,7 +127,6 @@ function renderGacha(){
   $("#nm").oninput=e=>{S.name=e.target.value.trim()||"名無し";prev()};
   $("#nmr").onclick=()=>{S.name=pick(SEI)+" "+pick(MEI);$("#nm").value=S.name;prev()};
   $("#fcr").onclick=()=>{S.face=newFace();prev()};
-  app.querySelectorAll(".df").forEach(b=>b.onclick=()=>{S.diff=meta.diff=b.dataset.df;save(meta);app.querySelectorAll(".df").forEach(x=>x.setAttribute("aria-pressed",x===b))});
   app.querySelectorAll(".sx").forEach(b=>b.onclick=()=>{S.sex=b.dataset.sx;app.querySelectorAll(".sx").forEach(x=>x.setAttribute("aria-pressed",x===b))});
   $("#enter").onclick=()=>{startLife();scrollTop()};
   $("#reroll").onclick=()=>{meta.runs--;save(meta);newRun()};
@@ -139,7 +135,7 @@ function renderGacha(){
 function renderEvent(e){
   S.busy=true;stop();
   const choices=val(e.choices).filter(c=>!c.when||c.when(S));
-  const rq=c=>c.req||REQ[c.label];
+  const rq=c=>c.req||REQ[val(c.label)];
   if(!choices.some(c=>reqOK(rq(c))))choices.push({label:"何もできない",sub:"どの選択肢も条件を満たしていない",ok:{t:"見送るしかなかった。",d:{men:-4}}});
   showPanel(`
   <section class="card event">
@@ -147,7 +143,7 @@ function renderEvent(e){
     <h3>${esc(val(e.title))}</h3>
     <p>${esc(val(e.text))}</p>
     <div class="choices" id="ch">${choices.map((c,i)=>{const r=rq(c),ok=reqOK(r),p=c.chance?c.chance(S):null;
-      return `<button class="choice" data-i="${i}" ${ok?"":"disabled"}><span class="l"><span>${esc(c.label)}</span>${c.sub?`<small>${esc(c.sub)}</small>`:""}${r?`<small class="req ${ok?"":"ng"}">条件：${esc(reqTxt(r))}</small>`:""}</span>${!ok?`<span class="pct lock">選べない</span>`:""}</button>`}).join("")}</div>
+      return `<button class="choice" data-i="${i}" ${ok?"":"disabled"}><span class="l"><span>${esc(val(c.label))}</span>${c.sub?`<small>${esc(c.sub)}</small>`:""}${r?`<small class="req ${ok?"":"ng"}">条件：${esc(reqTxt(r))}</small>`:""}</span>${!ok?`<span class="pct lock">選べない</span>`:""}</button>`}).join("")}</div>
   </section>`);
   $("#panel").querySelectorAll(".choice:not([disabled])").forEach(b=>b.onclick=()=>resolve(e,choices[+b.dataset.i]));
 }
@@ -162,12 +158,12 @@ function resolve(e,c){
   syncLover();
   const text=val(r.t)||S._txt||"";
   const ttl=val(e.title);
-  if(e!==EV.honsenko)log(`${ttl}：${text.replace(/。.*$/,"")}`);
+  if(e!==EV.honsenko&&!e.jobResult)log(`${ttl}：${text.replace(/。.*$/,"")}`);
   feed(`${ttl}：${text}`,ds,"key");
   $("#ch").outerHTML=`<div class="result ${ok?"":"ng"}">
-    <span class="roll">${esc(c.label)}</span>
+    <span class="roll">${esc(val(c.label))}</span>
     <p>${esc(text)}</p>
-    ${e===EV.honsenko&&S.job?`<p><strong>進路：${esc(S.job.label)}</strong></p>`:""}
+    ${(e===EV.honsenko||e.jobResult)&&S.job?`<p><strong>進路：${esc(S.job.label)}</strong></p>`:""}
     ${ds.length?chips(ds):""}
   </div>
   <div class="actions"><button class="btn" id="nx">続ける</button></div>`;

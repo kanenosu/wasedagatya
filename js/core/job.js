@@ -5,7 +5,7 @@ function tierOf(x){return x>=80?"S":x>=68?"A":x>=56?"B":x>=44?"C":"D"}
 
 function job(s,mode){
   const f=s.flags;
-  let x=s.s.gk*.3+s.s.com*.15+s.s.jin*.1+s.s.gaku*.15+s.s.men*.08+gpa()*4+s.fac.job+(f.intern||0)*5+(f.ob?4:0)+(f.spi?3:0)+(f.early?5:0)+(f.hakone?10:0)+(s.post?4:0)-(f.late?6:0)+(s.zemi==="人気ゼミ"?4:0)-(f.teigaku||0)*8+(f.giin?4:0);
+  let x=s.s.gk*.3+s.s.com*.15+s.s.jin*.1+s.s.gaku*.15+s.s.men*.08+gpa()*4+s.fac.job+(f.intern||0)*5+(f.ob?4:0)+(f.spi?3:0)+(f.early?5:0)+(f.hakone?10:0)+(s.post?4:0)-(f.late?6:0)+(s.zemi==="人気ゼミ"?4:0)+(f.jobBonus||0)-(f.teigaku||0)*8+(f.giin?4:0);
   let tier,t;
   if(mode==="all"){const r=x+rnd(-20,20);tier=tierOf(r);if(tier==="B")tier="C";
     t=tier==="S"?pick(["第一志望の総合商社から内定の電話が来た。手が震えた。","外資コンサルから内定。初任給の数字を二度見した。","外銀の内定が出た。体力が持つかは知らない。"]):tier==="A"?"第一志望は落ちたが、滑り止めの大手から内定。":tier==="C"?"上位は全滅。持ち駒が尽きて、夏採用の中堅に決めた。":"全滅した。秋採用か、就職浪人か。";}
@@ -19,5 +19,5 @@ function job(s,mode){
     t=ok?"養成所を経ずに事務所に拾われた。LUDOの先輩たちと同じ道だ。":"オーディションに全部落ちた。ネタ帳を閉じて就活した。";}
   else{const ok=Math.random()<pc(s.s.gaku,48);tier=ok?"G":tierOf(x-6);
     t=ok?"院試に合格。あと2年、研究を続ける。":"院試に落ちた。慌てて就活に戻った。";}
-  s.job={tier,label:TIERS[tier]}; s._txt=t; log(`進路：${TIERS[tier]}`);
+  s.job={tier,label:TIERS[tier]}; assignCompany(s); s._txt=t+(s.job.co?`内定先は${s.job.co}。`:""); log(`進路：${s.job.label}`);
 }

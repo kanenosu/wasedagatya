@@ -44,18 +44,22 @@ let timer=null;
 function newRun(){
   stop();clearRun();
   meta.runs++; save(meta);
-  const fac=wpick(FACS),route=wpick(ROUTES),home=wpick(HOMES),wealth=wpick(WEALTH),lang=wpick(LANGS),past=wpick(PASTS),brain=wpick(BRAINS);
-  const area=wpick(fac.tokoro&&home.n==="上京して一人暮らし"?[{n:"所沢",w:1,c:3,m:{tai:2},t:"キャンパスには近い"}]:home.areas);
+  const fac=wpick(FACS),route=wpick(ROUTES),wealth=wpick(WEALTH),lang=wpick(LANGS),past=wpick(PASTS),brain=wpick(BRAINS);
+  const school=pickSchool(route);
+  // 首都圏の高校でなければ実家から通えない
+  let home=wpick(HOMES);if(home.n==="実家から通学"&&!SHUTOKEN.includes(school.pref))home=wpick(HOMES.filter(h=>h.n!=="実家から通学"));
+  const area=pickStation(home,fac,school.pref);
   const s={gaku:ri(38,58),com:ri(30,55),jin:ri(35,55),tai:ri(40,60),men:ri(45,65),gk:ri(10,25)};
   for(const m of [fac.m,route.m,home.m,area.m||{},past.m])for(const k in m)s[k]=clamp(s[k]+m[k],0,100);
   const BD={m:ri(1,12),d:ri(1,28)},RONIN=route.n==="一般選抜"&&Math.random()<.3?1:0,BY=BASE_Y-18-RONIN-(BD.m>=4&&!(BD.m===4&&BD.d===1)?1:0);
-  S={n:meta.runs,fac,route,home,area,wealth,lang,past,brain,s,kane:wealth.kane+ri(0,10),cr:0,gp:0,gu:0,ay:0,T:0,mod:0,flags:{first:Math.random()<.65?1:0},circle:null,circle2:null,post:null,zemi:null,job:null,ending:null,log:[],feed:[],sched:[],today:[],prof:PROFS[4],date:new Date(BASE_Y,2,31),busy:false,recent:[],
-    name:pick(SEI)+" "+pick(MEI),sid:`1${"ABCDEFGHJKLMN"[FACS.indexOf(fac)]}${String(BASE_Y%100)}${ri(1000,9999)}-${ri(0,9)}`,face:newFace(),diff:DIFF[meta.diff]?meta.diff:"normal",sex:"x",susp:0,people:null,ys:null,bd:BD,by:BY,ronin:RONIN,passed:[],retake:[],failedEl:[],freeN:0,tt:[],pending:null,pol:"bal",crisis:{},skip:0,teT:ri(0,1),grades:[]};
+  S={n:meta.runs,fac,route,home,area,wealth,lang,past,brain,school,s,kane:wealth.kane+ri(0,10),flagsInit:1,cr:0,gp:0,gu:0,ay:0,T:0,mod:0,flags:{first:Math.random()<.65?1:0},circle:null,circle2:null,post:null,zemi:null,job:null,ending:null,log:[],feed:[],sched:[],today:[],prof:PROFS[4],date:new Date(BASE_Y,2,31),busy:false,recent:[],
+    name:pick(SEI)+" "+pick(MEI),sid:`1${"ABCDEFGHJKLMN"[FACS.indexOf(fac)]}${String(BASE_Y%100)}${ri(1000,9999)}-${ri(0,9)}`,face:newFace(),diff:"normal",sex:"x",susp:0,people:null,ys:null,bd:BD,by:BY,ronin:RONIN,passed:[],retake:[],failedEl:[],freeN:0,tt:[],pending:null,pol:"bal",crisis:{},skip:0,teT:ri(0,1),grades:[]};
   renderGacha();
 }
 function startLife(){
   initPeople();yearStart();
-  log(`${S.fac.n}に${S.route.n}で入学${S.ronin?"（1浪）":""}`);
+  if(S.wealth.loan)S.flags.loan=30;
+  log(`${S.school.n}（${S.school.pref}）から${S.fac.n}に${S.route.n}で入学${S.ronin?"（1浪）":""}`);
   renderLife();
   play();
 }
@@ -98,6 +102,8 @@ function tick(){
     if(S.ay<=1)for(const k in S.lang.cls)md[k]=(md[k]||0)+S.lang.cls[k];
     // コミュ力は使わないと鈍る（高いときだけ）
     if(S.s.com>60&&!S.circle)md.com=(md.com||0)-1;
+    // 通学時間が長いと体力が削れる
+    if(commuteTai())md.tai=(md.tai||0)-commuteTai();
     // 90を超えたステータスは現状維持が難しい
     for(const [k] of STATS)if(S.s[k]>=90)md[k]=(md[k]||0)-2;
     // 人間関係は放っておくと薄れる（サークルなし・上級生ほど減りやすい）

@@ -25,13 +25,13 @@ job=function(s,mode){
   else baseJob(s,mode);
 };
 const baseHonsenko=EV.honsenko.choices;
-EV.honsenko.choices=s=>[
+const _oldHonsenko=s=>[
  ...baseHonsenko(s),
  {label:"公務員試験を受ける",req:{gaku:50},ok:{t:"",f:s=>job(s,"koumuin")}},
  ...(s.flags.yobi?[{label:"法曹を目指す",sub:"予備試験に合格している",ok:{t:"",f:s=>job(s,"shiho")}}]:[]),
  ...(s.flags.kaigai?[{label:"海外の大学院に行く",sub:"教授の推薦がある",ok:{t:"",f:s=>job(s,"kaigai")}}]:[]),
  ...(s.flags.buzz?[{label:"インフルエンサーで食べていく",sub:"フォロワー10万人",ok:{t:"",f:s=>job(s,"influencer")}}]:[]),
- ...(s.wealth.n==="太い"?[{label:"家業を継ぐ",sub:"実家が太い人だけの選択肢",ok:{t:"",f:s=>job(s,"kagyou")}}]:[]),
+ ...(s.wealth.kagyou?[{label:"家業を継ぐ",sub:"家業のある家だけの選択肢",ok:{t:"",f:s=>job(s,"kagyou")}}]:[]),
  {label:"地域おこし協力隊に応募する",sub:"東京を出る",req:{men:40},ok:{t:"",f:s=>job(s,"chiiki")}},
 ];
 
@@ -41,9 +41,9 @@ const FATE=[
   {label:"東京の部屋で受ける",ok:{t:"画面の中の同期としか話さない日々が続いた。",d:{jin:-10,men:-6,gaku:2}}},
   {label:"実家に帰って受ける",ok:{t:"家賃がもったいないが、メシは出る。",d:{jin:-8,men:-2,kane:-3}}},
  ]},
- {once:"bankrupt",when:s=>s.wealth.n!=="細い",title:"不可避：実家の倒産",text:"実家の会社が倒産した。来月から仕送りが止まる。",choices:[
-  {label:"バイトを増やして自分で稼ぐ",ok:{t:"方針をバイト漬けにした。",d:{men:-12},f:s=>{s.wealth=WEALTH.find(w=>w.n==="細い");s.pol="work"}}},
-  {label:"給付型奨学金を探す",chance:s=>pc(s.s.gaku,55),ok:{t:"家計急変の枠で採用された。",d:{men:-8,kane:20},f:s=>{s.wealth=WEALTH.find(w=>w.n==="細い");s.flags.shou=1}},ng:{t:"間に合わなかった。",d:{men:-14},f:s=>s.wealth=WEALTH.find(w=>w.n==="細い")}},
+ {once:"bankrupt",when:s=>s.wealth.tier!=="細い",title:"不可避：実家の倒産",text:"実家の会社が倒産した。来月から仕送りが止まる。",choices:[
+  {label:"バイトを増やして自分で稼ぐ",ok:{t:"方針をバイト漬けにした。",d:{men:-12},f:s=>{s.wealth={...s.wealth,tier:"細い",inc:0,oj:0,kagyou:0};s.pol="work"}}},
+  {label:"給付型奨学金を探す",chance:s=>pc(s.s.gaku,55),ok:{t:"家計急変の枠で採用された。",d:{men:-8,kane:20},f:s=>{s.wealth={...s.wealth,tier:"細い",inc:0,oj:0,kagyou:0};s.flags.shou=1}},ng:{t:"間に合わなかった。",d:{men:-14},f:s=>s.wealth={...s.wealth,tier:"細い",inc:0,oj:0,kagyou:0}}},
  ]},
  {title:"不可避：祖父の死",text:"祖父が亡くなったと連絡が来た。小さい頃によく遊んでもらった。",choices:[
   {label:"葬儀のために帰省する",ok:{t:"久しぶりに親戚が集まった。祖父の話で少しだけ笑えた。",d:{men:-10,kane:-3}}},

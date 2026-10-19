@@ -49,9 +49,10 @@ function renderEnd(){
     <p class="story">${esc(story())}</p>
     <table>
       <tr><td>学部</td><td>${S.fac.n}（${S.fac.c}）</td></tr>
+      <tr><td>出身高校</td><td>${S.school.n}（${S.school.pref}）</td></tr>
       <tr><td>入試方式</td><td>${S.route.n}</td></tr>
       ${S.flags.teigaku||S.flags.warn?`<tr><td>処分歴</td><td>${S.flags.teigaku?`停学${S.flags.teigaku}回 `:""}${S.flags.warn?`厳重注意${S.flags.warn}回`:""}</td></tr>`:""}
-      <tr><td>住まい・実家</td><td>${S.home.n==="学生寮"?"学生寮":`${S.home.n}（${S.area.n}）`}／実家は${S.wealth.n}</td></tr>
+      <tr><td>住まい・実家</td><td>${S.home.n}（${S.area.n}・キャンパスまで${S.area.min}分）／実家は${S.wealth.n}</td></tr>
       <tr><td>第二外国語</td><td>${S.lang.n}</td></tr>
       <tr><td>高校時代</td><td>${S.past.n}</td></tr>
       <tr><td>地頭</td><td>${S.brain.n}</td></tr>
@@ -61,7 +62,7 @@ function renderEnd(){
       <tr><td>GPA</td><td class="mono">${S.gu?gpa().toFixed(2):"—"} / 4.00</td></tr>
       <tr><td>所持金</td><td class="mono">${Math.round(S.kane)}万円${S.flags.loan?`（奨学金の返済 ${S.flags.loan}万円）`:""}${S.flags.ribo?"（リボ残高あり）":""}</td></tr>
       ${S.grades.length?`<tr><td>学期ごとのGPA</td><td class="mono" style="font-size:13px">${S.grades.map(g=>`${TERMS[g.T]} ${g.gpa.toFixed(2)}${g.f?`（F${g.f}）`:""}`).join("<br>")}</td></tr>`:""}
-      <tr><td>進路</td><td><strong>${esc(out)}</strong></td></tr>
+      <tr><td>進路</td><td><strong>${esc(out)}</strong>${S.job&&S.job.co?`<br><small class="muted">${esc(S.job.tierLabel)}</small>`:""}</td></tr>
       <tr><td>最終ステータス</td><td class="mono" style="font-size:13px">${STATS.map(([k,l])=>`${l} ${S.s[k]}`).join("　")}</td></tr>
     </table>
   </section>
