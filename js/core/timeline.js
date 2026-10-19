@@ -52,7 +52,7 @@ function newRun(){
   // 実家の種類も出身に合わせる（都内の農家・地方の名士は出さない）
   const wealth=wpick(WEALTH.filter(w=>!(local&&(w.n==="農家"||w.n==="地方の名士の家"))&&!(school.pref==="東京"&&w.n==="農家")));
   const area=pickStation(home,fac,school.pref);
-  const s={gaku:ri(38,58),com:ri(30,55),jin:ri(35,55),tai:ri(40,60),men:ri(45,65),gk:ri(10,25)};
+  const s={gaku:ri(38,58),com:ri(30,55),jin:ri(35,55),tai:ri(50,70),men:ri(45,65),gk:ri(10,25)};
   for(const m of [fac.m,route.m,home.m,area.m||{},past.m])for(const k in m)s[k]=clamp(s[k]+m[k],0,100);
   const BD={m:ri(1,12),d:ri(1,28)},RONIN=route.n==="一般選抜"&&Math.random()<.3?1:0,BY=BASE_Y-18-RONIN-(BD.m>=4&&!(BD.m===4&&BD.d===1)?1:0);
   S={flyers:[],s0:{...s},n:meta.runs,fac,route,home,area,wealth,lang,past,brain,school,s,kane:wealth.kane+ri(0,10),flagsInit:1,cr:0,gp:0,gu:0,ay:0,T:0,mod:0,flags:{first:Math.random()<.65?1:0},circle:null,circle2:null,post:null,zemi:null,job:null,ending:null,log:[],feed:[],sched:[],today:[],prof:PROFS[4],date:new Date(BASE_Y,2,31),busy:false,recent:[],
@@ -106,7 +106,8 @@ function tick(){
     if(S.ay<=1)for(const k in S.lang.cls)md[k]=(md[k]||0)+S.lang.cls[k];
     // コミュ力は使わないと鈍る（高いときだけ）
     if(S.s.com>60&&!S.circle)md.com=(md.com||0)-1;
-    // 通学時間が長いと体力が削れる
+    // 若い体は月に少し回復する。通学時間が長いと削れる
+    if(S.s.tai<50)md.tai=(md.tai||0)+1;
     if(commuteTai())md.tai=(md.tai||0)-commuteTai();
     // 掛け持ちは会費と体力が二重にかかる
     if(S.circle2){md.tai=(md.tai||0)-1;S.kane=Math.round((S.kane-0.6)*10)/10}

@@ -19,7 +19,7 @@ const confLabel=p=>p>=85?"余裕":p>=70?"いける":p>=50?"五分":p>=35?"不安
 function renderExam(){
   S.busy=true;stop();
   const name=`${TERMS[S.T]}の試験期間`;
-  const X=S._exam=S._exam||{rows:S.tt.map(co=>({n:co.n,p:prepInit(co),c:co.c,kind:co.kind,prof:co.prof.n,scary:co.prof.m===-10||co.prof.m==="att",drop:0})),days:S.s.tai<20?4:5,day:1,kako:0,ev:0,sel:0,done:0,log:[]};
+  const X=S._exam=S._exam||{rows:S.tt.map(co=>({n:co.n,p:prepInit(co),c:co.c,kind:co.kind,prof:co.prof.n,scary:co.prof.m===-10||co.prof.m==="att",drop:0})),days:S.s.tai<15?4:5,day:1,kako:0,ev:0,sel:0,done:0,log:[]};
   if(!X.ev&&Math.random()<.65){const cand=EXAM_EVENTS.filter(e=>!e.c||e.c(S));const e=pick(cand);e.f(X);if(e.d)applyD(e.d);X.log.unshift(e.t)}
   X.ev=1;
   let ov=$("#xov");
@@ -32,10 +32,10 @@ function renderExam(){
       <span class="xc-b"><span class="xb"><span style="width:${r.p}%" class="${r.p>=70?"hi":r.p>=45?"mid":"lo"}"></span></span><span class="xp mono">${r.drop?"捨てた":`${r.p}・${confLabel(r.p)}`}</span></span>
       <small class="xprof">${esc(r.prof)}</small></button>`).join("");
     const acts=X.done?"":`
-      <button class="xa" data-a="study" ${sel.drop?"disabled":""}><b>勉強する</b><small>+12〜20／体力−3</small></button>
-      <button class="xa" data-a="night" ${sel.drop||S.s.tai<15?"disabled":""}><b>徹夜</b><small>大きく上がる／体力−10</small></button>
+      <button class="xa" data-a="study" ${sel.drop?"disabled":""}><b>勉強する</b><small>+12〜20／体力−2</small></button>
+      <button class="xa" data-a="night" ${sel.drop||S.s.tai<15?"disabled":""}><b>徹夜</b><small>大きく上がる／体力−7</small></button>
       <button class="xa" data-a="kako" ${X.kako?"disabled":""}><b>過去問を回す</b><small>人脈判定・全科目／1回</small></button>
-      <button class="xa" data-a="rest"><b>休む</b><small>体力+6 メンタル+4</small></button>
+      <button class="xa" data-a="rest"><b>休む</b><small>体力+9 メンタル+5</small></button>
       <button class="xa" data-a="drop" ${sel.drop||sel.kind==="必修"||sel.kind==="再履修"?"disabled":""}><b>捨てる</b><small>${sel.kind==="必修"||sel.kind==="再履修"?"必修は不可":"落とす代わりに他+5"}</small></button>
       ${left===1?`<button class="xa warn" data-a="cheat"><b>カンペ</b><small>最後の手段</small></button>`:""}`;
     ov.innerHTML=`<div class="ov-inner xin">
@@ -56,10 +56,10 @@ function renderExam(){
   const bump=(r,g)=>{r.p+=g;X.flash=r.n};
   const act=a=>{
     const sel=X.rows[X.sel]||X.rows[0];
-    if(a==="study"){const g=Math.round(ri(12,20)*S.brain.grow*(S.s.men<25?.7:1));bump(sel,g);applyD({tai:-3});X.log.unshift(`「${sel.n}」を勉強した。自信度 +${g}。`);sfx("tick")}
-    else if(a==="night"){const g=ri(24,34);bump(sel,g);applyD({tai:-10,men:-2});X.log.unshift(`徹夜。「${sel.n}」の自信度 +${g}。目の下が黒い。`);if(Math.random()<.15){const o=pick(X.rows.filter(r=>r!==sel&&!r.drop));if(o){o.p-=15;X.log[0]+=`翌日の「${o.n}」で寝落ちした（−15）。`}}sfx("thud")}
+    if(a==="study"){const g=Math.round(ri(12,20)*S.brain.grow*(S.s.men<25?.7:1));bump(sel,g);applyD({tai:-2});X.log.unshift(`「${sel.n}」を勉強した。自信度 +${g}。`);sfx("tick")}
+    else if(a==="night"){const g=ri(24,34);bump(sel,g);applyD({tai:-7,men:-2});X.log.unshift(`徹夜。「${sel.n}」の自信度 +${g}。目の下が黒い。`);if(Math.random()<.15){const o=pick(X.rows.filter(r=>r!==sel&&!r.drop));if(o){o.p-=15;X.log[0]+=`翌日の「${o.n}」で寝落ちした（−15）。`}}sfx("thud")}
     else if(a==="kako"){X.kako=1;const ok=Math.random()<pc(S.s.jin,45);if(ok){const g=ri(8,14);X.rows.forEach(r=>r.p+=g);applyD({jin:2});X.log.unshift(`先輩から過去問が回ってきた。全科目の自信度 +${g}。`);sfx("good")}else{X.rows.forEach(r=>r.p+=2);applyD({men:-3});X.log.unshift("過去問を持っている人が周りにいなかった。");sfx("bad")}}
-    else if(a==="rest"){applyD({tai:6,men:4});X.log.unshift("一日休んだ。少し回復した。");sfx("tap")}
+    else if(a==="rest"){applyD({tai:9,men:5});X.log.unshift("一日休んだ。だいぶ回復した。");sfx("tap")}
     else if(a==="drop"){sel.drop=1;X.rows.filter(r=>!r.drop).forEach(r=>r.p+=5);X.log.unshift(`「${sel.n}」を捨てた。他の科目の自信度 +5。`);sfx("thud");draw();return}
     else if(a==="cheat"){return finish(1)}
     X.day++;

@@ -134,4 +134,4 @@ function pickStation(home,fac,pref){
   // 戸山・西早稲田は本キャンと同じ扱い、所沢は遠くなる
   return fac.tokoro?{...s,min:s.min+35}:{...s};
 }
-const commuteTai=()=>S.area.min>=60?2:S.area.min>=40?1:0;
+const commuteTai=()=>S.area.min>=85?2:S.area.min>=60?1:0;

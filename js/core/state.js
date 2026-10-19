@@ -6,7 +6,7 @@ function applyD(d){
   for(const k in d){
     let v=d[k]; if(!v) continue;
     // 難易度：ステータスのマイナス変化だけ倍率をかける
-    if(v<0&&k!=="kane"&&k!=="cr"&&S.diff)v=Math.min(-1,Math.round(v*DIFF[S.diff].neg));
+    if(v<0&&k!=="kane"&&k!=="cr"&&S.diff)v=Math.min(-1,Math.round(v*DIFF[S.diff].neg*(k==="tai"?.8:1)));
     if(k==="kane")S.kane=Math.round((S.kane+v)*10)/10;
     else if(k==="cr")S.cr+=v;
     else{const b=S.s[k];S.s[k]=clamp(b+v,0,100);if(S.s[k]===b)continue}
