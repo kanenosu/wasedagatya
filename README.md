@@ -26,6 +26,7 @@ https://kanenosu.github.io/wasedagatya/
 | `js/core/exam.js` | 期末試験の選択肢（カンニング含む） | 試験の選択肢 |
 | `js/core/job.js` | 就活の結果 | 内定の出やすさ |
 | `js/core/save.js` | 途中セーブと「続きから」 | ほぼ触らない |
+| `js/core/audio.js` | BGMと効果音（Web Audioで合成。音声ファイルなし） | 音を変える |
 | `js/core/policy.js` | 行動方針と、選択肢のゲージ条件 | 方針の効果、選べる条件 |
 | `js/events/fixed.js` | 決まった日の選択イベント（入学式、新歓、ゼミ、就活、卒論など） | 定番イベント |
 | `js/events/random.js` | 学期ごとのランダムな選択イベント | イベント追加 |
@@ -36,6 +37,8 @@ https://kanenosu.github.io/wasedagatya/
 | `js/events/waseda.js` | 早稲田ならではの出来事（マイルストーン、抽選科目、早慶戦の夜、一陽来復、ホームカミングデー、エンパク、都電、学部ネタなど） | 早稲田ネタを足すならここ |
 | `js/events/people.js` | 親友・先輩・後輩・恋人・親が絡む出来事 | 人間関係のイベント |
 | `js/events/campus.js` | 授業・就活・住まい・健康・SNS・お金の追加イベント | イベントを足すならここ |
+| `js/events/slang.js` | 早稲田用語集ベースの内輪ネタ（学注、ロタ、給油、100ハイ、早稲田王、男祭りなど） | 内輪ネタを足すならここ |
+| `js/events/extra.js` | 1年生・4年生特有、バイト先、恋人との進展、家族、世間、趣味 | イベントを足すならここ |
 | `js/events/more.js` | 追加イベント（代返、教科書、借金の頼み、詐欺SMS、引っ越し、就活の圧力、旅行など） | イベントを足すならここ |
 | `js/core/timeline.js` | 日程、自動再生の速度、1日ごとの進行、毎月の収支 | 速度、毎月の変化 |
 | `js/ui/student-card.js` | 名前、顔写真、学生証 | 学生証の見た目 |

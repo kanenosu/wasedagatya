@@ -349,3 +349,6 @@ button,.choice,.kw{touch-action:manipulation;-webkit-tap-highlight-color:transpa
 .goal.ok{color:var(--good)} .goal.ng{color:var(--muted)}
 .goals .kw small{font-weight:400}
 .hero .row{flex-direction:column;align-items:center}
+.hdr-r{display:flex;align-items:center;gap:10px}
+.snd{background:var(--surface);border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:4px 10px;font-size:12px;font-family:var(--f-mono);white-space:nowrap}
+.snd[aria-pressed="true"]{background:var(--enji);border-color:var(--enji);color:var(--enji-ink)}

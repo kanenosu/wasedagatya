@@ -62,8 +62,8 @@ function feed(t,ds,cls,rar){
   while(ol.children.length>150)ol.lastChild.remove();
 }
 function chips(list){return `<div class="chips">${list.map(([k,v])=>`<span class="chip ${v>0?"up":"down"}">${LABEL[k]} ${v>0?"+":""}${v}${k==="kane"?"万":""}</span>`).join("")}</div>`}
-function showPanel(html){const p=$("#panel");p.innerHTML=html;document.documentElement.classList.add("noscroll");p.scrollTop=0;syncCtrl();const f=p.querySelector(".choice:not([disabled])");if(f)f.focus({preventScroll:true})}
-function bindNext(){const b=$("#nx");b.onclick=()=>{$("#panel").innerHTML="";document.documentElement.classList.remove("noscroll");S.busy=false;if(S.ending)return renderEnd();refreshHud();saveRun();S.userPaused?syncCtrl():run()};b.focus({preventScroll:true})}
+function showPanel(html){sfx("pop");bgmDuck(.35);const p=$("#panel");p.innerHTML=html;document.documentElement.classList.add("noscroll");p.scrollTop=0;syncCtrl();const f=p.querySelector(".choice:not([disabled])");if(f)f.focus({preventScroll:true})}
+function bindNext(){const b=$("#nx");b.onclick=()=>{sfx("tap");bgmDuck(1);$("#panel").innerHTML="";document.documentElement.classList.remove("noscroll");S.busy=false;if(S.ending)return renderEnd();refreshHud();saveRun();S.userPaused?syncCtrl():run()};b.focus({preventScroll:true})}
 function setLap(){$("#lap").innerHTML=`早稲田生活 <b>${S?S.n:meta.runs+1}</b> 周目`}
 function scrollTop(){try{window.scrollTo({top:0,behavior:reduce?"auto":"smooth"})}catch(e){}}
 function logBox(){
@@ -124,9 +124,9 @@ function renderGacha(){
   const prev=()=>{$("#idprev").innerHTML=idHTML()};
   let i=0;
   const reveal=()=>{
-    if(i>=slots.length){$("#enter").hidden=false;$("#reroll").hidden=false;$("#setup").hidden=false;prev();return}
+    if(i>=slots.length){sfx("fanfare");$("#enter").hidden=false;$("#reroll").hidden=false;$("#setup").hidden=false;prev();return}
     const el=$("#sl"+i),st=el.querySelector("strong"),tg=el.querySelector(".tag"),pool=pools[i],x=slots[i];
-    let k=0;const iv=setInterval(()=>{st.textContent=pick(pool);if(++k>7){clearInterval(iv);st.textContent=x[1];tg.textContent=x[2];el.classList.remove("spin");el.classList.add("hit");i++;reveal()}},reduce?0:50);
+    let k=0;const iv=setInterval(()=>{st.textContent=pick(pool);sfx("slot");if(++k>7){clearInterval(iv);sfx("stop");st.textContent=x[1];tg.textContent=x[2];el.classList.remove("spin");el.classList.add("hit");i++;reveal()}},reduce?0:50);
   };
   reveal();
   $("#nm").oninput=e=>{S.name=e.target.value.trim()||"名無し";prev()};
@@ -158,6 +158,7 @@ function resolve(e,c){
   let ok=true,roll=null,p=c.chance?c.chance(S):null;
   if(p!=null){roll=Math.random();ok=roll<p}
   const r=ok?c.ok:c.ng;
+  sfx(c.chance?(ok?"good":"bad"):"tap");
   S._txt=null;S._hd=null;S._rar=null;S._after=null;
   if(r.f)r.f(S);
   const ds=applyD(val(r.d)||{});
@@ -219,7 +220,7 @@ function renderGrades(){
     <div class="tt-wrap"><table class="gtable big"><thead><tr><th>科目名</th><th>区分</th><th>単位</th><th>評価</th></tr></thead><tbody id="gt"></tbody></table></div>
     <div id="gsum"></div>
   </div>`;
-  document.body.append(ov);document.documentElement.classList.add("noscroll");
+  document.body.append(ov);document.documentElement.classList.add("noscroll");sfx("page");bgmDuck(.35);
   const tb=$("#gt");let i=0,gp=0,gu=0,got=0,f=[];
   const step=()=>{
     if(i>=pd.rows.length)return finish();
@@ -228,7 +229,7 @@ function renderGrades(){
     if(r.g!=="F"){got+=r.c;S.passed.push(r.n)}else{f.push(r);if(r.kind==="選択"||r.kind==="全学")S.failedEl.push(r.n);else S.retake.push({n:r.n,c:r.c,sem:pd.T%2,x:r.lab?"lab":r.lang?"lang":""})}
     const tr=document.createElement("tr");
     tr.innerHTML=`<td>${esc(r.n)}</td><td><span class="kind">${r.kind}</span></td><td class="mono">${r.c}</td><td class="g g-${r.g==="A+"?"Ap":r.g}">${r.g}</td>`;
-    tb.append(tr);
+    tb.append(tr);sfx(r.g==="A+"?"sparkle":r.g==="F"?"thud":"tick");
     $("#gprog").textContent=`${i}/${pd.rows.length}科目`;$("#glive").textContent=(gp/gu).toFixed(2);
     try{tr.scrollIntoView({block:"nearest",behavior:reduce?"auto":"smooth"})}catch(e){}
     setTimeout(step,reduce?0:r.g==="F"||r.g==="A+"?520:300);
@@ -245,7 +246,8 @@ function renderGrades(){
       <p>${esc(comment)}</p>${ds.length?chips(ds):""}<div class="actions"><button class="btn" id="nx">MyWasedaを閉じる</button></div>`;
     refreshHud();
     const b=$("#nx");try{b.scrollIntoView({block:"nearest"})}catch(e){}
-    b.onclick=()=>{ov.remove();document.documentElement.classList.remove("noscroll");S.busy=false;if(S.ending)return renderEnd();refreshHud();saveRun();S.userPaused?syncCtrl():run()};
+    sfx(f.length?"bad":"good");
+    b.onclick=()=>{sfx("tap");bgmDuck(1);ov.remove();document.documentElement.classList.remove("noscroll");S.busy=false;if(S.ending)return renderEnd();refreshHud();saveRun();S.userPaused?syncCtrl():run()};
     b.focus({preventScroll:true});
   };
   setTimeout(step,reduce?0:600);

@@ -31,6 +31,7 @@ function rankOf(){
 function renderEnd(){
   stop();clearRun();document.documentElement.classList.remove("noscroll");const ov=$("#ov");if(ov)ov.remove();if($("#panel"))$("#panel").innerHTML="";
   const e=S.ending.type, rank=rankOf(), ttl=title();
+  bgmDuck(1);sfx(["S","EX","A"].includes(rank)?"fanfare":rank==="E"?"sad":"good");
   const out=ENDINGS[e]?ENDINGS[e].out:e==="taiho"?"逮捕・退学":e==="taigaku"?"退学":e==="kamen"?"国立大学に再入学":e==="kyugaku"?"休学":e==="joseki"?"除籍":e==="kyugakuWork"?"休学して就労":e==="stuck"?"6年目に突入":(S.job?S.job.label:TIERS.D);
   const head=ENDINGS[e]?ENDINGS[e].head:e==="taiho"?"特殊詐欺の受け子として逮捕された。大学からは退学処分が出た":e==="taigaku"?"2度目の停学処分。学部から退学を勧められ、早稲田を去った":e==="joseki"?"学費を払えず、除籍になった":e==="kyugakuWork"?"借金を返すため、休学して働くことにした":e==="kamen"?"早稲田を去った":e==="kyugaku"?"メンタルが尽きて、休学届を出した":e==="stuck"?"5年でも卒業できなかった":S.ay>=4?"1年遅れて卒業した":"4年で卒業した";
   const firstS=rank==="S"&&!meta.firstS;
