@@ -28,7 +28,7 @@ function saveRun(){
   if(!S||S.ending||!S.started)return;
   try{
     const out={...S};
-    delete out._k;delete out._txt;delete out._hd;delete out._rar;delete out._after;delete out._afterExam;delete out._rv;
+    delete out._k;delete out._txt;delete out._hd;delete out._rar;delete out._after;delete out._afterExam;
     out.date=S.date.toISOString();
     out.circle=S.circle?S.circle.id:null;out.circle2=S.circle2?S.circle2.id:null;
     out.fac=FACS.indexOf(S.fac);out.route=ROUTES.indexOf(S.route);out.home=HOMES.findIndex(h=>h.n===S.home.n);out.wealth=S.wealth;out.lang=LANGS.indexOf(S.lang);out.past=PASTS.indexOf(S.past);out.brain=BRAINS.indexOf(S.brain);

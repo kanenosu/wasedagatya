@@ -48,16 +48,18 @@ function sfx(name){
       case "tick":tone(NOTE(76),t,.05,"square",.05);break;
       case "rare":[76,80,83,88,95].forEach((n,i)=>tone(NOTE(n),t+i*.06,.4,"triangle",.15));noise(t,.3,.05);break;
       case "coin":tone(NOTE(88),t,.08,"square",.1);tone(NOTE(95),t+.07,.18,"square",.1);break;
+      case "drum":for(let i=0;i<12;i++)noise(t+i*.12,.05,.1);break;
       case "sad":[64,62,60,55].forEach((n,i)=>tone(NOTE(n),t+i*.25,.5,"triangle",.12));break;
       case "page":noise(t,.08,.05);break;
     }
   }catch(e){}
 }
 /* ---------- BGM（8小節ループの簡単なシーケンサー） ---------- */
-const PROG={normal:[[60,64,67],[55,59,62],[57,60,64],[53,57,60]],exam:[[57,60,64],[53,57,60],[52,55,59],[55,59,62]],cram:[[57,60,64],[57,60,64],[53,57,60],[56,59,64]],summer:[[60,64,67,71],[65,69,72],[62,65,69],[67,71,74]],winter:[[57,60,64],[55,59,62],[53,57,60],[52,55,59]]};
-const BPM={normal:104,exam:128,summer:88,winter:96,cram:140};
+const PROG={normal:[[60,64,67],[55,59,62],[57,60,64],[53,57,60]],exam:[[57,60,64],[53,57,60],[52,55,59],[55,59,62]],cram:[[57,60,64],[57,60,64],[53,57,60],[56,59,64]],end:[[60,64,67],[57,60,64],[65,69,72],[67,71,74]],summer:[[60,64,67,71],[65,69,72],[62,65,69],[67,71,74]],winter:[[57,60,64],[55,59,62],[53,57,60],[52,55,59]]};
+const BPM={normal:104,exam:128,summer:88,winter:96,cram:140,end:72};
 function bgmMood(){
   const l=S&&S.date?seasonLabel(S.date):"春";
+  if(S&&S.ending)return "end";
   if(S&&S._exam&&!S._exam.done)return "cram";
   return l==="試験期間"?"exam":l==="夏休み"||l==="夏"?"summer":l==="冬"||l==="年末"||l==="正月"||l==="春休み"?"winter":"normal";
 }

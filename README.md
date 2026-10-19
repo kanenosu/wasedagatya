@@ -60,7 +60,6 @@ https://kanenosu.github.io/wasedagatya/
 | `js/events/love.js` | 恋愛の出来事 |
 | `js/events/meshi.js` | ワセメシ（実在の飯屋） |
 | `js/events/naitei.js` | 内定後のやらかし → 内定取り消し |
-| `js/events/rival.js` | ライバル（同期）との成績・就活比較 |
 
 ## イベントの書き方
 選択イベントは次の形。`random.js` の `POOL` に足せばランダムで出る。
