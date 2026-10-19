@@ -310,3 +310,18 @@ button,.choice,.kw{touch-action:manipulation;-webkit-tap-highlight-color:transpa
 .meter span:first-child{white-space:nowrap}
 .ctrl button{white-space:nowrap}
 @media (max-width:480px){.meter{grid-template-columns:4.2em 1fr 1.8em}}
+/* ---------- 一新：季節・人物・振り返り・物語・称号 ---------- */
+.date{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.season{font-family:var(--f-body);font-weight:700;font-size:11px;letter-spacing:.12em;color:var(--enji);background:var(--enji-soft);border-radius:999px;padding:2px 9px;white-space:nowrap}
+.people{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;border-top:1px dashed var(--line);padding-top:8px}
+.people span{display:inline-flex;gap:5px;align-items:baseline;white-space:nowrap}
+.people small{font-size:10px;letter-spacing:.1em;color:var(--muted)}
+.recap .gsum{margin-top:0}
+.recap-ev small{display:block;font-size:11px;letter-spacing:.12em;color:var(--muted);margin-bottom:4px}
+.recap-ev ul{margin:0;padding-left:1.2em;font-size:14px;display:flex;flex-direction:column;gap:2px}
+.story{font-family:var(--f-display);font-size:15px;line-height:1.9;margin:0;padding:12px 14px;background:var(--bg);border-left:3px solid var(--enji);text-wrap:pretty}
+.titles{display:flex;flex-wrap:wrap;gap:6px}
+.titles span{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--enji-soft);color:var(--enji);font-weight:700}
+.titles small{margin-left:4px;font-weight:400;opacity:.8}
+.gsum b.neg{color:var(--bad)}
+@media (max-width:480px){.season{font-size:10px;padding:1px 7px}.story{font-size:14px}}

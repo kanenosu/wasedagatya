@@ -1,0 +1,134 @@
+/* 名前つきの人物が絡む出来事（親友・先輩・後輩・恋人・親） */
+
+/* ---------- 選択イベント ---------- */
+POOL.push(
+ // 親友
+ {w:3,terms:[0,1],title:s=>`${PN("friend")}との約束`,text:s=>`${PF("friend")}に「来週、2人で東京タワー行かない？」と誘われた。`,
+  choices:[
+   {label:"行く",req:{kane:2},ok:{t:s=>`展望台で、${PN("friend")}が「俺ら4年後どうなってんのかな」と言った。`,d:{jin:5,men:5,kane:-2}}},
+   {label:"バイトで断る",ok:{t:s=>`${PN("friend")}は別の友達と行った。写真がストーリーに流れてきた。`,d:{men:-3,jin:-2}}},
+  ]},
+ {w:3,terms:[1,7],title:s=>`${PN("friend")}の落単`,text:s=>`${PF("friend")}が必修を落として、落ち込んでいる。`,
+  choices:[
+   {label:"一緒に再履修の計画を立てる",ok:{t:s=>`${PN("friend")}が「お前がいてよかった」と言った。`,d:{jin:5,men:3}}},
+   {label:"飲みに連れていく",req:{kane:3},ok:{t:"ロータリーで2人で叫んだ。",d:{jin:4,kane:-3,tai:-2}}},
+   {label:"そっとしておく",ok:{t:"しばらく連絡が減った。",d:{jin:-3}}},
+  ]},
+ {w:2,terms:[2,6],title:s=>`${PN("friend")}の秘密`,text:s=>`${PF("friend")}から「誰にも言わないでほしい」と相談された。親に留年を隠しているらしい。`,
+  choices:[
+   {label:"黙っておく",ok:{t:"秘密を共有した。前より親友になった。",d:{jin:6,men:-2}}},
+   {label:"親に言うべきだと説得する",chance:s=>pc(s.s.men,50),ok:{t:s=>`${PN("friend")}は泣きながら親に電話した。後で「ありがとう」と言われた。`,d:{jin:4,gk:2}},ng:{t:"「お前には関係ない」と言われた。",d:{jin:-8,men:-5}}},
+  ]},
+ {w:3,terms:[4,7],title:s=>`${PN("friend")}の内定`,text:s=>`${PF("friend")}に、第一志望の内定が出た。${s.job?"自分も決まっているとはいえ、":"自分はまだ何も決まっていない。"}素直に喜べるか。`,
+  choices:[
+   {label:"全力で祝う",ok:{t:"焼肉をおごった。心からおめでとうと言えた。",d:{jin:5,men:3,kane:-4}}},
+   {label:"おめでとうと言って、家で泣く",ok:{t:"自分だけ取り残された気がした。",d:{men:-8,gk:2}}},
+  ]},
+ {w:2,terms:[2,7],when:s=>!s.people.borrow,title:s=>`${PN("friend")}に借金を頼まれた`,text:s=>`${PF("friend")}に「家賃が払えない。3万円貸して」と頼まれた。`,
+  choices:[
+   {label:"貸す",req:{kane:3},ok:{t:"「絶対返す」と言われた。",d:{kane:-3,jin:2},f:s=>s.people.borrow={amt:3,T:s.T}}},
+   {label:"断って、一緒に親に相談するよう言う",ok:{t:s=>`${PN("friend")}は少し気まずそうにしたが、親に連絡した。`,d:{jin:-2,men:1}}},
+  ]},
+ {w:6,terms:[2,9],when:s=>s.people.borrow&&s.T>s.people.borrow.T,title:"貸した金",text:s=>`${PF("friend")}に貸した${s.people.borrow.amt}万円、まだ返ってこない。`,
+  choices:[
+   {label:"催促する",chance:()=>.6,ok:{t:"翌日、全額返ってきた。「遅くなってごめん」と。",d:{kane:3,jin:1},f:s=>s.people.borrow=null},ng:{t:"「来月まで待って」と言われた。",d:{men:-3},f:s=>s.people.borrow.T=s.T}},
+   {label:"あげたことにする",ok:{t:"3万円で友情を買ったと思うことにした。",d:{men:-2,jin:2},f:s=>s.people.borrow=null}},
+  ]},
+ // 先輩
+ {w:3,terms:[0,3],title:s=>`${PN("senpai")}の相談`,text:s=>`${PF("senpai")}に「飲みながら話そう」と呼び出された。就活の愚痴を聞かされそうだ。`,
+  choices:[
+   {label:"付き合う",req:{tai:15},ok:{t:s=>`${PN("senpai")}の話は、2年後の自分の予習になった。`,d:{jin:4,gk:3,tai:-3}}},
+   {label:"課題があると断る",ok:{t:"「真面目だな」と笑われた。",d:{jin:-2,gaku:2}}},
+  ]},
+ {w:3,terms:[1,3],title:s=>`${PN("senpai")}の卒業`,text:s=>`${PF("senpai")}が卒業する。最後にサークルの部室で飲み会がある。`,
+  choices:[
+   {label:"手紙を書いて渡す",ok:{t:s=>`${PN("senpai")}は読みながら泣いていた。「困ったら連絡しろ」と言われた。`,d:{jin:6,men:5},f:s=>s.flags.ob=1}},
+   {label:"普通に参加する",ok:{t:"胴上げして見送った。",d:{jin:3,men:2}}},
+  ]},
+ {w:2,terms:[4,7],title:s=>`${PN("senpai")}からの連絡`,text:s=>`社会人になった${PF("senpai")}から「うちの会社、紹介できるよ」と連絡が来た。`,
+  choices:[
+   {label:"紹介してもらう",ok:{t:"リファラルで選考に乗った。面接官が先輩の同僚だった。",d:{gk:4,jin:2},f:s=>{s.flags.ob=1;s.flags.early=1}}},
+   {label:"自分の力で受けると断る",ok:{t:"「かっこつけるな」と笑われた。",d:{men:2}}},
+  ]},
+ // 後輩
+ {w:4,terms:[2,2],when:s=>!s.people.kohai&&!!s.circle,title:"新歓で懐かれた",text:s=>`新歓で、1年生の${s._k=newPerson("kohai"),s._k.n}が自分の後ろをずっとついてくる。`,
+  choices:[
+   {label:"面倒を見る",ok:{t:s=>`${s._k.s}はその日のうちに入会を決めた。`,d:{jin:4,gk:2},f:s=>s.people.kohai=s._k}},
+   {label:"適当にあしらう",ok:{t:s=>`${s._k.s}は別のサークルに入った。`,d:{}}},
+  ]},
+ {w:3,terms:[3,7],when:s=>!!s.people.kohai,title:s=>`${PN("kohai")}の相談`,text:s=>`後輩の${PF("kohai")}から「大学をやめようか迷っている」と相談された。`,
+  choices:[
+   {label:"ちゃんと話を聞く",req:{men:25},ok:{t:s=>`2時間話した。${PN("kohai")}は「もう少し続けてみる」と言った。`,d:{jin:5,gk:4,men:-2}}},
+   {label:"先輩として説教する",ok:{t:s=>`${PN("kohai")}は黙って聞いていた。それ以来、少し距離ができた。`,d:{jin:-4}}},
+  ]},
+ {w:2,terms:[3,7],when:s=>!!s.people.kohai&&s.post,title:s=>`${PN("kohai")}を幹部に`,text:s=>`次の幹部に、${PF("kohai")}を推すかどうか。`,
+  choices:[
+   {label:"推す",ok:{t:s=>`${PN("kohai")}は「先輩のおかげです」と言った。`,d:{jin:4,gk:3}}},
+   {label:"別の子を推す",ok:{t:s=>`${PN("kohai")}は何も言わなかったが、顔を見ればわかった。`,d:{jin:-3}}},
+  ]},
+ // 恋人
+ {w:3,terms:[0,7],when:s=>s.flags.partner,title:s=>`${PN("lover")}の誕生日`,text:s=>`来週は${PF("lover")}の誕生日。`,
+  choices:[
+   {label:"ちゃんとしたレストランを予約する",req:{kane:3},ok:{t:s=>`${PN("lover")}は泣いて喜んだ。`,d:{kane:-3,men:8}}},
+   {label:"手作りのプレゼント",ok:{t:"夜なべして作った。予算はほぼゼロ。",d:{men:6,tai:-2}}},
+   {label:"忘れていた",ok:{t:"当日の夜に気づいた。冷たい空気が1週間続いた。",d:{men:-8}}},
+  ]},
+ {w:2,terms:[1,7],when:s=>s.flags.partner,title:s=>`${PN("lover")}の親に会う`,text:s=>`${PF("lover")}から「今度、うちの親に会ってほしい」と言われた。`,
+  choices:[
+   {label:"会いに行く",req:{men:30},ok:{t:"緊張で箸を落とした。でも「いい子ね」と言ってもらえた。",d:{men:5,jin:3}}},
+   {label:"まだ早いと断る",ok:{t:s=>`${PN("lover")}は少し寂しそうだった。`,d:{men:-3}}},
+  ]},
+ {w:3,terms:[1,7],when:s=>s.flags.partner&&s.ay>=2,title:s=>`${PN("lover")}の就活`,text:s=>`${PF("lover")}の第一志望は地方の企業。受かったら遠距離になる。`,
+  choices:[
+   {label:"応援する",ok:{t:s=>`${PN("lover")}は内定をもらった。来年から遠距離だ。`,d:{men:-4,jin:2}}},
+   {label:"東京に残ってほしいと言う",chance:s=>pc(s.s.men,55),ok:{t:"話し合って、東京の会社も受けることにしてくれた。",d:{men:4}},ng:{t:"「私の人生だよ」と言われた。そのとおりだ。",d:{men:-10},f:s=>{s.flags.partner=0}}},
+  ]},
+ {w:2,terms:[1,7],title:"元恋人からの連絡",when:s=>s.flags.partner&&s.people.ex.length,text:s=>`元恋人の${s.people.ex[s.people.ex.length-1].n}から「久しぶり。元気？」とLINEが来た。`,
+  choices:[
+   {label:"返信しない",ok:{t:"今の相手を大事にすると決めた。",d:{men:2}}},
+   {label:"返信する",chance:()=>.5,ok:{t:"近況を話して終わった。それだけだった。",d:{men:1}},ng:{t:s=>`${PN("lover")}にスマホを見られた。修羅場になった。`,d:{men:-12},f:s=>s.flags.partner=0}},
+  ]},
+ // 親
+ {w:3,terms:[0,7],title:"親が東京に来る",text:"親が「東京に行くから、キャンパス案内してよ」と言ってきた。",
+  choices:[
+   {label:"案内する",ok:{t:"大隈講堂の前で記念写真。帰りに焼肉をおごってもらった。",d:{men:6,kane:3}}},
+   {label:"忙しいと断る",ok:{t:"親は一人で観光して帰った。後で少し後悔した。",d:{men:-4}}},
+  ]},
+ {w:2,terms:[1,7],title:"親からの電話",text:"親から「最近、連絡がないけど元気？」と電話が来た。",
+  choices:[
+   {label:"正直に近況を話す",ok:{t:"30分話した。切ったあと、少し泣いた。",d:{men:5}}},
+   {label:"元気と言って切る",ok:{t:"3分で切った。",d:{men:-1}}},
+  ]},
+ {w:2,terms:[2,7],when:s=>s.wealth.n!=="太い",title:"親の本音",text:"帰省した夜、親が「大学、楽しい？ 無理して行かせてるから、楽しんでくれないと」と言った。",
+  choices:[
+   {label:"楽しいと答える",ok:{t:"本当にそう思えるように、残りの大学生活を生きようと思った。",d:{men:6,gk:2}}},
+   {label:"黙る",ok:{t:"何も言えなかった。",d:{men:-4}}},
+  ]},
+);
+
+/* ---------- 勝手に流れる出来事 ---------- */
+LIFE_FLOW.push(
+ {w:3,t:s=>`${PN("friend")}と学食で昼を食べた。`,d:{jin:1}},
+ {w:2,t:s=>`${PN("friend")}が1限に遅刻して、後ろの席から手を振ってきた。`},
+ {t:s=>`${PN("friend")}のインスタに、知らない人との写真が増えてきた。`,d:{men:-1}},
+ {t:s=>`${PN("friend")}に課題を見せてもらった。`,d:{gaku:1,jin:1}},
+ {t:s=>`${PN("friend")}と深夜のファミレスで3時間しゃべった。`,d:{men:2,tai:-1}},
+ {c:s=>s.ay>=2,t:s=>`${PN("friend")}がスーツ姿で説明会に向かうのを見た。`},
+ {c:s=>s.ay>=3,t:s=>`${PN("friend")}と「卒業しても会おうな」と言い合った。`,d:{men:2}},
+ {w:2,t:s=>`${PN("senpai")}に昼をおごってもらった。`,d:{jin:1,kane:1}},
+ {t:s=>`${PN("senpai")}が授業の裏情報を教えてくれた。`,f:s=>s.mod+=1},
+ {c:s=>s.ay<=1,t:s=>`${PN("senpai")}の就活話を聞いて、少し怖くなった。`,d:{men:-1,gk:1}},
+ {c:s=>s.ay>=2,t:s=>`社会人になった${PN("senpai")}が、初任給でおごってくれた。`,d:{jin:1,men:2}},
+ {c:s=>!!s.people.kohai,w:2,t:s=>`${PN("kohai")}から「先輩、履修どうしてました？」とLINEが来た。`,d:{jin:1}},
+ {c:s=>!!s.people.kohai,t:s=>`${PN("kohai")}が部室で寝ていた。`},
+ {c:s=>!!s.people.kohai,t:s=>`${PN("kohai")}にラーメンをおごった。`,d:{kane:-1,jin:1}},
+ {c:s=>s.flags.partner,w:3,t:s=>`${PN("lover")}と早稲田松竹で映画を観た。`,d:{men:3,kane:-1}},
+ {c:s=>s.flags.partner,w:2,t:s=>`${PN("lover")}と些細なことで喧嘩して、すぐ仲直りした。`,d:{men:1}},
+ {c:s=>s.flags.partner,t:s=>`${PN("lover")}の寝顔を見て、幸せだと思った。`,d:{men:3}},
+ {c:s=>s.flags.partner,t:s=>`${PN("lover")}が作った弁当を学食で食べた。周りの視線が痛い。`,d:{men:2,kane:1}},
+ {c:s=>s.flags.partner,t:s=>`${PN("lover")}と終電を逃して、高田馬場を歩いて帰った。`,d:{tai:-2,men:2}},
+ {c:s=>!s.flags.partner&&s.people.ex.length,w:2,t:s=>`街で${s.people.ex[s.people.ex.length-1].s}に似た人を見て、振り返ってしまった。`,d:{men:-2}},
+ {w:2,t:"親から「ちゃんと食べてる？」とLINEが来た。",d:{men:1}},
+ {t:"親の誕生日を忘れていた。慌ててプレゼントを送った。",d:{kane:-1}},
+ {c:s=>s.ay>=3,t:"親が「卒業式、行っていい？」と聞いてきた。",d:{men:2}},
+);

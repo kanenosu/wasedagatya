@@ -50,10 +50,11 @@ function newRun(){
   for(const m of [fac.m,route.m,home.m,area.m||{},past.m])for(const k in m)s[k]=clamp(s[k]+m[k],0,100);
   const BD={m:ri(1,12),d:ri(1,28)},RONIN=route.n==="一般選抜"&&Math.random()<.3?1:0,BY=BASE_Y-18-RONIN-(BD.m>=4&&!(BD.m===4&&BD.d===1)?1:0);
   S={n:meta.runs,fac,route,home,area,wealth,lang,past,s,kane:wealth.kane+ri(0,10),cr:0,gp:0,gu:0,ay:0,T:0,mod:0,flags:{},circle:null,circle2:null,post:null,zemi:null,job:null,ending:null,log:[],feed:[],sched:[],today:[],prof:PROFS[4],date:new Date(BASE_Y,2,31),busy:false,recent:[],
-    name:pick(SEI)+" "+pick(MEI),sid:`1${"ABCDEFGHJKLMN"[FACS.indexOf(fac)]}${String(BASE_Y%100)}${ri(1000,9999)}-${ri(0,9)}`,face:newFace(),diff:DIFF[meta.diff]?meta.diff:"normal",sex:"x",susp:0,bd:BD,by:BY,ronin:RONIN,passed:[],retake:[],failedEl:[],freeN:0,tt:[],pending:null,pol:"bal",crisis:{},skip:0,teT:ri(0,1),grades:[]};
+    name:pick(SEI)+" "+pick(MEI),sid:`1${"ABCDEFGHJKLMN"[FACS.indexOf(fac)]}${String(BASE_Y%100)}${ri(1000,9999)}-${ri(0,9)}`,face:newFace(),diff:DIFF[meta.diff]?meta.diff:"normal",sex:"x",susp:0,people:null,ys:null,bd:BD,by:BY,ronin:RONIN,passed:[],retake:[],failedEl:[],freeN:0,tt:[],pending:null,pol:"bal",crisis:{},skip:0,teT:ri(0,1),grades:[]};
   renderGacha();
 }
 function startLife(){
+  initPeople();yearStart();
   log(`${S.fac.n}に${S.route.n}で入学${S.ronin?"（1浪）":""}`);
   renderLife();
   play();
@@ -73,7 +74,7 @@ function tick(){
   if(S.today.length)return fire(S.today.shift());
   const d=S.date=new Date(S.date.getFullYear(),S.date.getMonth(),S.date.getDate()+1);
   const m=d.getMonth()+1,day=d.getDate();
-  if(m===4&&day===1&&S.started){S.ay++}
+  if(m===4&&day===1&&S.started){S.ay++;yearStart()}
   S.started=1;
   S.T=termOf(S.ay,m);
   if(day===1){
@@ -92,7 +93,8 @@ function tick(){
     S.kane=Math.round((S.kane+inc)*10)/10;
     const md={...P.d};if(S.flags.smoke)md.tai=(md.tai||0)-1;
     // 人間関係は放っておくと薄れる（サークルなし・上級生ほど減りやすい）
-    md.jin=(md.jin||0)-(S.circle?1:3)-(S.ay>=3?1:0);
+    if(S.s.jin>35)md.jin=(md.jin||0)-(S.circle?1:2)-(S.ay>=3?1:0);
+    syncLover();
     const ds=applyD(md);
     feed(`${m}月の収支 ${inc>=0?"+":""}${inc.toFixed(1)}万円${P.id!=="bal"?`（方針：${P.n}）`:""}${S.flags.ribo?"。リボの返済が重い":""}`,ds,"sys");
     refreshHud();
@@ -106,6 +108,7 @@ function tick(){
   if(crisis())return fire(S.today.shift());
   if(S.susp>0){S.susp--;if(S.susp===0){feed("停学が明けた。",null,"sys");refreshHud()}return}
   if(S.skip>0){S.skip--;if(S.skip===0)feed("退院した。",null,"sys");return}
+  if(m===3&&day===31&&!S.ending&&!S.busy){S.busy=true;stop();renderRecap();return}
   if(Math.random()<.012)return rare();
   if(Math.random()<.12)flow();
   if(S.s.men<=0){S.ending={type:"kyugaku"};stop();return renderEnd()}

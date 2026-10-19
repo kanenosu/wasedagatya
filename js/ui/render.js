@@ -14,6 +14,7 @@ function hudHTML(){
      ${S.flags.smoke?`<span>喫煙者</span>`:""}${S.susp>0?`<span class="neg">停学中 あと${S.susp}日</span>`:""}
      ${S.flags.loan?`<span>奨学金（貸与） <b>${S.flags.loan}</b>万円</span>`:""}${S.flags.ribo?`<span class="neg">リボ払い中</span>`:""}
     </div>
+    ${peopleHTML()}
     ${S.tt.length?`<details class="tt" id="ttd"${S.ttOpen?" open":""}><summary>${TERMS[t]}の時間割・${S.tt.length}科目${S.tt.reduce((a,o)=>a+o.c,0)}単位</summary><div class="tt-wrap"><table>${S.tt.map(o=>`<tr><td class="mono">${o.slot}</td><td>${esc(o.n)}${o.kind!=="選択"?` <span class="kind">${o.kind}</span>`:""}</td><td class="mono">${o.c}</td><td class="pt">${esc(o.prof.n)}</td></tr>`).join("")}</table></div></details>`:""}
    </div>`;
 }
@@ -25,7 +26,7 @@ function renderLife(){
   app.innerHTML=`
   <section class="clock" aria-label="日付と再生">
     <div class="clock-row">
-      <div class="date" id="date">${fmtLong(S.date)}</div>
+      <div class="date"><span id="date">${fmtLong(S.date)}</span><span class="season" id="season">${seasonLabel(S.date)}</span></div>
       <div class="ctrl"><button class="play" id="pp">停止</button>${SPEEDS.map((s,i)=>`<button data-sp="${i}" aria-pressed="${spd()===i}">${s.n}</button>`).join("")}</div>
     </div>
     <div class="status" id="status"></div>
@@ -39,7 +40,7 @@ function renderLife(){
   for(const f of S.feed)$("#feed").append(feedLi(f));
   refreshPol();refreshHud();
 }
-function updateClock(){const d=$("#date");if(d)d.textContent=fmtLong(S.date)}
+function updateClock(){const d=$("#date");if(d)d.textContent=fmtLong(S.date);const sn=$("#season");if(sn){const l=seasonLabel(S.date);if(sn.textContent!==l)sn.textContent=l}}
 function syncCtrl(){
   const b=$("#pp"),st=$("#status");if(!b)return;
   b.textContent=timer?"停止":"再生";
@@ -81,7 +82,8 @@ function renderHome(){
   </section>
   <section class="howto">
     <div><b>入学ガチャ</b><span>学部、入試方式、住まい、仕送り、第二外国語、高校時代の6連ガチャ。顔写真つきの学生証が発行される</span></div>
-    <div><b>時間は勝手に進む</b><span>300種類以上の出来事が流れ、選択イベントが来たら一時停止</span></div>
+    <div><b>時間は勝手に進む</b><span>400種類以上の出来事が流れ、選択イベントが来たら一時停止。年度末には1年の振り返り</span></div>
+    <div><b>名前のある人間関係</b><span>親友、先輩、後輩、恋人、親。借りた金は返ってこないし、別れた相手からは連絡が来る</span></div>
     <div><b>サークルガチャ</b><span>テニサー、ダンス、文化系、体育会、界隈（ガーディアン、昂揚会、運スタ、早慶戦支援会、便利舎、鵬志会など）</span></div>
     <div><b>実在の科目で履修</b><span>憲法Ⅰ、基礎会計学、数学B2など。成績発表はMyWaseda風の全画面</span></div>
     <div><b>行動方針と難易度</b><span>勉強漬け、バイト漬け、節約生活など。難易度はゆるめ・ふつう・シビア</span></div>
@@ -89,6 +91,7 @@ function renderHome(){
     <div><b>不可避と奇跡</b><span>実家の倒産、オンライン授業化、宝くじ、スカウト。避けられない出来事と、たまに来る奇跡</span></div>
     <div><b>エンディングいろいろ</b><span>商社、公務員、法曹、海外大学院、芸能界、インフルエンサー、留年、除籍、逮捕まで</span></div>
   </section>
+  ${meta.titles&&Object.keys(meta.titles).length?`<section class="card hist"><h4>集めた称号・${Object.keys(meta.titles).length}種類</h4><div class="titles">${Object.entries(meta.titles).sort((a,b)=>b[1]-a[1]).slice(0,16).map(([t,n])=>`<span>${esc(t)}${n>1?`<small>×${n}</small>`:""}</span>`).join("")}</div></section>`:""}
   ${h.length?`<section class="card hist"><h4>これまでの早稲田生活</h4><ul>${h.map(x=>`<li><span class="mono muted">${x.n}周目</span><span class="r">${esc(x.rank)}</span><span>${esc(x.fac)}・${esc(x.out)}</span></li>`).join("")}</ul>${meta.firstS?`<p class="muted" style="margin:8px 0 0;font-size:13px">初めてSランクを取ったのは ${meta.firstS} 周目</p>`:""}</section>`:""}`;
   app.insertAdjacentHTML("beforeend",`<p class="disc">このゲームはフィクションです。実在のサークル名・店名・行事名を使っていますが、特定のサークルや個人を誹謗中傷する意図はありません。20歳未満の飲酒・喫煙は法律で禁止された違法行為です。ゲーム内の処分や確率は実際の大学の規程とは異なります。</p>`);
   $("#go").onclick=newRun;
@@ -158,7 +161,8 @@ function resolve(e,c){
   S._txt=null;S._hd=null;S._rar=null;S._after=null;
   if(r.f)r.f(S);
   const ds=applyD(val(r.d)||{});
-  const text=r.t||S._txt||"";
+  syncLover();
+  const text=val(r.t)||S._txt||"";
   const ttl=val(e.title);
   if(e!==EV.honsenko)log(`${ttl}：${text.replace(/。.*$/,"")}`);
   feed(`${ttl}：${text}`,ds,"key");
