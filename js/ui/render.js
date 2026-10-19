@@ -82,7 +82,7 @@ function renderHome(){
     <div class="row">${(()=>{const r=loadRun();return r?`<button class="btn big" id="resume">続きから（${new Date(r.date).getFullYear()}年${new Date(r.date).getMonth()+1}月・${esc(r.name)}）</button><button class="btn ghost" id="go">新しく入学する</button>`:`<button class="btn big" id="go">入学ガチャを回す</button>`})()}</div>
     <ul class="hints">
       <li>日付は勝手に進み、大事な場面で止まる</li>
-      <li>実在の科目、サークル、行事。400種類以上の出来事</li>
+      <li>実在の科目、サークル、行事。500種類以上の出来事</li>
       <li>金が尽きれば借金、心が尽きれば休学。結末はいろいろ</li>
     </ul>
     ${meta.runs?`<span class="muted small">これまで ${meta.runs} 回入学した</span>`:""}
@@ -97,8 +97,8 @@ function renderHome(){
 function renderGacha(){
   setLap();
   const homeName=S.home.n==="学生寮"?"学生寮":`${S.home.n}（${S.area.n}）`;
-  const slots=[["学部",S.fac.n,`${S.fac.c}キャンパス`],["入試方式",S.route.n,S.route.t],["住まい",homeName,S.area.t||S.home.t],["実家の太さ",S.wealth.n,S.wealth.t],["第二外国語",S.lang.n,S.lang.t],["高校時代",S.past.n,S.past.t]];
-  const pools=[FACS.map(x=>x.n),ROUTES.map(x=>x.n),HOMES.map(x=>x.n),WEALTH.map(x=>x.n),LANGS.map(x=>x.n),PASTS.map(x=>x.n)];
+  const slots=[["学部",S.fac.n,`${S.fac.c}キャンパス`],["入試方式",S.route.n,S.route.t],["住まい",homeName,S.area.t||S.home.t],["実家の太さ",S.wealth.n,S.wealth.t],["第二外国語",S.lang.n,S.lang.t],["高校時代",S.past.n,S.past.t],["地頭",S.brain.n,S.brain.t]];
+  const pools=[FACS.map(x=>x.n),ROUTES.map(x=>x.n),HOMES.map(x=>x.n),WEALTH.map(x=>x.n),LANGS.map(x=>x.n),PASTS.map(x=>x.n),BRAINS.map(x=>x.n)];
   app.innerHTML=`
   <section class="card">
    <div class="id-band"><span>入学ガチャ</span><span>${S.n}周目</span></div>
@@ -112,8 +112,6 @@ function renderGacha(){
    <div class="setup-row">
     <span class="lbl">性別（昂揚会など、入会条件がある団体の判定にだけ使う）</span>
     <div class="sex-row">${[["m","男性"],["f","女性"],["x","答えない"]].map(([k,l])=>`<button class="kw sx" data-sx="${k}" aria-pressed="${S.sex===k}">${l}</button>`).join("")}</div>
-    <span class="lbl">4年間の目標</span>
-    <div class="kw-grid goals">${GOALS.map(g=>`<button class="kw gl" data-gl="${g.id}" aria-pressed="${S.goal===g.id}"><b>${g.n}</b><small>${g.t}</small></button>`).join("")}</div>
     <span class="lbl">難易度</span>
     <div class="sex-row">${Object.entries(DIFF).map(([k,d])=>`<button class="kw df" data-df="${k}" aria-pressed="${S.diff===k}"><b>${d.n}</b><small>${d.t}</small></button>`).join("")}</div>
     <p class="muted" style="margin:0;font-size:13px">${S.ronin?"1浪して入学。":"現役で入学。"}20歳になるまで酒とタバコは違法だ。</p>
@@ -132,7 +130,6 @@ function renderGacha(){
   $("#nm").oninput=e=>{S.name=e.target.value.trim()||"名無し";prev()};
   $("#nmr").onclick=()=>{S.name=pick(SEI)+" "+pick(MEI);$("#nm").value=S.name;prev()};
   $("#fcr").onclick=()=>{S.face=newFace();prev()};
-  app.querySelectorAll(".gl").forEach(b=>b.onclick=()=>{S.goal=meta.goal=b.dataset.gl;save(meta);app.querySelectorAll(".gl").forEach(x=>x.setAttribute("aria-pressed",x===b))});
   app.querySelectorAll(".df").forEach(b=>b.onclick=()=>{S.diff=meta.diff=b.dataset.df;save(meta);app.querySelectorAll(".df").forEach(x=>x.setAttribute("aria-pressed",x===b))});
   app.querySelectorAll(".sx").forEach(b=>b.onclick=()=>{S.sex=b.dataset.sx;app.querySelectorAll(".sx").forEach(x=>x.setAttribute("aria-pressed",x===b))});
   $("#enter").onclick=()=>{startLife();scrollTop()};

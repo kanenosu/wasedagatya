@@ -13,7 +13,7 @@ const POOL=[
   ]},
  {w:2,terms:[0,7],when:s=>!s.flags.partner,title:"恋愛ガチャ",text:s=>`${s.circle?s.circle.n+"の":"授業で一緒の"}気になっている人と、2人で飲みに行くことになった。`,
   choices:[
-   {label:"告白する",chance:s=>pc(s.s.jin*.5+s.s.men*.5,50),ok:{t:"付き合うことになった。キャンパスが輝いて見える。",d:{men:15},f:s=>{s.flags.partner=1;s.flags.partnerT=s.T}},ng:{t:"次の日からLINEの既読が遅くなった。",d:{men:-15}}},
+   {label:"告白する",chance:s=>pc(s.s.com*.6+s.s.men*.4,50),ok:{t:"付き合うことになった。キャンパスが輝いて見える。",d:{men:15},f:s=>{s.flags.partner=1;s.flags.partnerT=s.T}},ng:{t:"次の日からLINEの既読が遅くなった。",d:{men:-15}}},
    {label:"友達のままでいい",ok:{t:"居心地のいい関係を守った。",d:{men:2,jin:2}}},
   ]},
  {w:4,terms:[1,9],when:s=>s.flags.partner&&s.T>s.flags.partnerT,title:"恋人とのこれから",text:"最近すれ違いが多い。",
@@ -64,7 +64,7 @@ const POOL=[
  {w:2,terms:[0,7],title:"グループワーク",text:"授業のグループ発表。メンバーの2人が全然動かない。",
   choices:[
    {label:"全部自分でやる",ok:{t:"発表は大成功。でも心は疲れた。",d:{gaku:5,men:-7,gk:3}}},
-   {label:"役割を振ってまとめる",chance:s=>pc(s.s.jin,45),ok:{t:"全員を動かせた。リーダー経験として話せる。",d:{gk:6,jin:4}},ng:{t:"結局誰も動かず、発表はグダグダ。",d:{men:-5},f:s=>s.mod-=2}},
+   {label:"役割を振ってまとめる",chance:s=>pc(s.s.com,45),ok:{t:"全員を動かせた。リーダー経験として話せる。",d:{gk:6,com:4,jin:2}},ng:{t:"結局誰も動かず、発表はグダグダ。",d:{men:-5},f:s=>s.mod-=2}},
   ]},
  {w:2,terms:[1,6],title:"資格を取る？",text:s=>`周りが資格の話をしている。今なら${s.qual.n}が狙えそうだ。`,
   choices:s=>[
@@ -112,7 +112,7 @@ const POOL=[
   ]},
  {w:2,terms:[1,6],when:s=>!!s.circle,title:"サークルの揉め事",text:s=>`${s.circle.n}で、同期同士がLINEグループで揉め始めた。`,
   choices:[
-   {label:"間に入って仲裁する",chance:s=>pc(s.s.jin*.6+s.s.men*.4,50),ok:{t:"なんとか収まった。みんなに感謝された。",d:{jin:6,gk:5}},ng:{t:"巻き込まれて自分も気まずくなった。",d:{men:-8,jin:-4}}},
+   {label:"間に入って仲裁する",chance:s=>pc(s.s.com*.6+s.s.men*.4,50),ok:{t:"なんとか収まった。みんなに感謝された。",d:{jin:6,com:4,gk:5}},ng:{t:"巻き込まれて自分も気まずくなった。",d:{men:-8,jin:-4}}},
    {label:"既読だけつけて静観する",ok:{t:"嵐が過ぎるのを待った。",d:{men:-2}}},
   ]},
  {w:2,terms:[4,5],when:s=>s.zemi&&s.zemi!=="なし",title:"ゼミ合宿",text:s=>`${s.zemi}の合宿。昼は発表、夜は宴会。`,

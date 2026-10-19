@@ -48,7 +48,7 @@ POOL.push(
  // 人間関係
  {w:2,terms:[0,7],when:s=>!s.flags.partner,title:"他大との飲み会",text:"他大学との飲み会に誘われた。",
   choices:[
-   {label:"行く",req:{kane:3},chance:s=>pc(s.s.jin*.6+s.s.men*.4,55),ok:{t:"連絡先を交換した人と、何度か会うようになった。",d:{kane:-3,men:6},f:s=>{s.flags.partner=1;s.flags.partnerT=s.T}},ng:{t:"端の席で烏龍茶を飲んでいた。",d:{kane:-3,men:-3}}},
+   {label:"行く",req:{kane:3},chance:s=>pc(s.s.com*.7+s.s.men*.3,55),ok:{t:"連絡先を交換した人と、何度か会うようになった。",d:{kane:-3,men:6},f:s=>{s.flags.partner=1;s.flags.partnerT=s.T}},ng:{t:"端の席で烏龍茶を飲んでいた。",d:{kane:-3,men:-3}}},
    {label:"行かない",ok:{t:"家で寝た。",d:{tai:2}}},
   ]},
  {w:2,terms:[1,7],when:s=>s.flags.partner&&s.home.n==="上京して一人暮らし",title:"同棲の話",text:"恋人から「一緒に住まない？家賃も半分になるし」と言われた。",

@@ -21,7 +21,7 @@ function circleGacha(cat){
   S._hd=null;
 }
 function kanbuGacha(){
-  const j=S.s.jin;
+  const j=(S.s.jin+S.s.com)/2;
   const r=wpick([{n:"代表",w:5+j/10,d:{gk:20,men:-4,tai:-4}},{n:"副代表",w:8,d:{gk:14}},{n:"会計",w:8,d:{gk:12,gaku:2}},{n:"渉外",w:8,d:{gk:10,jin:5}},{n:"落選",w:Math.max(4,14-j/8),d:{men:-8}}]);
   if(r.n==="落選"){S._txt="選挙で負けた。平部員としてやっていく。";applyD(r.d)}
   else{S.post=r.n;S._txt=`${S.circle.n}の${r.n}になった。就活で話せる肩書きができた。`;applyD(r.d);log(`${S.circle.n}の${r.n}に就任`)}

@@ -31,7 +31,7 @@ function saveRun(){
     delete out._k;delete out._txt;delete out._hd;delete out._rar;delete out._after;delete out._afterExam;
     out.date=S.date.toISOString();
     out.circle=S.circle?S.circle.id:null;out.circle2=S.circle2?S.circle2.id:null;
-    out.fac=FACS.indexOf(S.fac);out.route=ROUTES.indexOf(S.route);out.home=HOMES.indexOf(S.home);out.wealth=WEALTH.indexOf(S.wealth);out.lang=LANGS.indexOf(S.lang);out.past=PASTS.indexOf(S.past);
+    out.fac=FACS.indexOf(S.fac);out.route=ROUTES.indexOf(S.route);out.home=HOMES.indexOf(S.home);out.wealth=WEALTH.indexOf(S.wealth);out.lang=LANGS.indexOf(S.lang);out.past=PASTS.indexOf(S.past);out.brain=BRAINS.indexOf(S.brain);
     out.prof=profIdx(S.prof);
     out.tt=S.tt.map(rowOut);
     out.pending=S.pending?{...S.pending,rows:S.pending.rows.map(rowOut)}:null;
@@ -50,7 +50,8 @@ function resumeRun(){
   const r=loadRun();if(!r)return false;
   S=r;
   S.date=new Date(r.date);
-  S.fac=FACS[r.fac]||FACS[0];S.route=ROUTES[r.route]||ROUTES[0];S.home=HOMES[r.home]||HOMES[0];S.wealth=WEALTH[r.wealth]||WEALTH[1];S.lang=LANGS[r.lang]||LANGS[0];S.past=PASTS[r.past]||PASTS[0];
+  S.fac=FACS[r.fac]||FACS[0];S.route=ROUTES[r.route]||ROUTES[0];S.home=HOMES[r.home]||HOMES[0];S.wealth=WEALTH[r.wealth]||WEALTH[1];S.lang=LANGS[r.lang]||LANGS[0];S.past=PASTS[r.past]||PASTS[0];S.brain=BRAINS[r.brain]||BRAINS[2];
+  if(S.s.com==null)S.s.com=45;
   if(typeof S.area!=="object"||!S.area)S.area=S.home.areas[0];
   S.circle=r.circle?CIRCLES.find(c=>c.id===r.circle)||null:null;
   S.circle2=r.circle2?CIRCLES.find(c=>c.id===r.circle2)||null:null;

@@ -53,7 +53,7 @@ function seasonLabel(d){
 function story(){
   const p=S.people||{},f=S.flags,e=S.ending.type;
   const out=[];
-  out.push(`${BASE_Y}年の春、${S.fac.n}に${S.route.n}で入学した。${S.home.n==="学生寮"?"学生寮に入り、":S.home.n==="実家から通学"?`${S.area.n}の実家から通い、`:`${S.area.n}で一人暮らしを始め、`}実家は${S.wealth.n}ほうだった。`);
+  out.push(`${BASE_Y}年の春、${S.fac.n}に${S.route.n}で入学した。${S.home.n==="学生寮"?"学生寮に入り、":S.home.n==="実家から通学"?`${S.area.n}の実家から通い、`:`${S.area.n}で一人暮らしを始め、`}実家は${S.wealth.n}ほうで、地頭は${S.brain.n}。第二外国語は${S.lang.n}を取った。`);
   if(p.friend)out.push(`最初にできた友達は${p.friend.n}。${S.circle?`${S.circle.n}に入り、${S.post?`${S.post}まで務めた。`:"4年間の居場所になった。"}`:"サークルには入らず、自分の時間を大事にした。"}`);
   const g=S.grades||[],fails=g.reduce((a,x)=>a+x.f,0);
   if(g.length)out.push(`成績は${gpa()>=3.3?"上位で安定していた":gpa()>=2.3?"可もなく不可もなく":"正直ギリギリだった"}。${fails?`落とした科目は合わせて${fails}科目。`:"4年間、一度も単位を落とさなかった。"}`);

@@ -49,6 +49,7 @@ function idHTML(){
      <dl>
       <dt>学部</dt><dd>${S.fac.n}</dd>
       <dt>学年</dt><dd>${yr}年${S.ay>=4?"（留年）":""}・${S.fac.c}キャンパス</dd>
+      <dt>地頭</dt><dd>${S.brain.n}</dd>
 ${S.susp>0?`<dt>処分</dt><dd class="neg">停学中（あと${S.susp}日）</dd>`:(S.flags.teigaku?`<dt>処分歴</dt><dd class="neg">停学${S.flags.teigaku}回</dd>`:"")}
      </dl>
     </div>

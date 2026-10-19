@@ -36,8 +36,7 @@ function renderEnd(){
   const head=ENDINGS[e]?ENDINGS[e].head:e==="taiho"?"特殊詐欺の受け子として逮捕された。大学からは退学処分が出た":e==="taigaku"?"2度目の停学処分。学部から退学を勧められ、早稲田を去った":e==="joseki"?"学費を払えず、除籍になった":e==="kyugakuWork"?"借金を返すため、休学して働くことにした":e==="kamen"?"早稲田を去った":e==="kyugaku"?"メンタルが尽きて、休学届を出した":e==="stuck"?"5年でも卒業できなかった":S.ay>=4?"1年遅れて卒業した":"4年で卒業した";
   const firstS=rank==="S"&&!meta.firstS;
   if(firstS)meta.firstS=S.n;
-  const gr=goalResult();
-  meta.titles=meta.titles||{};meta.titles[ttl]=(meta.titles[ttl]||0)+1;if(gr&&gr.ok)meta.titles[`目標達成：${gr.g.n}`]=(meta.titles[`目標達成：${gr.g.n}`]||0)+1;
+  meta.titles=meta.titles||{};meta.titles[ttl]=(meta.titles[ttl]||0)+1;
   meta.history.unshift({n:S.n,rank,fac:S.fac.s,out});meta.history=meta.history.slice(0,30);save(meta);
   const share=`【早稲田ガチャ】${S.n}周目：${S.fac.s}・${S.route.n}・${cname(S)}→${out}（${rank}ランク）GPA ${gpa().toFixed(2)}／${S.cr}単位「${ttl}」`;
   app.innerHTML=`
@@ -46,7 +45,7 @@ function renderEnd(){
     <div class="stamp" aria-hidden="true">早稲田<br>${e==="grad"?"卒業":"記録"}</div>
     <div class="head"><small>CERTIFICATE</small><h3>成績証明書</h3><span class="muted mono" style="font-size:12px">${fmtLong(S.date)}・早稲田生活 ${S.n} 周目</span></div>
     <div class="rank ${rank==="S"||rank==="EX"?"s":""}">${rank}</div>
-    <div class="verdict"><span class="muted">${head}</span><strong>「${esc(ttl)}」</strong>${gr?`<span class="goal ${gr.ok?"ok":"ng"}">${esc(gr.text)}</span>`:""}${firstS?`<span style="color:var(--gold);font-weight:700">${S.n}周目で初めてのSランク</span>`:rank==="S"&&meta.firstS?`<span class="muted">初Sは ${meta.firstS} 周目</span>`:""}</div>
+    <div class="verdict"><span class="muted">${head}</span><strong>「${esc(ttl)}」</strong>${firstS?`<span style="color:var(--gold);font-weight:700">${S.n}周目で初めてのSランク</span>`:rank==="S"&&meta.firstS?`<span class="muted">初Sは ${meta.firstS} 周目</span>`:""}</div>
     <p class="story">${esc(story())}</p>
     <table>
       <tr><td>学部</td><td>${S.fac.n}（${S.fac.c}）</td></tr>
@@ -55,6 +54,7 @@ function renderEnd(){
       <tr><td>住まい・実家</td><td>${S.home.n==="学生寮"?"学生寮":`${S.home.n}（${S.area.n}）`}／実家は${S.wealth.n}</td></tr>
       <tr><td>第二外国語</td><td>${S.lang.n}</td></tr>
       <tr><td>高校時代</td><td>${S.past.n}</td></tr>
+      <tr><td>地頭</td><td>${S.brain.n}</td></tr>
       <tr><td>サークル</td><td>${esc(cname(S))}${S.post?`（${S.post}）`:""}${S.circle2?`、${esc(S.circle2.n)}`:""}</td></tr>
       ${S.zemi?`<tr><td>ゼミ</td><td>${S.zemi}</td></tr>`:""}
       <tr><td>取得単位</td><td class="mono">${S.cr} / ${NEED}</td></tr>
