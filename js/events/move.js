@@ -2,6 +2,7 @@
 
 const STA=n=>Object.values(STATIONS).flat().find(x=>x.n===n);
 function moveTo(home,sta,extra){
+  if(home==="上京して一人暮らし"&&SHUTOKEN.includes(S.school.pref))home="実家を出て一人暮らし";
   S.home=HOMES.find(h=>h.n===home)||S.home;
   S.area={...sta,...(extra||{})};
   if(S.fac.tokoro&&home!=="実家から通学")S.area.min=sta.n==="所沢"?15:sta.min+35;
@@ -12,11 +13,11 @@ function moveTo(home,sta,extra){
 EV.move2={title:"2年目の住まい",text:s=>`2年目の春。今は${s.home.n}（${s.area.n}、キャンパスまで${s.area.min}分）。このままでいいか。`,
  choices:s=>[
   {label:"今のまま",ok:{t:"引っ越しは面倒だ。",d:{}}},
-  ...(s.home.n!=="上京して一人暮らし"||s.area.min>12?[{label:"キャンパスの近くに引っ越す",sub:"早稲田・西早稲田・高田馬場",req:{kane:9},ok:{t:"徒歩圏に引っ越した。1限が怖くなくなった。",d:{kane:-15,men:3},f:s=>moveTo("上京して一人暮らし",pick([STA("早稲田"),STA("西早稲田"),STA("高田馬場")]))}}]:[]),
-  ...(s.home.n==="上京して一人暮らし"&&s.area.c>=-2?[{label:"家賃の安いところへ",sub:"江古田・練馬・西葛西",req:{kane:5},ok:{t:"毎月2万円浮いた。通学は少し遠くなった。",d:{kane:-8},f:s=>moveTo("上京して一人暮らし",pick([STA("江古田"),STA("練馬"),STA("西葛西")]))}}]:[]),
+  ...(!s.home.solo||s.area.min>12?[{label:"キャンパスの近くに引っ越す",sub:"早稲田・西早稲田・高田馬場",req:{kane:9},ok:{t:"徒歩圏に引っ越した。1限が怖くなくなった。",d:{kane:-15,men:3},f:s=>moveTo("上京して一人暮らし",pick([STA("早稲田"),STA("西早稲田"),STA("高田馬場")]))}}]:[]),
+  ...(s.home.solo&&s.area.c>=-2?[{label:"家賃の安いところへ",sub:"江古田・練馬・西葛西",req:{kane:5},ok:{t:"毎月2万円浮いた。通学は少し遠くなった。",d:{kane:-8},f:s=>moveTo("上京して一人暮らし",pick([STA("江古田"),STA("練馬"),STA("西葛西")]))}}]:[]),
   ...(s.home.n==="実家から通学"&&s.area.min>=45?[{label:"実家を出る",sub:"通学が長すぎる",req:{kane:12},ok:{t:"親は少し寂しそうだった。初めての一人暮らしだ。",d:{kane:-20,men:-3,jin:3},f:s=>moveTo("上京して一人暮らし",pick([STA("高田馬場"),STA("落合"),STA("下落合")]))}}]:[]),
   ...(s.home.n==="学生寮"?[{label:"寮を出て一人暮らし",req:{kane:11},ok:{t:"門限から解放された。静かすぎて最初は眠れなかった。",d:{kane:-18,men:2,jin:-3},f:s=>moveTo("上京して一人暮らし",pick([STA("高田馬場"),STA("中野"),STA("東中野")]))}}]:[]),
-  ...(s.flags.partner&&s.home.n==="上京して一人暮らし"?[{label:s=>`${PN("lover")}と同棲する`,sub:"家賃は半分",req:{kane:6},ok:{t:"二人暮らしが始まった。家賃は半分、喧嘩は倍。",d:{kane:-10,men:5},f:s=>{s.area={...s.area,c:(s.area.c||0)-4};s.flags.dousei=1}}}]:[]),
+  ...(s.flags.partner&&s.home.solo?[{label:s=>`${PN("lover")}と同棲する`,sub:"家賃は半分",req:{kane:6},ok:{t:"二人暮らしが始まった。家賃は半分、喧嘩は倍。",d:{kane:-10,men:5},f:s=>{s.area={...s.area,c:(s.area.c||0)-4};s.flags.dousei=1}}}]:[]),
  ]};
 SCHED[2].push(["move2",4,5]);
 
@@ -30,12 +31,12 @@ EV.dormOut={title:"寮の退去期限",when:s=>s.home.n==="学生寮",text:"寮�
 SCHED[4].push(["dormOut",4,3]);
 
 POOL.push(
- {w:2,terms:[0,9],when:s=>s.home.n==="上京して一人暮らし",title:"水漏れ",text:"上の階から水が漏れてきた。天井にシミが広がっている。",
+ {w:2,terms:[0,9],when:s=>s.home.solo,title:"水漏れ",text:"上の階から水が漏れてきた。天井にシミが広がっている。",
   choices:[
    {label:"管理会社に連絡する",ok:{t:"修理に3日かかった。その間ホテル代は出なかった。",d:{men:-3,kane:-2}}},
    {label:"バケツで耐える",ok:{t:"1週間、バケツの音で眠った。",d:{men:-5,tai:-2}}},
   ]},
- {w:2,terms:[0,9],when:s=>s.home.n==="上京して一人暮らし",title:"大家さん",text:"大家さんに廊下で呼び止められた。「学生さん、ゴミの日守ってね」。",
+ {w:2,terms:[0,9],when:s=>s.home.solo,title:"大家さん",text:"大家さんに廊下で呼び止められた。「学生さん、ゴミの日守ってね」。",
   choices:[
    {label:"謝って、お菓子を持っていく",req:{kane:1},ok:{t:"次の日、大家さんから野菜をもらった。",d:{kane:0,men:3,jin:1}}},
    {label:"聞き流す",ok:{t:"それ以来、廊下で目を合わせてくれない。",d:{men:-2}}},
@@ -55,7 +56,7 @@ POOL.push(
    {label:"3日間入る",req:{tai:30},ok:{t:"腰が死んだ。財布は生き返った。",d:{kane:4,tai:-8}}},
    {label:"やめておく",ok:{t:"体を大事にした。",d:{}}},
   ]},
- {w:2,terms:[1,6],when:s=>s.home.n==="上京して一人暮らし"&&!s.flags.share&&!s.flags.dousei,title:"ルームシェアの誘い",text:s=>`${PF("friend")}から「広い部屋を2人で借りない？」と誘われた。`,
+ {w:2,terms:[1,6],when:s=>s.home.solo&&!s.flags.share&&!s.flags.dousei,title:"ルームシェアの誘い",text:s=>`${PF("friend")}から「広い部屋を2人で借りない？」と誘われた。`,
   choices:[
    {label:"一緒に住む",req:{kane:5},ok:{t:"家賃は下がった。生活リズムの違いで、たまに喧嘩する。",d:{kane:-8,jin:4,men:-2},f:s=>{s.area={...s.area,c:(s.area.c||0)-3};s.flags.share=1}}},
    {label:"一人がいい",ok:{t:"自分の部屋が一番だ。",d:{men:2}}},
@@ -80,7 +81,7 @@ LIFE_FLOW.push(
  {c:s=>s.flags.share,w:2,t:"同居人が友達を連れてきて、リビングが占拠された。",d:{men:-1,jin:1}},
  {c:s=>s.flags.dousei,w:2,t:s=>`${PN("lover")}が先に起きて、コーヒーを淹れてくれた。`,d:{men:3}},
  {c:s=>s.flags.bike,t:"自転車の鍵を家に忘れて、結局歩いた。"},
- {c:s=>s.home.n==="上京して一人暮らし",t:"不動産屋の前で、来年の家賃を眺めてため息をついた。"},
+ {c:s=>s.home.solo,t:"不動産屋の前で、来年の家賃を眺めてため息をついた。"},
  {m:[3],y:[3,4],t:"卒業。部屋の退去立ち会いで、4年分のホコリと向き合った。",d:{men:2}},
  {m:[3],y:[3,4],t:"引っ越しの段ボールに、1年のときの新歓ビラが出てきた。",d:{men:3}},
 );

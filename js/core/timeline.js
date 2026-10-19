@@ -44,10 +44,13 @@ let timer=null;
 function newRun(){
   stop();clearRun();
   meta.runs++; save(meta);
-  const fac=wpick(FACS),route=wpick(ROUTES),wealth=wpick(WEALTH),lang=wpick(LANGS),past=wpick(PASTS),brain=wpick(BRAINS);
+  const fac=wpick(FACS),route=wpick(ROUTES),lang=wpick(LANGS),past=wpick(PASTS),brain=wpick(BRAINS);
   const school=pickSchool(route);
-  // 首都圏の高校でなければ実家から通えない
-  let home=wpick(HOMES);if(home.n==="実家から通学"&&!SHUTOKEN.includes(school.pref)&&!(["茨城","栃木","群馬"].includes(school.pref)&&Math.random()<.3))home=wpick(HOMES.filter(h=>h.n!=="実家から通学"));
+  const local=SHUTOKEN.includes(school.pref),near=["茨城","栃木","群馬"].includes(school.pref);
+  // 首都圏の高校なら実家通いが基本。地方なら上京か寮。北関東は3割だけ実家から通う
+  const home=local?wpick([{...HOMES.find(h=>h.n==="実家から通学"),w:70},{...HOMES.find(h=>h.n==="実家を出て一人暮らし"),w:18},{...HOMES.find(h=>h.n==="学生寮"),w:12}]):near&&Math.random()<.3?HOMES.find(h=>h.n==="実家から通学"):wpick(HOMES.filter(h=>h.n==="上京して一人暮らし"||h.n==="学生寮"));
+  // 実家の種類も出身に合わせる（都内の農家・地方の名士は出さない）
+  const wealth=wpick(WEALTH.filter(w=>!(local&&(w.n==="農家"||w.n==="地方の名士の家"))&&!(school.pref==="東京"&&w.n==="農家")));
   const area=pickStation(home,fac,school.pref);
   const s={gaku:ri(38,58),com:ri(30,55),jin:ri(35,55),tai:ri(40,60),men:ri(45,65),gk:ri(10,25)};
   for(const m of [fac.m,route.m,home.m,area.m||{},past.m])for(const k in m)s[k]=clamp(s[k]+m[k],0,100);

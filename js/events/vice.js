@@ -51,12 +51,12 @@ POOL.push(
    {label:"校門の外まで歩く",ok:{t:"毎回10分の往復。1限に遅れた。",d:{tai:-2,men:-1}}},
    {label:"これを機にやめる",chance:s=>pc(s.s.men,50),ok:{t:"やめた。",d:{tai:4,kane:1},f:s=>s.flags.smoke=0},ng:{t:"やめられなかった。",d:{men:-2}}},
   ]},
- {w:2,terms:[0,9],when:s=>s.flags.smoke&&s.home.n==="上京して一人暮らし",title:"部屋の壁",text:"部屋の壁が黄ばんできた。退去時の原状回復費を考えると怖い。",
+ {w:2,terms:[0,9],when:s=>s.flags.smoke&&s.home.solo,title:"部屋の壁",text:"部屋の壁が黄ばんできた。退去時の原状回復費を考えると怖い。",
   choices:[
    {label:"ベランダで吸う",ok:{t:"隣の部屋から苦情が来た。",d:{men:-3}}},
    {label:"部屋では吸わない",ok:{t:"自然と本数が減った。",d:{tai:1}}},
   ]},
- {w:2,terms:[1,9],when:s=>adult()&&s.home.n==="上京して一人暮らし",title:"宅飲み",text:"友達が缶チューハイを抱えて家に来た。「今日泊まっていい？」",
+ {w:2,terms:[1,9],when:s=>adult()&&s.home.solo,title:"宅飲み",text:"友達が缶チューハイを抱えて家に来た。「今日泊まっていい？」",
   choices:[
    {label:"朝まで飲む",ok:{t:"安上がりで、一番濃い夜だった。",d:{jin:5,men:4,tai:-4,kane:-0.2}}},
    {label:"終電で帰らせる",ok:{t:"翌朝の1限に間に合った。",d:{gaku:1,jin:-1}}},

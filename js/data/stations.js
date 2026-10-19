@@ -126,9 +126,9 @@ const STATIONS={
  ],
 };
 function pickStation(home,fac,pref){
-  let list=STATIONS[home.n]||STATIONS["学生寮"];
+  let list=home.solo?STATIONS["上京して一人暮らし"]:STATIONS[home.n]||STATIONS["学生寮"];
   if(home.n==="実家から通学"&&pref){const byPref=list.filter(x=>x.pref===pref);if(byPref.length)list=byPref}
-  if(fac.tokoro&&home.n==="上京して一人暮らし"){const t=list.find(x=>x.tokoro);if(t&&Math.random()<.7)return {...t,min:15,t:"所沢キャンパスまで15分"}}
+  if(fac.tokoro&&home.solo){const t=list.find(x=>x.tokoro);if(t&&Math.random()<.7)return {...t,min:15,t:"所沢キャンパスまで15分"}}
   if(fac.tokoro&&home.n==="実家から通学"){const t=list.find(x=>x.tokoro);if(t&&Math.random()<.5)return {...t,min:25,t:"所沢キャンパスまで25分"}}
   const s=wpick(list);
   // 戸山・西早稲田は本キャンと同じ扱い、所沢は遠くなる

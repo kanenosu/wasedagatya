@@ -74,7 +74,7 @@ POOL.push(
    {label:"話す",chance:()=>.5,ok:{t:"よりを戻した。前より少し大人になっていた。",d:{men:8},f:s=>{s.flags.partner=1;s.flags.partnerT=s.T;s.people.lover=s.people.ex.pop();log(`${s.people.lover.n}と復縁`)}},ng:{t:"話して、やっぱり無理だとお互いわかった。",d:{men:-3}}},
    {label:"軽く挨拶だけ",ok:{t:"元気そうでよかった。",d:{men:1}}},
   ]},
- {w:2,terms:[2,7],when:LV,title:"同棲の相談",when:s=>LV(s)&&s.home.n==="上京して一人暮らし"&&!s.flags.dousei,text:s=>`${PN("lover")}が「一緒に住まない？」と言ってきた。家賃は折半。`,
+ {w:2,terms:[2,7],when:LV,title:"同棲の相談",when:s=>LV(s)&&s.home.solo&&!s.flags.dousei,text:s=>`${PN("lover")}が「一緒に住まない？」と言ってきた。家賃は折半。`,
   choices:[
    {label:"一緒に住む",req:{kane:5},ok:{t:"二人暮らしが始まった。家賃は半分、喧嘩は倍。",d:{kane:-8,men:6},f:s=>{s.area={...s.area,c:(s.area.c||0)-3};s.flags.dousei=1}}},
    {label:"まだ早い",ok:{t:"「そうだよね」と言われた。少し残念そうだった。",d:{men:-1}}},
