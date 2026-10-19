@@ -34,7 +34,7 @@ POOL.push(
  {w:5,terms:[3,7],when:s=>!!s.circle&&(s.post==="会計"||s.post==="代表"),title:"部費の通帳",text:s=>`${s.circle.n}の部費の通帳を預かっている。残高は${ri(60,150)}万円。今月の家賃が払えるか怪しい。`,
   choices:s=>[
    {label:"1円も手を付けない",ok:{t:"当たり前のことをした。",d:{men:2}}},
-   {label:"来月返すつもりで10万円だけ借りる",sub:"横領。バレれば除名と処分",ok:{t:"自分の口座に移した。手が震えた。",d:{kane:10,men:-6},f:s=>{s.flags.oryo=1;s.flags.oryoT=s.T}}},
+   {label:"来月返すつもりで10万円だけ借りる",ok:{t:"自分の口座に移した。手が震えた。",d:{kane:10,men:-6},f:s=>{s.flags.oryo=1;s.flags.oryoT=s.T}}},
   ]},
  {w:3,terms:[2,7],when:s=>!!s.circle&&!s.post,title:"消えた部費",text:s=>`${s.circle.n}の前の会計が、部費を使い込んでいたことがわかった。合宿の予約金が払えない。`,
   choices:[

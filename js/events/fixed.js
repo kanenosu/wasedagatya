@@ -89,9 +89,9 @@ const EV={
  honsenko:{title:"本選考",text:s=>`いよいよ本選考。ここまでの4年間が試される。${s.flags.intern?"インターンの経験は武器になりそうだ。":""}${s.flags.hakone?"面接官は全員、箱根の話を聞きたがった。":""}`,
   choices:s=>[
    {label:"第一志望群に全振りする",sub:"総合商社・外資コンサル・外銀",ok:{t:"",f:s=>job(s,"all")}},
-   {label:"手堅く大手と中堅を受ける",sub:"上振れは少ないが外れにくい",ok:{t:"",f:s=>job(s,"safe")}},
-   {label:"ベンチャー一本で行く",sub:"ガクチカがものを言う",ok:{t:"",f:s=>job(s,"venture")}},
-   ...(s.fac.sci||s.flags.grad?[{label:"大学院に進学する",sub:"院試の結果次第",ok:{t:"",f:s=>job(s,"grad")}}]:[]),
+   {label:"手堅く大手と中堅を受ける",ok:{t:"",f:s=>job(s,"safe")}},
+   {label:"ベンチャー一本で行く",ok:{t:"",f:s=>job(s,"venture")}},
+   ...(s.fac.sci||s.flags.grad?[{label:"大学院に進学する",ok:{t:"",f:s=>job(s,"grad")}}]:[]),
    ...(s.flags.startup?[{label:"自分の会社を続ける",sub:"バズったアプリで起業する",ok:{t:"",f:s=>job(s,"startup")}}]:[]),
    ...((s.flags.ukeru||0)>=1&&s.circle&&s.circle.id==="ludo"?[{label:"芸人になる",sub:"LUDOの先輩と同じ道へ",ok:{t:"",f:s=>job(s,"geinin")}}]:[]),
   ]},

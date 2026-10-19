@@ -5,7 +5,7 @@ POOL.push(
  // 授業まわり
  {w:3,terms:[0,7],title:"代返の頼み",text:"友達から「明日の1限、出席カードを代わりに出しておいて」とLINEが来た。",
   choices:[
-   {label:"引き受ける",sub:"見つかれば両方その科目が危ない",ok:{t:"",f:s=>{if(Math.random()<.18){s.flags.warn=(s.flags.warn||0)+1;s.mod-=6;applyD({men:-6});s._txt="筆跡でバレた。2人とも学生生活課に呼ばれ、その科目は絶望的になった。"}else{applyD({jin:3});s._txt="バレなかった。友達に昼をおごってもらった。"}}}},
+   {label:"引き受ける",ok:{t:"",f:s=>{if(Math.random()<.18){s.flags.warn=(s.flags.warn||0)+1;s.mod-=6;applyD({men:-6});s._txt="筆跡でバレた。2人とも学生生活課に呼ばれ、その科目は絶望的になった。"}else{applyD({jin:3});s._txt="バレなかった。友達に昼をおごってもらった。"}}}},
    {label:"断る",ok:{t:"「ノリ悪いな」と言われた。",d:{jin:-3}}},
   ]},
  {w:3,terms:[0,7],title:"指定教科書",text:"授業の指定教科書が5,800円。シラバスには「必携」と書いてある。",

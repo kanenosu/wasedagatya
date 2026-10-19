@@ -27,7 +27,7 @@ job=function(s,mode){
 const baseHonsenko=EV.honsenko.choices;
 EV.honsenko.choices=s=>[
  ...baseHonsenko(s),
- {label:"公務員試験を受ける",sub:"筆記と面接。学力とメンタル次第",req:{gaku:50},ok:{t:"",f:s=>job(s,"koumuin")}},
+ {label:"公務員試験を受ける",req:{gaku:50},ok:{t:"",f:s=>job(s,"koumuin")}},
  ...(s.flags.yobi?[{label:"法曹を目指す",sub:"予備試験に合格している",ok:{t:"",f:s=>job(s,"shiho")}}]:[]),
  ...(s.flags.kaigai?[{label:"海外の大学院に行く",sub:"教授の推薦がある",ok:{t:"",f:s=>job(s,"kaigai")}}]:[]),
  ...(s.flags.buzz?[{label:"インフルエンサーで食べていく",sub:"フォロワー10万人",ok:{t:"",f:s=>job(s,"influencer")}}]:[]),

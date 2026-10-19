@@ -46,7 +46,7 @@ const YAMI2={title:"高額バイトの続き",text:"DMの返事が来た。「�
 POOL.push(
  {w:3,terms:[0,9],when:s=>!!s.circle,title:"一気コール",text:s=>`${s.circle.n}の飲み会。一気コールが始まって、グラスが回ってきた。${adult()?"":`まだ${age()}歳だ。`}`,
   choices:s=>[
-   {label:"一気する",sub:adult()?"体力次第で急性アルコール中毒":"20歳未満の飲酒は違法。発覚すれば処分",chance:adult()?s=>pc(s.s.tai,45):undefined,
+   {label:"一気する",chance:adult()?s=>pc(s.s.tai,45):undefined,
     ok:adult()?{t:"盛り上がった。翌日は使い物にならなかった。",d:{jin:4,tai:-5,kane:-3}}:{t:"",f:s=>underageDrink(s)},
     ng:{t:"急性アルコール中毒で救急搬送された。",d:{tai:-18,kane:-4,men:-6}}},
    {label:"コールを止める",req:{men:40},ok:{t:"空気は冷えたけど、誰も倒れなかった。",d:{jin:-2,gk:2}}},
@@ -54,7 +54,7 @@ POOL.push(
   ]},
  {w:2,terms:[0,9],when:s=>!s.flags.smoke,title:"喫煙所の誘い",text:s=>adult()?"キャンパスの指定喫煙所で、先輩に一本勧められた。":`サークルの先輩がタバコを差し出してきた。まだ${age()}歳だ。`,
   choices:s=>[
-   {label:"吸ってみる",sub:adult()?"毎月の出費と体力に響く":"20歳未満の喫煙は違法",ok:adult()?{t:"喫煙所の常連になった。",d:{jin:3,tai:-2},f:s=>s.flags.smoke=1}:{t:"",f:s=>{if(Math.random()<.15){s.flags.warn=(s.flags.warn||0)+1;applyD({men:-6});s._txt="学生生活課の職員に見つかって呼び出された。厳重注意を受けた。"}else{s.flags.smoke=1;applyD({jin:2});s._txt="吸ってしまった。20歳未満の喫煙は違法だ。"}}}},
+   {label:"吸ってみる",ok:adult()?{t:"喫煙所の常連になった。",d:{jin:3,tai:-2},f:s=>s.flags.smoke=1}:{t:"",f:s=>{if(Math.random()<.15){s.flags.warn=(s.flags.warn||0)+1;applyD({men:-6});s._txt="学生生活課の職員に見つかって呼び出された。厳重注意を受けた。"}else{s.flags.smoke=1;applyD({jin:2});s._txt="吸ってしまった。20歳未満の喫煙は違法だ。"}}}},
    {label:"断る",ok:{t:"「だよね」と笑われて終わった。",d:{}}},
   ]},
  {w:3,terms:[0,9],when:s=>s.flags.smoke,title:"タバコの値上げ",text:"タバコがまた値上がりした。毎月の出費が地味に痛い。",
@@ -80,7 +80,7 @@ POOL.push(
  {w:2,terms:[0,7],when:s=>s.s.men>=30,title:"レポートの締切前夜",text:"明日締切のレポートが白紙。ネットに似たテーマの文章が落ちている。",
   choices:[
    {label:"自力で書く",chance:s=>pc(s.s.tai,40),ok:{t:"徹夜で書き上げた。",d:{tai:-6,gaku:2}},ng:{t:"間に合わなかった。その科目はほぼ絶望だ。",d:{men:-5},f:s=>s.mod-=4}},
-   {label:"コピペして出す",sub:"剽窃が見つかれば停学の可能性",ok:{t:"",f:s=>{if(Math.random()<.18){s._txt="剽窃チェックに引っかかった。";s._after=()=>suspend(SUSP_MONTHS(),"レポートの剽窃")}else{s._txt="何も言われなかった。罪悪感だけが残る。";applyD({men:-3})}}}},
+   {label:"コピペして出す",ok:{t:"",f:s=>{if(Math.random()<.18){s._txt="剽窃チェックに引っかかった。";s._after=()=>suspend(SUSP_MONTHS(),"レポートの剽窃")}else{s._txt="何も言われなかった。罪悪感だけが残る。";applyD({men:-3})}}}},
    {label:"諦めて出さない",ok:{t:"その科目は捨てた。",d:{men:2},f:s=>s.mod-=3}},
   ]},
 );

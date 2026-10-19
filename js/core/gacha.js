@@ -11,10 +11,10 @@ function circleGacha(cat){
     if(!ok){
       const alt=pickCircle(["tennis","dance","bunka","unei"]);
       joinCircle(alt);
-      S._txt=`${c.n}の練習に参加したが、レベルが違いすぎた（入部成功率 ${Math.round(p*100)}%）。流れで${alt.n}に入った。${alt.t?alt.t+"。":""}`;
+      S._txt=`${c.n}の練習に参加したが、レベルが違いすぎた。流れで${alt.n}に入った。${alt.t?alt.t+"。":""}`;
       applyD({men:-5});return;
     }
-    joinCircle(c);S._txt=`${c.n}に入部した（入部成功率 ${Math.round(p*100)}%）。${c.t}。朝練の生活が始まる。`;return;
+    joinCircle(c);S._txt=`${c.n}に入部した。${c.t}。朝練の生活が始まる。`;return;
   }
   joinCircle(c);
   S._txt=`サークルガチャの結果、${c.n}に入った。${c.t?c.t+"。":""}`;

@@ -81,7 +81,7 @@ function renderHome(){
   </section>
   <section class="howto">
     <div><b>入学ガチャ</b><span>学部、入試方式、住まい、仕送り、第二外国語、高校時代の6連ガチャ。顔写真つきの学生証が発行される</span></div>
-    <div><b>時間は勝手に進む</b><span>250種類以上の出来事が流れ、選択イベントが来たら一時停止</span></div>
+    <div><b>時間は勝手に進む</b><span>300種類以上の出来事が流れ、選択イベントが来たら一時停止</span></div>
     <div><b>サークルガチャ</b><span>テニサー、ダンス、文化系、体育会、界隈（ガーディアン、昂揚会、運スタ、早慶戦支援会、便利舎、鵬志会など）</span></div>
     <div><b>実在の科目で履修</b><span>憲法Ⅰ、基礎会計学、数学B2など。成績発表はMyWaseda風の全画面</span></div>
     <div><b>行動方針と難易度</b><span>勉強漬け、バイト漬け、節約生活など。難易度はゆるめ・ふつう・シビア</span></div>
@@ -147,7 +147,7 @@ function renderEvent(e){
     <h3>${esc(val(e.title))}</h3>
     <p>${esc(val(e.text))}</p>
     <div class="choices" id="ch">${choices.map((c,i)=>{const r=rq(c),ok=reqOK(r),p=c.chance?c.chance(S):null;
-      return `<button class="choice" data-i="${i}" ${ok?"":"disabled"}><span class="l"><span>${esc(c.label)}</span>${c.sub?`<small>${esc(c.sub)}</small>`:""}${r?`<small class="req ${ok?"":"ng"}">条件：${esc(reqTxt(r))}</small>`:""}</span>${!ok?`<span class="pct lock">選べない</span>`:p!=null?`<span class="pct">成功率 ${Math.round(p*100)}%</span>`:""}</button>`}).join("")}</div>
+      return `<button class="choice" data-i="${i}" ${ok?"":"disabled"}><span class="l"><span>${esc(c.label)}</span>${c.sub?`<small>${esc(c.sub)}</small>`:""}${r?`<small class="req ${ok?"":"ng"}">条件：${esc(reqTxt(r))}</small>`:""}</span>${!ok?`<span class="pct lock">選べない</span>`:""}</button>`}).join("")}</div>
   </section>`);
   $("#panel").querySelectorAll(".choice:not([disabled])").forEach(b=>b.onclick=()=>resolve(e,choices[+b.dataset.i]));
 }
@@ -163,7 +163,7 @@ function resolve(e,c){
   if(e!==EV.honsenko)log(`${ttl}：${text.replace(/。.*$/,"")}`);
   feed(`${ttl}：${text}`,ds,"key");
   $("#ch").outerHTML=`<div class="result ${ok?"":"ng"}">
-    ${p!=null?`<span class="roll">${esc(c.label)}｜成功率 ${Math.round(p*100)}% → 出目 ${Math.round(roll*100)} … ${ok?"成功":"失敗"}</span>`:`<span class="roll">${esc(c.label)}</span>`}
+    <span class="roll">${esc(c.label)}</span>
     <p>${esc(text)}</p>
     ${e===EV.honsenko&&S.job?`<p><strong>進路：${esc(S.job.label)}</strong></p>`:""}
     ${ds.length?chips(ds):""}
@@ -185,7 +185,7 @@ function renderExam(){
     <h3>${name}</h3>
     <p>${S.tt.length}科目${cr}単位分の試験とレポートが一気に来た。${S.mod>0?"これまでの立ち回りが効いていて、今学期は少し有利だ。":S.mod<0?"今学期は欠席が多い。正直ヤバい。":""}</p>
     ${scary.length?`<p class="prof"><span class="rar R">要注意</span>${scary.map(o=>`「${esc(o.n)}」は${esc(o.prof.n)}`).join("、")}。</p>`:`<p class="prof muted">今学期は鬼の教授がいない。チャンスだ。</p>`}
-    <div class="choices" id="ch">${EXAM_CH.map((c,i)=>{const ok=reqOK(c.req);return `<button class="choice" data-i="${i}" ${ok?"":"disabled"}><span class="l"><span>${c.label}</span><small>${c.sub}</small>${c.req?`<small class="req ${ok?"":"ng"}">条件：${esc(reqTxt(c.req))}</small>`:""}</span>${ok?"":`<span class="pct lock">選べない</span>`}</button>`}).join("")}</div>
+    <div class="choices" id="ch">${EXAM_CH.map((c,i)=>{const ok=reqOK(c.req);return `<button class="choice" data-i="${i}" ${ok?"":"disabled"}><span class="l"><span>${c.label}</span>${c.sub?`<small>${c.sub}</small>`:""}${c.req?`<small class="req ${ok?"":"ng"}">条件：${esc(reqTxt(c.req))}</small>`:""}</span>${ok?"":`<span class="pct lock">選べない</span>`}</button>`}).join("")}</div>
   </section>`);
   $("#panel").querySelectorAll(".choice:not([disabled])").forEach(b=>b.onclick=()=>{
     const c=EXAM_CH[+b.dataset.i],r=sitExam(c);

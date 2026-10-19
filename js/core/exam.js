@@ -1,11 +1,11 @@
 /* 期末試験の選択肢と受験処理（カンニング含む） */
 /* ---------- 試験 ---------- */
 const EXAM_CH=[
- {label:"シケプリと過去問をかき集める",sub:"人脈がものを言う",req:{jin:20},bonus:s=>(s.s.jin-40)*.35+6,d:{}},
- {label:"中央図書館にこもる",sub:"確実だが体力を使う",req:{tai:20},bonus:()=>10,d:{tai:-7,men:-3,gaku:1}},
- {label:"一夜漬け",sub:"当たり外れが大きい",req:{tai:10},bonus:()=>rnd(-10,16),d:{tai:-6}},
- {label:"諦めて単位を捨てる",sub:"心は守れる",bonus:()=>-28,d:{men:5}},
- {label:"カンニングペーパーを仕込む",sub:"バレたら停学、その学期の全科目が無効",cheat:1,bonus:()=>15,d:{men:-3}},
+ {label:"シケプリと過去問をかき集める",req:{jin:20},bonus:s=>(s.s.jin-40)*.35+6,d:{}},
+ {label:"中央図書館にこもる",req:{tai:20},bonus:()=>10,d:{tai:-7,men:-3,gaku:1}},
+ {label:"一夜漬け",req:{tai:10},bonus:()=>rnd(-10,16),d:{tai:-6}},
+ {label:"諦めて単位を捨てる",bonus:()=>-28,d:{men:5}},
+ {label:"カンニングペーパーを仕込む",cheat:1,bonus:()=>15,d:{men:-3}},
 ];
 function sitExam(ch){
   const b=ch.bonus(S);
