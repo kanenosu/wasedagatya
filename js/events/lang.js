@@ -81,7 +81,7 @@ POOL.push(
   ]},
  {w:3,terms:[0,7],when:isMusic,title:"機材",text:"バンドの機材を買い替えたい。先輩が「学生のうちにいいの買っとけ」と言う。",
   choices:[
-   {label:"買う",req:{kane:8},ok:{t:"音が変わった。財布も変わった。",d:{kane:-8,men:5,gk:2}}},
+   {label:"買う",req:{kane:5},ok:{t:"音が変わった。財布も変わった。",d:{kane:-8,men:5,gk:2}}},
    {label:"今の機材で頑張る",ok:{t:"腕でカバーすることにした。",d:{gk:1}}},
   ]},
  {w:3,terms:[1,7],when:isMusic,title:"バンドの解散危機",text:"バンドのドラムが「就活で抜けたい」と言い出した。",

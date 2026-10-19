@@ -20,7 +20,7 @@ FATE.push(
 
 MIRACLE.push(
  {once:"rarebook",title:"奇跡：古本屋の掘り出し物",text:"早稲田通りの古本屋の100円ワゴンで、有名作家のサイン入り初版本を見つけた。",choices:[
-  {label:"古書店に売る",ok:{t:"15万円で売れた。",d:{kane:15,men:8}}},
+  {label:"古書店に売る",ok:{t:"15万円で売れた。",d:{kane:9,men:8}}},
   {label:"自分で持っておく",ok:{t:"本棚の一番いい場所に飾った。",d:{men:10}}},
  ]},
  {once:"kohai",title:"奇跡：母校の後輩",text:"高校の後輩が早稲田に合格して、「先輩に憧れて受けました」と挨拶に来た。",choices:[
@@ -30,6 +30,6 @@ MIRACLE.push(
   {label:"前向きに考えると答える",ok:{t:"就活の保険ができた。",d:{men:10,gk:8},f:s=>{s.flags.early=1;s.flags.ob=1}}},
  ]},
  {once:"prize",title:"奇跡：懸賞論文",text:"授業の課題を書き直して出した懸賞論文が、最優秀賞に選ばれた。",choices:[
-  {label:"授賞式に出る",ok:{t:"賞金と、ESに一生書ける実績をもらった。",d:{kane:10,gk:15,gaku:4}}},
+  {label:"授賞式に出る",ok:{t:"賞金と、ESに一生書ける実績をもらった。",d:{kane:6,gk:15,gaku:4}}},
  ]},
 );

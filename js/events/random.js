@@ -8,7 +8,7 @@ const POOL=[
   ]},
  {w:3,terms:[0,9],when:s=>s.s.jin>=25,title:"高田馬場ロータリー",text:"飲み会が終わった。ロータリーで二次会の流れになっている。",
   choices:[
-   {label:"二次会、三次会まで行く",chance:()=>.7,ok:{t:"終電を逃してカラオケでオール。",d:{jin:6,kane:-5,tai:-6}},ng:{t:"ロータリーで寝落ちして、警察官に起こされた。",d:{men:-6,kane:-3,jin:3}}},
+   {label:"二次会、三次会まで行く",chance:()=>.7,ok:{t:"終電を逃してカラオケでオール。",d:{jin:6,kane:-1,tai:-6}},ng:{t:"ロータリーで寝落ちして、警察官に起こされた。",d:{men:-6,kane:-3,jin:3}}},
    {label:"一次会で帰る",ok:{t:"帰りの電車で少しだけ寂しくなった。",d:{men:2,tai:2}}},
   ]},
  {w:2,terms:[0,7],when:s=>!s.flags.partner,title:"恋愛ガチャ",text:s=>`${s.circle?s.circle.n+"の":"授業で一緒の"}気になっている人と、2人で飲みに行くことになった。`,
@@ -23,11 +23,11 @@ const POOL=[
   ]},
  {w:3,terms:[0,9],title:"バイト選び",text:"金がない。バイトを探す。",
   choices:s=>[
-   {label:"塾講師",ok:{t:"早稲田の看板で時給が上がった。",d:{kane:20,gaku:3},f:s=>s.flags.job=1}},
-   {label:"居酒屋",ok:{t:"まかないで食費が浮く。体はボロボロ。",d:{kane:18,jin:5,tai:-6},f:s=>s.flags.job=1}},
-   {label:"カフェ",ok:{t:"おしゃれな職場。時給はそこそこ。",d:{kane:13,men:4},f:s=>s.flags.job=1}},
-   {label:"イベントの単発バイト",chance:()=>.6,ok:{t:"1日で2万円。最高。",d:{kane:10}},ng:{t:"炎天下で12時間立ちっぱなし。",d:{kane:8,tai:-8}}},
-   ...(s.T>=2?[{label:"長期インターン",ok:{t:"時給は低めだがガクチカになる。",d:{kane:10,gk:10},f:s=>s.flags.intern=(s.flags.intern||0)+1}}]:[]),
+   {label:"塾講師",ok:{t:"早稲田の看板で時給が上がった。",d:{kane:12,gaku:3},f:s=>s.flags.job=1}},
+   {label:"居酒屋",ok:{t:"まかないで食費が浮く。体はボロボロ。",d:{kane:11,jin:5,tai:-6},f:s=>s.flags.job=1}},
+   {label:"カフェ",ok:{t:"おしゃれな職場。時給はそこそこ。",d:{kane:8,men:4},f:s=>s.flags.job=1}},
+   {label:"イベントの単発バイト",chance:()=>.6,ok:{t:"1日で2万円。最高。",d:{kane:6}},ng:{t:"炎天下で12時間立ちっぱなし。",d:{kane:5,tai:-8}}},
+   ...(s.T>=2?[{label:"長期インターン",ok:{t:"時給は低めだがガクチカになる。",d:{kane:6,gk:10},f:s=>s.flags.intern=(s.flags.intern||0)+1}}]:[]),
   ]},
  {w:2,terms:[0,7],when:s=>s.T%2===0,title:"早慶戦（野球）",text:"神宮球場で東京六大学野球の早慶戦。友達に誘われた。",
   choices:[
@@ -46,7 +46,7 @@ const POOL=[
   ]},
  {w:3,terms:[0,9],title:"ワセメシ",text:"昼休み。今日はどこで食べる？",
   choices:[
-   {label:"メルシーのラーメン",ok:{t:"安い、早い、懐かしい。早稲田の味だ。",d:{men:3,kane:-1}}},
+   {label:"メルシーのラーメン",ok:{t:"安い、早い、懐かしい。早稲田の味だ。",d:{men:3,kane:-0.1}}},
    {label:"武蔵野アブラ学会の油そば",chance:()=>.8,ok:{t:"大盛りを完食した。午後の授業は眠い。",d:{tai:3,kane:-1,gaku:-1}},ng:{t:"大盛りに負けた。",d:{tai:-2,men:-2}}},
    {label:"学食で済ませる",ok:{t:"安定の学食。",d:{kane:1}}},
    {label:"自炊して節約する",ok:{t:"もやしのレパートリーが増えた。",d:{kane:4,tai:-2}}},
@@ -95,7 +95,7 @@ const POOL=[
   choices:[{label:"日が暮れるまで語る",ok:{t:"将来の話をした。少しだけ前向きになれた。",d:{men:6,jin:4}}}]},
  {w:4,terms:[0,5],when:s=>s.wealth.tier==="細い"&&!s.flags.shou,title:"奨学金",text:"給付型奨学金の募集が出ていた。",
   choices:[
-   {label:"応募する",chance:s=>pc(s.s.gaku,55),ok:{t:"採用された。生活が少しだけ楽になる。",d:{kane:30,men:5},f:s=>s.flags.shou=1},ng:{t:"不採用だった。",d:{men:-5},f:s=>s.flags.shou=1}},
+   {label:"応募する",chance:s=>pc(s.s.gaku,55),ok:{t:"採用された。生活が少しだけ楽になる。",d:{kane:18,men:5},f:s=>s.flags.shou=1},ng:{t:"不採用だった。",d:{men:-5},f:s=>s.flags.shou=1}},
    {label:"見送る",ok:{t:"申請書を書く気力がなかった。",d:{}}},
   ]},
  {w:3,terms:[4,5],when:s=>s.s.gaku>=65&&!s.flags.grad,title:"教授からの声かけ",text:"授業のあと、教授に「大学院に来る気はないか」と言われた。",

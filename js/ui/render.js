@@ -11,13 +11,20 @@ function hudHTML(){
     <div class="term-track" aria-hidden="true">${track}</div>
     <div class="meters">${meters}</div>
     <div class="facts">
-     <span>所持金 <b class="${S.kane<0?"neg":""}">${Math.round(S.kane)}</b>万円</span>
+     <span>所持金 <b class="${S.kane<0?"neg":""}">${(Math.round(S.kane*10)/10).toFixed(1)}</b>万円</span>
      ${S.flags.smoke?`<span>喫煙者</span>`:""}${S.susp>0?`<span class="neg">停学中 あと${S.susp}日</span>`:""}
      ${S.flags.loan?`<span>奨学金（貸与） <b>${S.flags.loan}</b>万円</span>`:""}${S.flags.ribo?`<span class="neg">リボ払い中</span>`:""}
     </div>
     ${peopleHTML()}
-    ${S.tt.length?`<details class="tt" id="ttd"${S.ttOpen?" open":""}><summary>${TERMS[t]}の時間割・${S.tt.length}科目${S.tt.reduce((a,o)=>a+o.c,0)}単位</summary><div class="tt-wrap"><table>${S.tt.map(o=>`<tr><td class="mono">${o.slot}</td><td>${esc(o.n)}${o.kind!=="選択"?` <span class="kind">${o.kind}</span>`:""}</td><td class="mono">${o.c}</td><td class="pt">${esc(o.prof.n)}</td></tr>`).join("")}</table></div></details>`:""}
+    ${S.tt.length?`<details class="tt" id="ttd"${S.ttOpen?" open":""}><summary>${TERMS[t]}の時間割・${S.tt.length}科目${S.tt.reduce((a,o)=>a+o.c,0)}単位</summary>${ttGridHTML()}</details>`:""}
    </div>`;
+}
+function ttGridHTML(){
+  const days=[..."月火水木金"],maxP=Math.max(5,...S.tt.map(o=>+o.slot.slice(1)));
+  const at=(d,p)=>S.tt.find(o=>o.slot===d+p);
+  let h=`<div class="ttg" style="grid-template-columns:1.4em repeat(${days.length},1fr)"><i></i>${days.map(d=>`<b>${d}</b>`).join("")}`;
+  for(let p=1;p<=maxP;p++){h+=`<b>${p}</b>`;for(const d of days){const o=at(d,p);h+=o?`<span class="tc ${o.kind==="必修"?"k1":o.kind==="再履修"?"k2":o.kind==="全学"?"k3":""}" title="${esc(o.n)}／${esc(o.prof.n)}／${o.c}単位"><em>${esc(o.n.replace(/（.*?）/g,"").slice(0,9))}</em><small>${esc(o.prof.n.slice(0,4))}</small></span>`:`<span class="tc e"></span>`}}
+  return h+`</div><div class="ttl"><span class="k1">必修</span><span class="k2">再履修</span><span class="k3">全学</span><span>選択</span></div>`;
 }
 function refreshHud(){const c=$("#idc");if(c){c.innerHTML=idHTML();const d=$("#ttd");if(d)d.ontoggle=()=>S.ttOpen=d.open}}
 function polHTML(){return POL.map(p=>{const ok=reqOK(p.req);return `<button data-pol="${p.id}" aria-pressed="${S.pol===p.id}" ${ok?"":"disabled"} title="${esc(p.t+(ok?"":"（"+reqTxt(p.req)+"が必要）"))}">${p.n}</button>`}).join("")}
@@ -51,7 +58,7 @@ function syncCtrl(){
 }
 function feedLi(f){
   const li=document.createElement("li");if(f.cls)li.className=f.cls;
-  li.innerHTML=`<span class="dt">${f.dt}</span><span class="tx"><span>${f.rar?`<span class="rar ${f.rar}">${f.rar}</span>`:""}${esc(f.t)}</span>${f.ds&&f.ds.length?`<span class="mini">${f.ds.map(([k,v])=>`<span class="${v>0?"up":"down"}">${LABEL[k]}${v>0?"+":""}${v}</span>`).join("")}</span>`:""}</span>`;
+  li.innerHTML=`<span class="dt">${f.dt}</span><span class="tx"><span>${f.rar?`<span class="rar ${f.rar}">${f.rar}</span>`:""}${esc(f.t)}</span>${f.ds&&f.ds.length?`<span class="mini">${f.ds.map(([k,v])=>`<span class="${v>0?"up":"down"}">${LABEL[k]}${kaneTxt(k,v)}</span>`).join("")}</span>`:""}</span>`;
   return li;
 }
 function feed(t,ds,cls,rar){

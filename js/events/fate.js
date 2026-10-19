@@ -43,7 +43,7 @@ const FATE=[
  ]},
  {once:"bankrupt",when:s=>s.wealth.tier!=="細い",title:"不可避：実家の倒産",text:"実家の会社が倒産した。来月から仕送りが止まる。",choices:[
   {label:"バイトを増やして自分で稼ぐ",ok:{t:"方針をバイト漬けにした。",d:{men:-12},f:s=>{s.wealth={...s.wealth,tier:"細い",inc:0,oj:0,kagyou:0};s.pol="work"}}},
-  {label:"給付型奨学金を探す",chance:s=>pc(s.s.gaku,55),ok:{t:"家計急変の枠で採用された。",d:{men:-8,kane:20},f:s=>{s.wealth={...s.wealth,tier:"細い",inc:0,oj:0,kagyou:0};s.flags.shou=1}},ng:{t:"間に合わなかった。",d:{men:-14},f:s=>s.wealth={...s.wealth,tier:"細い",inc:0,oj:0,kagyou:0}}},
+  {label:"給付型奨学金を探す",chance:s=>pc(s.s.gaku,55),ok:{t:"家計急変の枠で採用された。",d:{men:-8,kane:12},f:s=>{s.wealth={...s.wealth,tier:"細い",inc:0,oj:0,kagyou:0};s.flags.shou=1}},ng:{t:"間に合わなかった。",d:{men:-14},f:s=>s.wealth={...s.wealth,tier:"細い",inc:0,oj:0,kagyou:0}}},
  ]},
  {title:"不可避：祖父の死",text:"祖父が亡くなったと連絡が来た。小さい頃によく遊んでもらった。",choices:[
   {label:"葬儀のために帰省する",ok:{t:"久しぶりに親戚が集まった。祖父の話で少しだけ笑えた。",d:{men:-10,kane:-3}}},
@@ -69,14 +69,14 @@ const FATE=[
 const MIRACLE=[
  {once:"lottery",title:"奇跡：宝くじ",text:"なんとなく買った宝くじが、1000万円当たった。",choices:[
   {label:"大学をやめて自由に生きる",ok:{t:"退学届を出した。",f:s=>s.ending={type:"takarakuji"}}},
-  {label:"全額貯金して学生を続ける",ok:{t:"誰にも言わずに口座に入れた。",d:{kane:1000,men:15}}},
+  {label:"全額貯金して学生を続ける",ok:{t:"誰にも言わずに口座に入れた。",d:{kane:600,men:15}}},
  ]},
  {once:"scout",title:"奇跡：スカウト",text:"原宿を歩いていたら、芸能事務所の人に声をかけられた。",choices:[
   {label:"事務所に入る",chance:()=>.4,ok:{t:"ドラマの端役が決まった。大学に通う時間がない。",f:s=>s.ending={type:"geinou"}},ng:{t:"3か月で契約を切られた。",d:{men:-8}}},
   {label:"断る",ok:{t:"名刺だけ財布に入れておいた。",d:{men:3}}},
  ]},
  {once:"buzz",title:"奇跡：大バズり",text:"何気なく投稿した早稲田あるあるの動画が大バズりして、フォロワーが10万人を超えた。",choices:[
-  {label:"本気で発信を続ける",ok:{t:"企業から案件の依頼が来るようになった。",d:{jin:10,men:8,kane:10},f:s=>s.flags.buzz=1}},
+  {label:"本気で発信を続ける",ok:{t:"企業から案件の依頼が来るようになった。",d:{jin:10,men:8,kane:6},f:s=>s.flags.buzz=1}},
   {label:"怖くなってアカウントを消す",ok:{t:"平穏が戻った。",d:{men:2}}},
  ]},
  {once:"kaigai",when:s=>s.s.gaku>=60&&s.ay>=2,title:"奇跡：教授の推薦",text:"授業で議論した教授から、海外大学院の奨学金に推薦したいと言われた。",choices:[

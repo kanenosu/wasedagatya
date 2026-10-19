@@ -12,19 +12,19 @@ function moveTo(home,sta,extra){
 EV.move2={title:"2年目の住まい",text:s=>`2年目の春。今は${s.home.n}（${s.area.n}、キャンパスまで${s.area.min}分）。このままでいいか。`,
  choices:s=>[
   {label:"今のまま",ok:{t:"引っ越しは面倒だ。",d:{}}},
-  ...(s.home.n!=="上京して一人暮らし"||s.area.min>12?[{label:"キャンパスの近くに引っ越す",sub:"早稲田・西早稲田・高田馬場",req:{kane:15},ok:{t:"徒歩圏に引っ越した。1限が怖くなくなった。",d:{kane:-15,men:3},f:s=>moveTo("上京して一人暮らし",pick([STA("早稲田"),STA("西早稲田"),STA("高田馬場")]))}}]:[]),
-  ...(s.home.n==="上京して一人暮らし"&&s.area.c>=-2?[{label:"家賃の安いところへ",sub:"江古田・練馬・西葛西",req:{kane:8},ok:{t:"毎月2万円浮いた。通学は少し遠くなった。",d:{kane:-8},f:s=>moveTo("上京して一人暮らし",pick([STA("江古田"),STA("練馬"),STA("西葛西")]))}}]:[]),
-  ...(s.home.n==="実家から通学"&&s.area.min>=45?[{label:"実家を出る",sub:"通学が長すぎる",req:{kane:20},ok:{t:"親は少し寂しそうだった。初めての一人暮らしだ。",d:{kane:-20,men:-3,jin:3},f:s=>moveTo("上京して一人暮らし",pick([STA("高田馬場"),STA("落合"),STA("下落合")]))}}]:[]),
-  ...(s.home.n==="学生寮"?[{label:"寮を出て一人暮らし",req:{kane:18},ok:{t:"門限から解放された。静かすぎて最初は眠れなかった。",d:{kane:-18,men:2,jin:-3},f:s=>moveTo("上京して一人暮らし",pick([STA("高田馬場"),STA("中野"),STA("東中野")]))}}]:[]),
-  ...(s.flags.partner&&s.home.n==="上京して一人暮らし"?[{label:s=>`${PN("lover")}と同棲する`,sub:"家賃は半分",req:{kane:10},ok:{t:"二人暮らしが始まった。家賃は半分、喧嘩は倍。",d:{kane:-10,men:5},f:s=>{s.area={...s.area,c:(s.area.c||0)-4};s.flags.dousei=1}}}]:[]),
+  ...(s.home.n!=="上京して一人暮らし"||s.area.min>12?[{label:"キャンパスの近くに引っ越す",sub:"早稲田・西早稲田・高田馬場",req:{kane:9},ok:{t:"徒歩圏に引っ越した。1限が怖くなくなった。",d:{kane:-15,men:3},f:s=>moveTo("上京して一人暮らし",pick([STA("早稲田"),STA("西早稲田"),STA("高田馬場")]))}}]:[]),
+  ...(s.home.n==="上京して一人暮らし"&&s.area.c>=-2?[{label:"家賃の安いところへ",sub:"江古田・練馬・西葛西",req:{kane:5},ok:{t:"毎月2万円浮いた。通学は少し遠くなった。",d:{kane:-8},f:s=>moveTo("上京して一人暮らし",pick([STA("江古田"),STA("練馬"),STA("西葛西")]))}}]:[]),
+  ...(s.home.n==="実家から通学"&&s.area.min>=45?[{label:"実家を出る",sub:"通学が長すぎる",req:{kane:12},ok:{t:"親は少し寂しそうだった。初めての一人暮らしだ。",d:{kane:-20,men:-3,jin:3},f:s=>moveTo("上京して一人暮らし",pick([STA("高田馬場"),STA("落合"),STA("下落合")]))}}]:[]),
+  ...(s.home.n==="学生寮"?[{label:"寮を出て一人暮らし",req:{kane:11},ok:{t:"門限から解放された。静かすぎて最初は眠れなかった。",d:{kane:-18,men:2,jin:-3},f:s=>moveTo("上京して一人暮らし",pick([STA("高田馬場"),STA("中野"),STA("東中野")]))}}]:[]),
+  ...(s.flags.partner&&s.home.n==="上京して一人暮らし"?[{label:s=>`${PN("lover")}と同棲する`,sub:"家賃は半分",req:{kane:6},ok:{t:"二人暮らしが始まった。家賃は半分、喧嘩は倍。",d:{kane:-10,men:5},f:s=>{s.area={...s.area,c:(s.area.c||0)-4};s.flags.dousei=1}}}]:[]),
  ]};
 SCHED[2].push(["move2",4,5]);
 
 /* 3年春：寮の退去（寮は2年まで、というルールが多い） */
 EV.dormOut={title:"寮の退去期限",when:s=>s.home.n==="学生寮",text:"寮は2年まで。退去の通知が来た。",
  choices:s=>[
-  {label:"キャンパスの近くに引っ越す",req:{kane:15},ok:{t:"寮の仲間と最後の鍋をして、出た。",d:{kane:-15,jin:-2,men:2},f:s=>moveTo("上京して一人暮らし",pick([STA("早稲田"),STA("高田馬場"),STA("落合")]))}},
-  {label:"安いところへ",req:{kane:8},ok:{t:"家賃優先で選んだ。通学は遠くなった。",d:{kane:-8},f:s=>moveTo("上京して一人暮らし",pick([STA("江古田"),STA("練馬"),STA("西葛西")]))}},
+  {label:"キャンパスの近くに引っ越す",req:{kane:9},ok:{t:"寮の仲間と最後の鍋をして、出た。",d:{kane:-15,jin:-2,men:2},f:s=>moveTo("上京して一人暮らし",pick([STA("早稲田"),STA("高田馬場"),STA("落合")]))}},
+  {label:"安いところへ",req:{kane:5},ok:{t:"家賃優先で選んだ。通学は遠くなった。",d:{kane:-8},f:s=>moveTo("上京して一人暮らし",pick([STA("江古田"),STA("練馬"),STA("西葛西")]))}},
   {label:"寮の友達とルームシェア",req:{jin:30},ok:{t:"2LDKを2人で借りた。寮の延長みたいな生活だ。",d:{kane:-6,jin:3},f:s=>{moveTo("上京して一人暮らし",STA("中野"));s.area.c-=3;s.flags.share=1}}},
  ]};
 SCHED[4].push(["dormOut",4,3]);
@@ -57,7 +57,7 @@ POOL.push(
   ]},
  {w:2,terms:[1,6],when:s=>s.home.n==="上京して一人暮らし"&&!s.flags.share&&!s.flags.dousei,title:"ルームシェアの誘い",text:s=>`${PF("friend")}から「広い部屋を2人で借りない？」と誘われた。`,
   choices:[
-   {label:"一緒に住む",req:{kane:8},ok:{t:"家賃は下がった。生活リズムの違いで、たまに喧嘩する。",d:{kane:-8,jin:4,men:-2},f:s=>{s.area={...s.area,c:(s.area.c||0)-3};s.flags.share=1}}},
+   {label:"一緒に住む",req:{kane:5},ok:{t:"家賃は下がった。生活リズムの違いで、たまに喧嘩する。",d:{kane:-8,jin:4,men:-2},f:s=>{s.area={...s.area,c:(s.area.c||0)-3};s.flags.share=1}}},
    {label:"一人がいい",ok:{t:"自分の部屋が一番だ。",d:{men:2}}},
   ]},
  {w:3,terms:[1,7],when:s=>s.flags.share,title:"ルームシェアの揉め事",text:"同居人が、洗い物を1週間放置している。",

@@ -11,7 +11,7 @@ POOL.push(
  {w:3,terms:[1,7],title:s=>`${PN("friend")}の落単`,text:s=>`${PF("friend")}が必修を落として、落ち込んでいる。`,
   choices:[
    {label:"一緒に再履修の計画を立てる",ok:{t:s=>`${PN("friend")}が「お前がいてよかった」と言った。`,d:{jin:5,men:3}}},
-   {label:"飲みに連れていく",req:{kane:3},ok:{t:"ロータリーで2人で叫んだ。",d:{jin:4,kane:-3,tai:-2}}},
+   {label:"飲みに連れていく",req:{kane:1},ok:{t:"ロータリーで2人で叫んだ。",d:{jin:4,kane:-0.6,tai:-2}}},
    {label:"そっとしておく",ok:{t:"しばらく連絡が減った。",d:{jin:-3}}},
   ]},
  {w:2,terms:[2,6],title:s=>`${PN("friend")}の秘密`,text:s=>`${PF("friend")}から「誰にも言わないでほしい」と相談された。親に留年を隠しているらしい。`,
@@ -21,7 +21,7 @@ POOL.push(
   ]},
  {w:3,terms:[4,7],title:s=>`${PN("friend")}の内定`,text:s=>`${PF("friend")}に、第一志望の内定が出た。${s.job?"自分も決まっているとはいえ、":"自分はまだ何も決まっていない。"}素直に喜べるか。`,
   choices:[
-   {label:"全力で祝う",ok:{t:"焼肉をおごった。心からおめでとうと言えた。",d:{jin:5,men:3,kane:-4}}},
+   {label:"全力で祝う",ok:{t:"焼肉をおごった。心からおめでとうと言えた。",d:{jin:5,men:3,kane:-0.8}}},
    {label:"おめでとうと言って、家で泣く",ok:{t:"自分だけ取り残された気がした。",d:{men:-8,gk:2}}},
   ]},
  {w:2,terms:[2,7],when:s=>!s.people.borrow,title:s=>`${PN("friend")}に借金を頼まれた`,text:s=>`${PF("friend")}に「家賃が払えない。3万円貸して」と頼まれた。`,
@@ -121,7 +121,7 @@ LIFE_FLOW.push(
  {c:s=>s.ay>=2,t:s=>`社会人になった${PN("senpai")}が、初任給でおごってくれた。`,d:{jin:1,men:2}},
  {c:s=>!!s.people.kohai,w:2,t:s=>`${PN("kohai")}から「先輩、履修どうしてました？」とLINEが来た。`,d:{jin:1}},
  {c:s=>!!s.people.kohai,t:s=>`${PN("kohai")}が部室で寝ていた。`},
- {c:s=>!!s.people.kohai,t:s=>`${PN("kohai")}にラーメンをおごった。`,d:{kane:-1,jin:1}},
+ {c:s=>!!s.people.kohai,t:s=>`${PN("kohai")}にラーメンをおごった。`,d:{kane:-0.2,jin:1}},
  {c:s=>s.flags.partner,w:3,t:s=>`${PN("lover")}と早稲田松竹で映画を観た。`,d:{men:3,kane:-1}},
  {c:s=>s.flags.partner,w:2,t:s=>`${PN("lover")}と些細なことで喧嘩して、すぐ仲直りした。`,d:{men:1}},
  {c:s=>s.flags.partner,t:s=>`${PN("lover")}の寝顔を見て、幸せだと思った。`,d:{men:3}},
@@ -129,6 +129,6 @@ LIFE_FLOW.push(
  {c:s=>s.flags.partner,t:s=>`${PN("lover")}と終電を逃して、高田馬場を歩いて帰った。`,d:{tai:-2,men:2}},
  {c:s=>!s.flags.partner&&s.people.ex.length,w:2,t:s=>`街で${s.people.ex[s.people.ex.length-1].s}に似た人を見て、振り返ってしまった。`,d:{men:-2}},
  {w:2,t:"親から「ちゃんと食べてる？」とLINEが来た。",d:{men:1}},
- {t:"親の誕生日を忘れていた。慌ててプレゼントを送った。",d:{kane:-1}},
+ {t:"親の誕生日を忘れていた。慌ててプレゼントを送った。",d:{kane:-0.5}},
  {c:s=>s.ay>=3,t:"親が「卒業式、行っていい？」と聞いてきた。",d:{men:2}},
 );

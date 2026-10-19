@@ -18,7 +18,7 @@ const EV={
   choices:[
    {label:"先輩から楽単情報を仕入れて固める",chance:s=>pc(s.s.jin,40),ok:{t:"先輩の楽単リストは神だった。",d:{gaku:-2},f:s=>s.mod+=7},ng:{t:"楽単のはずが、担当教員が変わって鬼単になっていた。",d:{men:-4},f:s=>s.mod-=5}},
    {label:"興味のある授業を素直に取る",ok:{t:"授業が面白い。大学ってこういうものか。",d:{gaku:6,men:4}}},
-   {label:"1限を詰めて午後を空ける",chance:s=>pc(s.s.tai,55),ok:{t:"朝型生活に成功。午後はバイトに入れる。",d:{tai:3,kane:8}},ng:{t:"5月には1限に行けなくなっていた。",d:{men:-3},f:s=>s.mod-=8}},
+   {label:"1限を詰めて午後を空ける",chance:s=>pc(s.s.tai,55),ok:{t:"朝型生活に成功。午後はバイトに入れる。",d:{tai:3,kane:5}},ng:{t:"5月には1限に行けなくなっていた。",d:{men:-3},f:s=>s.mod-=8}},
   ]},
  hyakuhai:{title:"100キロハイク",text:s=>`5月、本庄から早稲田まで100kmを夜通し歩く「100キロハイク」。${s.circle&&s.circle.id==="koyo"?"主催の昂揚会として運営もしながら歩く。":"友達に誘われた。"}`,
   choices:[
@@ -27,9 +27,9 @@ const EV={
   ]},
  natsu:{title:"1年の夏休み",text:"2か月の夏休み。何に使う？",
   choices:[
-   {label:"バイトに明け暮れる",ok:{t:"通帳の数字が初めて増えた。",d:{kane:25,tai:-5},f:s=>s.flags.job=1}},
+   {label:"バイトに明け暮れる",ok:{t:"通帳の数字が初めて増えた。",d:{kane:15,tai:-5},f:s=>s.flags.job=1}},
    {label:"免許合宿に行く",ok:{t:"2週間で免許が取れた。合宿先で知り合いもできた。",d:{kane:-25,men:5,jin:3}}},
-   {label:"青春18きっぷで一人旅",ok:{t:"鈍行で西へ。知らない駅で降りるのが楽しい。",d:{kane:-10,men:8,gk:2}}},
+   {label:"青春18きっぷで一人旅",ok:{t:"鈍行で西へ。知らない駅で降りるのが楽しい。",d:{kane:-5,men:8,gk:2}}},
    {label:"短期留学",chance:s=>s.kane>=30?.95:.3,ok:{t:"英語で死ぬほど恥をかいた。でも行ってよかった。",d:{kane:-35,gaku:5,gk:6}},ng:{t:"資金が足りずに申し込みを諦めた。",d:{men:-4}}},
    {label:"実家でゴロゴロ",ok:{t:"何もしなかった。でもそれでいい夏もある。",d:{men:6,tai:3}}},
   ]},
@@ -51,9 +51,9 @@ const EV={
   ]},
  zemiPrep:{title:"2年生になった",text:s=>`後輩ができた。新歓では「先輩」と呼ばれる側だ。${s.fac.sci?"理工の授業は実験とレポートが本格化してきた。":"そろそろゼミのことも考えないといけない。"}`,
   choices:[
-   {label:"新歓で先輩風を吹かせる",when:s=>!!s.circle,ok:{t:"後輩に奢りまくって財布が空になった。",d:{jin:8,kane:-10,men:4}}},
+   {label:"新歓で先輩風を吹かせる",when:s=>!!s.circle,ok:{t:"後輩に奢りまくって財布が空になった。",d:{jin:8,kane:-2,men:4}}},
    {label:"勉強に本腰を入れる",ok:{t:"中央図書館の常連になった。",d:{gaku:8,men:-2}}},
-   {label:"バイトを増やす",ok:{t:"シフトを週4にした。",d:{kane:18,tai:-5},f:s=>s.flags.job=1}},
+   {label:"バイトを増やす",ok:{t:"シフトを週4にした。",d:{kane:11,tai:-5},f:s=>s.flags.job=1}},
   ]},
  kanbu:{when:s=>!!s.circle,title:"代替わり",text:s=>`${s.circle.n}の代替わり。次の幹部が決まる。どうする？`,
   choices:[
@@ -76,7 +76,7 @@ const EV={
  summerIntern:{title:"3年の夏、サマーインターン",text:"周りが一斉に就活を始めた。LINEのアイコンがスーツ姿になっていく。",
   choices:s=>[
    {label:"ESを20社出す",chance:s=>pc(s.s.gk*.5+s.s.gaku*.3+s.s.jin*.2,48),ok:{t:pick(["外資コンサルのジョブに通った。3日間で人生観が変わった。","総合商社のインターンに通った。周りが全員強かった。","メガバンクの5daysに参加した。早期選考ルートに乗れた。"]),d:{gk:8,men:-2},f:s=>s.flags.intern=(s.flags.intern||0)+1},ng:{t:`お祈りメールが${ri(10,19)}通届いた。`,d:{men:-12}}},
-   {label:"長期インターンを始める",ok:{t:"ベンチャーで営業を始めた。時給も出る。",d:{gk:15,tai:-5,kane:10},f:s=>s.flags.intern=(s.flags.intern||0)+1}},
+   {label:"長期インターンを始める",ok:{t:"ベンチャーで営業を始めた。時給も出る。",d:{gk:15,tai:-5,kane:6},f:s=>s.flags.intern=(s.flags.intern||0)+1}},
    {label:"まだ遊ぶ",ok:{t:"最後の夏休みを満喫した。",d:{men:8,jin:4},f:s=>s.flags.late=1}},
    ...(s.fac.sci||s.flags.grad?[{label:"院試の勉強をする",ok:{t:"研究室にこもって過去問を解いた。",d:{gaku:10,men:-3},f:s=>s.flags.grad=1}}]:[]),
   ]},
@@ -104,7 +104,7 @@ const EV={
  ryunen:{title:"5年生",text:s=>`単位が${NEED-s.cr}足りなかった。同期は社会人になった。`,
   choices:[
    {label:"真面目に授業に出る",ok:{t:"後輩に混じって前の席に座った。",d:{gaku:6,men:-4},f:s=>s.mod+=6}},
-   {label:"バイトしながら卒業を目指す",ok:{t:"昼は授業、夜はバイト。",d:{kane:15,tai:-5}}},
+   {label:"バイトしながら卒業を目指す",ok:{t:"昼は授業、夜はバイト。",d:{kane:9,tai:-5}}},
   ]},
  kamen:{title:"仮面浪人、本番",when:s=>s.flags.kamen,text:"1月、共通テスト。早稲田に籍を置いたまま受験勉強を続けてきた。",
   choices:[

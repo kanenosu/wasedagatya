@@ -22,7 +22,7 @@ POOL.find(e=>e.title==="資格を取る？").when=s=>{s.qual=pick(QUALS);return 
 /* ---------- 幹部の横領と会計監査 ---------- */
 const AUDIT={title:"会計監査",text:s=>`${s.circle?s.circle.n:"サークル"}の代替わりの会計監査。帳簿と通帳の残高が合わない。使い込んだのは自分だ。`,
  choices:[
-  {label:"正直に話して全額返す",req:{kane:10},ok:{t:"頭を下げて返した。幹部は辞任。サークルには居づらくなった。",d:{kane:-10,men:-10,jin:-10},f:s=>{s.flags.oryo=0;s.post=null;log("部費の使い込みを認めて幹部を辞任")}}},
+  {label:"正直に話して全額返す",req:{kane:6},ok:{t:"頭を下げて返した。幹部は辞任。サークルには居づらくなった。",d:{kane:-10,men:-10,jin:-10},f:s=>{s.flags.oryo=0;s.post=null;log("部費の使い込みを認めて幹部を辞任")}}},
   {label:"領収書を作ってごまかす",chance:()=>.35,ok:{t:"なんとかごまかせた。でも毎晩うなされる。",d:{men:-10},f:s=>s.flags.oryo=0},
    ng:{t:"OBが通帳の記録を照合して発覚した。サークルを除名され、大学にも報告された。",d:{kane:-10,jin:-15},f:s=>{s.flags.oryo=0;const c=s.circle;s.post=null;s.circle=null;log(`${c?c.n:"サークル"}を除名`);s._after=()=>suspend(SUSP_MONTHS(),"サークル部費の横領")}}},
  ]};
@@ -32,7 +32,7 @@ POOL.push(
  {w:5,terms:[3,7],when:s=>!!s.circle&&(s.post==="会計"||s.post==="代表"),title:"部費の通帳",text:s=>`${s.circle.n}の部費の通帳を預かっている。残高は${ri(60,150)}万円。今月の家賃が払えるか怪しい。`,
   choices:s=>[
    {label:"1円も手を付けない",ok:{t:"当たり前のことをした。",d:{men:2}}},
-   {label:"来月返すつもりで10万円だけ借りる",ok:{t:"自分の口座に移した。手が震えた。",d:{kane:10,men:-6},f:s=>{s.flags.oryo=1;s.flags.oryoT=s.T}}},
+   {label:"来月返すつもりで10万円だけ借りる",ok:{t:"自分の口座に移した。手が震えた。",d:{kane:6,men:-6},f:s=>{s.flags.oryo=1;s.flags.oryoT=s.T}}},
   ]},
  {w:3,terms:[2,7],when:s=>!!s.circle&&!s.post,title:"消えた部費",text:s=>`${s.circle.n}の前の会計が、部費を使い込んでいたことがわかった。合宿の予約金が払えない。`,
   choices:[
@@ -42,7 +42,7 @@ POOL.push(
   ]},
  {w:3,terms:[0,7],when:s=>!!s.circle,title:"合宿の幹事",text:"合宿の幹事を任された。直前になってキャンセルが続出している。",
   choices:[
-   {label:"キャンセル料を自腹で立て替える",req:{kane:8},ok:{t:"誰からも返ってこなかった。",d:{kane:-8,jin:3}}},
+   {label:"キャンセル料を自腹で立て替える",req:{kane:5},ok:{t:"誰からも返ってこなかった。",d:{kane:-8,jin:3}}},
    {label:"規約どおりキャンセル料を全員から集める",req:{men:30},chance:s=>pc(s.s.jin,45),ok:{t:"全員から回収できた。几帳面さが評価された。",d:{gk:4,jin:2}},ng:{t:"「ケチ」と陰で言われた。",d:{jin:-6,men:-4}}},
   ]},
  {w:2,terms:[1,7],when:s=>!!s.circle&&s.T%2===1,title:"売上金の封筒",text:"早稲田祭の模擬店の売上金を入れた封筒が見当たらない。",
@@ -53,7 +53,7 @@ POOL.push(
  {w:4,terms:[2,9],when:s=>adult()&&!s.flags.nenkin,title:"国民年金の納付書",text:"20歳になったので、国民年金の納付書が届いた。毎月1万円台後半を払えと書いてある。",
   choices:[
    {label:"学生納付特例を申請する",ok:{t:"手続きをした。在学中は納付が猶予される。",d:{men:1},f:s=>s.flags.nenkin=1}},
-   {label:"払う",req:{kane:20},ok:{t:"1年分を払った。痛い。",d:{kane:-20},f:s=>s.flags.nenkin=1}},
+   {label:"払う",req:{kane:12},ok:{t:"1年分を払った。痛い。",d:{kane:-20},f:s=>s.flags.nenkin=1}},
    {label:"放っておく",ok:{t:"見なかったことにした。",d:{},f:s=>s.flags.nenkin=2}},
   ]},
  {w:3,terms:[1,7],when:s=>s.flags.job,title:"扶養の壁",text:"親から「バイト代、扶養の範囲を超えないようにしてね」と連絡が来た。",

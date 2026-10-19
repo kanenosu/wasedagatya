@@ -12,7 +12,7 @@ SCHED[2].push(["kyoshoku",4,8]);
 // 交換留学：3年秋の出願が最後
 EV.ryugakuLast={title:"交換留学、最後の出願",when:s=>!s.flags.abroad&&!s.fac.sils,text:"3年秋。交換留学に行けるのは、この出願が最後だ。行けば4年の就活は出遅れる。",
  choices:[
-  {label:"出願する",req:{gaku:45,kane:20},chance:s=>pc(s.s.gaku+(s.flags.toefl?15:0),58),ok:{t:"通った。4年の春から半年、海外へ。就活は帰国してからだ。",d:{gk:12,gaku:5,kane:-20},f:s=>{s.flags.abroad=1;s.flags.late=1;s.flags.lateAbroad=1}},ng:{t:"学内選考で落ちた。留学の道はここで閉じた。",d:{men:-6},f:s=>s.flags.noAbroad=1}},
+  {label:"出願する",req:{gaku:45,kane:12},chance:s=>pc(s.s.gaku+(s.flags.toefl?15:0),58),ok:{t:"通った。4年の春から半年、海外へ。就活は帰国してからだ。",d:{gk:12,gaku:5,kane:-20},f:s=>{s.flags.abroad=1;s.flags.late=1;s.flags.lateAbroad=1}},ng:{t:"学内選考で落ちた。留学の道はここで閉じた。",d:{men:-6},f:s=>s.flags.noAbroad=1}},
   {label:"就活を優先して見送る",ok:{t:"留学はしないと決めた。もう戻れない。",d:{men:-1},f:s=>s.flags.noAbroad=1}},
  ]};
 SCHED[5].push(["ryugakuLast",10,20]);
@@ -27,7 +27,7 @@ SCHED[4].push(["tooLate",4,20]);
 POOL.push(
  {w:3,terms:[0,1],when:s=>s.wealth.tier!=="太い"&&!s.flags.shou&&!s.flags.shouLate,title:"奨学金の申請締め切り",text:"給付型奨学金の申請締め切りが明日。書類は半分しか埋まっていない。",
   choices:[
-   {label:"徹夜で書き上げる",req:{tai:20},chance:s=>pc(s.s.gaku,50),ok:{t:"採用された。4年間、毎月の重さが変わる。",d:{kane:30,tai:-4},f:s=>s.flags.shou=1},ng:{t:"出したが不採用だった。次の募集は来年だ。",d:{tai:-4,men:-3},f:s=>s.flags.shouLate=1}},
+   {label:"徹夜で書き上げる",req:{tai:20},chance:s=>pc(s.s.gaku,50),ok:{t:"採用された。4年間、毎月の重さが変わる。",d:{kane:18,tai:-4},f:s=>s.flags.shou=1},ng:{t:"出したが不採用だった。次の募集は来年だ。",d:{tai:-4,men:-3},f:s=>s.flags.shouLate=1}},
    {label:"間に合わない",ok:{t:"締め切りを過ぎた。この年の給付型は、もう申請できない。",d:{men:-4},f:s=>s.flags.shouLate=1}},
   ]},
  {w:3,terms:[6,6],when:s=>!s.job||s.job.tier==="D",title:"もう6月",text:"4年の6月。周りは内々定を持っている。自分はまだ持ち駒がない。",
@@ -56,8 +56,8 @@ POOL.push(
   ]},
  {w:3,terms:[2,4],when:s=>s.flags.job&&!s.flags.abroad,title:"バイトの昇格と留学",text:"バイト先から「来月から時給を上げて、シフトリーダーに」と言われた。同じ時期に、半年の留学の募集がある。",
   choices:[
-   {label:"昇格を受ける",ok:{t:"収入が増えた。留学の募集は、知らないうちに締め切られていた。",d:{kane:8,gk:3},f:s=>{s.flags.noAbroad=1;s.flags.jobLead=1}}},
-   {label:"バイトを辞めて留学する",req:{kane:25},chance:s=>pc(s.s.gaku,55),ok:{t:"半年、海外にいた。帰国したらバイト先に自分の席はなかった。",d:{gk:12,gaku:5,kane:-25},f:s=>{s.flags.abroad=1;s.flags.job=0}},ng:{t:"留学の選考に落ちた。バイトの昇格も、別の人に決まっていた。",d:{men:-8},f:s=>s.flags.noAbroad=1}},
+   {label:"昇格を受ける",ok:{t:"収入が増えた。留学の募集は、知らないうちに締め切られていた。",d:{kane:5,gk:3},f:s=>{s.flags.noAbroad=1;s.flags.jobLead=1}}},
+   {label:"バイトを辞めて留学する",req:{kane:15},chance:s=>pc(s.s.gaku,55),ok:{t:"半年、海外にいた。帰国したらバイト先に自分の席はなかった。",d:{gk:12,gaku:5,kane:-25},f:s=>{s.flags.abroad=1;s.flags.job=0}},ng:{t:"留学の選考に落ちた。バイトの昇格も、別の人に決まっていた。",d:{men:-8},f:s=>s.flags.noAbroad=1}},
   ]},
  {w:3,terms:[2,5],when:s=>s.flags.partner,title:"恋人の留学",text:s=>`${PF("lover")}が1年の留学に行く。「待っててほしい」と言われた。`,
   choices:[
@@ -66,7 +66,7 @@ POOL.push(
   ]},
  {w:4,terms:[3,5],when:s=>s.flags.ldr&&s.flags.partner,title:"遠距離の限界",text:s=>`${PF("lover")}との遠距離、半年。最近、返信が1日遅れる。`,
   choices:[
-   {label:"会いに行く",req:{kane:15},ok:{t:"航空券を買った。会ったら全部どうでもよくなった。",d:{kane:-15,men:10},f:s=>s.flags.ldr=0}},
+   {label:"会いに行く",req:{kane:9},ok:{t:"航空券を買った。会ったら全部どうでもよくなった。",d:{kane:-15,men:10},f:s=>s.flags.ldr=0}},
    {label:"電話で話す",chance:s=>pc(s.s.com*.5+s.s.men*.5,55),ok:{t:"3時間話した。続けられると思った。",d:{men:4}},ng:{t:"「もう無理かも」と言われた。",d:{men:-12},f:s=>{s.flags.partner=0;s.flags.ldr=0}}},
   ]},
  {w:3,terms:[4,5],when:s=>s.post&&s.ind,title:"幹部の任期と就活",text:s=>`${s.circle?s.circle.n:"サークル"}の${s.post}として、あと半年残っている。でも就活が本格化する。`,

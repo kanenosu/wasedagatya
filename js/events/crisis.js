@@ -3,13 +3,13 @@
 const parentChance=()=>({"太い":.9,"ふつう":.55,"細い":.15})[S.wealth.tier];
 const CRISIS={
  debt:{title:"口座がマイナス",text:"家賃とスマホ代の引き落としができなかった。どうする？",choices:[
-  {label:"親に頭を下げる",chance:parentChance,ok:{t:"「今回だけだよ」と振り込んでくれた。情けない。",d:{kane:20,men:-6}},ng:{t:"「自分でなんとかしなさい」と言われた。",d:{men:-8}}},
-  {label:"貸与型の奨学金を申し込む",req:{gaku:30},ok:{t:"毎月の振込が決まった。卒業後に返す借金だ。",d:{kane:30,men:-3},f:s=>s.flags.loan=(s.flags.loan||0)+30}},
-  {label:"リボ払いで乗り切る",ok:{t:"とりあえず今月は回った。毎月の返済がずっと続く。",d:{kane:15,men:-3},f:s=>s.flags.ribo=1}},
+  {label:"親に頭を下げる",chance:parentChance,ok:{t:"「今回だけだよ」と振り込んでくれた。情けない。",d:{kane:12,men:-6}},ng:{t:"「自分でなんとかしなさい」と言われた。",d:{men:-8}}},
+  {label:"貸与型の奨学金を申し込む",req:{gaku:30},ok:{t:"毎月の振込が決まった。卒業後に返す借金だ。",d:{kane:18,men:-3},f:s=>s.flags.loan=(s.flags.loan||0)+30}},
+  {label:"リボ払いで乗り切る",ok:{t:"とりあえず今月は回った。毎月の返済がずっと続く。",d:{kane:9,men:-3},f:s=>s.flags.ribo=1}},
   {label:"方針をバイト漬けに切り替える",req:{tai:15},ok:{t:"シフトを週5に増やした。",d:{},f:s=>s.pol="work"}},
  ]},
  tuition:{title:"学費が払えない",text:"借金がふくらみ、秋の学費の納入期限が過ぎた。このままだと除籍になる。",choices:[
-  {label:"実家に土下座する",chance:parentChance,ok:{t:"親が定期預金を崩してくれた。一生頭が上がらない。",d:{kane:45,men:-15}},ng:{t:"実家にも余裕はなかった。",f:s=>s.ending={type:"joseki"}}},
+  {label:"実家に土下座する",chance:parentChance,ok:{t:"親が定期預金を崩してくれた。一生頭が上がらない。",d:{kane:27,men:-15}},ng:{t:"実家にも余裕はなかった。",f:s=>s.ending={type:"joseki"}}},
   {label:"休学して1年働く",ok:{t:"休学届を出した。",f:s=>s.ending={type:"kyugakuWork"}}},
  ]},
  hp:{title:"倒れた",text:"駅の階段でめまいがして倒れた。救急車で運ばれた。",choices:[

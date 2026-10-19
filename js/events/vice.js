@@ -1,0 +1,101 @@
+/* 酒とタバコの出来事（20歳未満の飲酒・喫煙は法律で禁止された違法行為。ゲーム内では必ず代償がある） */
+const minor=()=>!adult();
+function underageSmoke(s){
+  s.flags.usmoke=(s.flags.usmoke||0)+1;
+  const r=Math.random();
+  if(r<.15){s.flags.warn=(s.flags.warn||0)+1;applyD({men:-6});s._txt="コンビニの前で補導された。親に連絡が行き、学生生活課からも呼び出された。";}
+  else if(r<.22){applyD({men:-5});s._txt="SNSに写真が上がって、学部に通報された。";s._after=()=>suspend(1,"20歳未満の喫煙")}
+  else{applyD({men:2,tai:-2});s._txt="誰にも見つからなかった。でも20歳未満の喫煙は法律違反で、肺は正直だ。";}
+}
+POOL.push(
+ {w:4,terms:[0,1],when:s=>!!s.circle&&minor(),title:"新歓コンパの乾杯",text:s=>`${s.circle.n}の新歓コンパ。先輩が「とりあえず生でいい？」と全員分を注文した。未成年なのは店も先輩も知っている。`,
+  choices:[
+   {label:"ウーロン茶で通す",ok:{t:"「真面目だね」と笑われたが、誰も強制はしなかった。",d:{men:2,jin:1}}},
+   {label:"一杯だけ付き合う",ok:{t:"",d:{},f:s=>underageDrink(s)}},
+   {label:"先輩のペースで飲む",ok:{t:"",d:{tai:-4},f:s=>{underageDrink(s);s._txt=(s._txt||"")+" 記憶は途中からない。"}}},
+  ]},
+ {w:3,terms:[0,2],when:s=>minor()&&!!s.circle,title:"居酒屋の年齢確認",text:"馬場の居酒屋。店員が「年齢確認できるものありますか」と全員に聞いてきた。",
+  choices:[
+   {label:"正直に学生証を見せる",ok:{t:"ソフトドリンクになった。先輩は「いい店だ」と言った。",d:{men:1}}},
+   {label:"先輩の免許を借りる",chance:()=>.6,ok:{t:"通ってしまった。通ってしまったことが一番怖い。",d:{men:-2},f:s=>underageDrink(s)},ng:{t:"バレて全員追い出された。店の前で先輩に土下座させられた。",d:{men:-8,jin:-3}}},
+  ]},
+ {w:3,terms:[1,9],when:s=>adult()&&!!s.circle,title:"サークルの追いコン",text:s=>`${s.circle.n}の追いコン。卒業する先輩に日本酒を注がれ続けている。`,
+  choices:[
+   {label:"受けて立つ",chance:s=>pc(s.s.tai,55),ok:{t:"最後まで立っていた。伝説になった。",d:{jin:6,tai:-6,kane:-0.5}},ng:{t:"トイレで朝を迎えた。先輩の卒業を見送れなかった。",d:{tai:-10,men:-5,kane:-0.5}}},
+   {label:"水を挟みながら",ok:{t:"ちゃんと先輩の話を最後まで聞けた。",d:{jin:4,men:3,kane:-0.5}}},
+  ]},
+ {w:3,terms:[2,9],when:s=>adult(),title:"酒癖",text:"昨夜の記憶がない。朝、LINEを見ると、送った覚えのないメッセージが12件。",
+  choices:[
+   {label:"全員に謝る",ok:{t:"「いつものことだから」と返ってきた。いつものこと、らしい。",d:{men:-3,jin:1}}},
+   {label:"しばらく酒を控える",ok:{t:"1か月、ウーロン茶で乗り切った。",d:{men:3,tai:4,kane:1},f:s=>s.flags.sober=1}},
+  ]},
+ {w:2,terms:[2,9],when:s=>adult(),title:"急性アルコール中毒",text:"友達が飲みすぎて倒れた。呼吸が浅い。",
+  choices:[
+   {label:"迷わず救急車を呼ぶ",ok:{t:"命に別状はなかった。救急隊員に「正しい判断」と言われた。",d:{men:3,jin:4}}},
+   {label:"寝かせて様子を見る",chance:()=>.7,ok:{t:"朝には回復した。本当に運がよかった。",d:{men:-3}},ng:{t:"夜中に救急搬送になった。あのとき呼んでいれば、と何度も思う。",d:{men:-12}}},
+  ]},
+ {w:2,terms:[0,9],when:s=>!s.flags.smoke&&!!s.circle,title:"部室のベランダ",text:s=>`${s.circle.n}の部室。先輩たちが外で煙草を吸っている。会話の輪はそこにある。`,
+  choices:[
+   {label:"輪に入って吸う",ok:{t:"",d:{jin:3},f:s=>{s.flags.smoke=1;if(minor())underageSmoke(s);else s._txt="喫煙者になった。先輩との距離は縮まった。肺と財布は削れる。"}}},
+   {label:"吸わずに輪に入る",req:{com:35},ok:{t:"煙を浴びながら話だけ聞いた。それでも仲間扱いされた。",d:{jin:2,tai:-1}}},
+   {label:"部室で待つ",ok:{t:"ベランダの笑い声が遠い。",d:{men:-2}}},
+  ]},
+ {w:3,terms:[1,9],when:s=>s.flags.smoke,title:"禁煙チャレンジ",text:"タバコ代が月1万円を超えた。体力テストの結果も悪い。",
+  choices:[
+   {label:"禁煙する",chance:s=>pc(s.s.men,55),ok:{t:"3か月吸わなかった。もう吸いたくない。",d:{tai:5,men:3,kane:1},f:s=>s.flags.smoke=0},ng:{t:"2週間で戻った。意志の弱さを思い知った。",d:{men:-4}}},
+   {label:"電子タバコに変える",ok:{t:"匂いは減った。やめたことにはならない。",d:{kane:-1,men:1}}},
+   {label:"吸い続ける",ok:{t:"喫煙所の友達は増えた。",d:{jin:1,tai:-2}}},
+  ]},
+ {w:2,terms:[0,9],when:s=>s.flags.smoke,title:"喫煙所の撤去",text:"キャンパスの喫煙所が減った。大学は全面禁煙を進めている。",
+  choices:[
+   {label:"校門の外まで歩く",ok:{t:"毎回10分の往復。1限に遅れた。",d:{tai:-2,men:-1}}},
+   {label:"これを機にやめる",chance:s=>pc(s.s.men,50),ok:{t:"やめた。",d:{tai:4,kane:1},f:s=>s.flags.smoke=0},ng:{t:"やめられなかった。",d:{men:-2}}},
+  ]},
+ {w:2,terms:[0,9],when:s=>s.flags.smoke&&s.home.n==="上京して一人暮らし",title:"部屋の壁",text:"部屋の壁が黄ばんできた。退去時の原状回復費を考えると怖い。",
+  choices:[
+   {label:"ベランダで吸う",ok:{t:"隣の部屋から苦情が来た。",d:{men:-3}}},
+   {label:"部屋では吸わない",ok:{t:"自然と本数が減った。",d:{tai:1}}},
+  ]},
+ {w:2,terms:[1,9],when:s=>adult()&&s.home.n==="上京して一人暮らし",title:"宅飲み",text:"友達が缶チューハイを抱えて家に来た。「今日泊まっていい？」",
+  choices:[
+   {label:"朝まで飲む",ok:{t:"安上がりで、一番濃い夜だった。",d:{jin:5,men:4,tai:-4,kane:-0.2}}},
+   {label:"終電で帰らせる",ok:{t:"翌朝の1限に間に合った。",d:{gaku:1,jin:-1}}},
+  ]},
+ {w:2,terms:[2,9],when:s=>adult(),title:"自転車で帰る",text:"飲み会の帰り。自転車で来てしまった。押して帰ると40分。",
+  choices:[
+   {label:"押して帰る",ok:{t:"飲酒運転は自転車でも違法だ。40分、酔いが覚めた。",d:{tai:-2,men:2}}},
+   {label:"乗って帰る",chance:()=>.8,ok:{t:"何もなかった。何もなかったのが運でしかないと、後で知った。",d:{men:-1}},ng:{t:"警察に止められた。酒気帯びで、大学にも連絡が行った。",d:{men:-10,kane:-3},f:s=>{s.flags.warn=(s.flags.warn||0)+1}}},
+  ]},
+ {w:2,terms:[0,9],when:s=>!!s.circle&&minor(),title:"飲みサーの噂",text:s=>`${s.circle.n}の飲み会で救急車が来た、という噂が回っている。大学が調査を始めるらしい。`,
+  choices:[
+   {label:"正直に状況を話す",ok:{t:"サークルは3か月の活動停止。自分は処分なし。",d:{jin:-4,men:-2}}},
+   {label:"知らないふりをする",chance:()=>.5,ok:{t:"調査は打ち切られた。",d:{men:-2}},ng:{t:"飲酒していた証拠が出て、呼び出された。",d:{men:-6},f:s=>{s.flags.warn=(s.flags.warn||0)+1}}},
+  ]},
+ {w:2,terms:[2,9],when:s=>adult(),title:"ストロング系",text:"コンビニで一番安く酔える缶を手に取った。最近、週に4本。",
+  choices:[
+   {label:"やめる",ok:{t:"炭酸水に変えた。眠りが浅いのが治った。",d:{men:3,tai:3}}},
+   {label:"続ける",ok:{t:"気づいたら毎晩になっていた。",d:{men:-4,tai:-3,kane:-0.3},f:s=>s.flags.drink=(s.flags.drink||0)+1}},
+  ]},
+ {w:1,terms:[3,9],when:s=>(s.flags.drink||0)>=2,title:"酒が抜けない朝",text:"手が震える。朝から一杯飲むと落ち着く。これはまずい。",
+  choices:[
+   {label:"保健センターに行く",ok:{t:"カウンセリングと禁酒の指導。早めでよかった。",d:{men:4,tai:4},f:s=>s.flags.drink=0}},
+   {label:"放っておく",ok:{t:"授業中も頭が働かない。",d:{men:-6,tai:-5,gaku:-4}}},
+  ]},
+);
+LIFE_FLOW.push(
+ {c:s=>minor()&&!!s.circle,t:"先輩が「お前まだ19か。じゃあ今日はコーラな」と気を遣ってくれた。",d:{men:2}},
+ {c:s=>minor(),t:"コンビニで酒の年齢確認ボタンを押せなかった。",d:{}},
+ {c:s=>adult(),w:2,t:"初めて自分の金で買った缶ビールが、まずかった。",d:{men:1}},
+ {c:s=>adult()&&!!s.circle,w:2,t:"二日酔いで1限を寝て過ごした。",d:{tai:-2,gaku:-1}},
+ {c:s=>s.flags.smoke,w:2,t:"タバコの値上げのニュース。財布が泣いている。",d:{kane:-0.2}},
+ {c:s=>s.flags.smoke,t:"喫煙所で他学部の人と仲良くなった。",d:{jin:2}},
+ {c:s=>s.flags.smoke,t:"階段で息が切れた。",d:{tai:-1}},
+ {c:s=>s.flags.sober,t:"飲み会でウーロン茶を頼んだら「体調悪いの？」と心配された。",d:{}},
+ {c:s=>adult(),t:"ロータリーで寝ている人を起こして、水を買ってあげた。",d:{jin:1,kane:-0.01}},
+ {c:s=>adult(),t:"終電を逃して、馬場から歩いて帰った。",d:{tai:-2}},
+ {c:s=>adult(),m:[12],t:"忘年会が3つ重なった。肝臓が悲鳴を上げている。",d:{tai:-3,kane:-1}},
+ {c:s=>adult(),m:[4],t:"花見で酒を飲んだ。戸山公園の桜の下。",d:{men:3,kane:-0.3}},
+ {c:s=>!!s.circle,t:"サークルの飲み会。一人4千円。",d:{kane:-0.4,jin:1}},
+ {c:s=>!!s.circle,t:"鳥貴族で飲んだ。全品均一の安心感。",d:{kane:-0.3,jin:1}},
+ {c:s=>!!s.circle,t:"馬場の居酒屋で飲み放題。2時間で元を取った。",d:{kane:-0.35,jin:1,tai:-1}},
+);

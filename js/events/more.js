@@ -26,7 +26,7 @@ POOL.push(
   ]},
  {w:2,terms:[2,7],when:s=>s.s.gaku>=60,title:"学内バイトの募集",text:"教授から、授業のTA（ティーチング・アシスタント）をやらないかと声がかかった。",
   choices:[
-   {label:"引き受ける",ok:{t:"時給は普通だが、教授との距離が縮まった。",d:{kane:8,gaku:3,gk:4,tai:-3}}},
+   {label:"引き受ける",ok:{t:"時給は普通だが、教授との距離が縮まった。",d:{kane:5,gaku:3,gk:4,tai:-3}}},
    {label:"断る",ok:{t:"自分の勉強に集中する。",d:{}}},
   ]},
  // お金
@@ -42,13 +42,13 @@ POOL.push(
   ]},
  {w:2,terms:[1,7],when:s=>s.home.n==="上京して一人暮らし",title:"部屋の更新",text:"アパートの更新時期。高田馬場の駅近に、家賃が1万円安い古い部屋が空いた。",
   choices:[
-   {label:"引っ越す",req:{kane:15},ok:{t:"引っ越し代は痛いが、毎月が少し楽になる。駅まで徒歩3分。",d:{kane:-15},f:s=>{s.area={n:"高田馬場",c:-2,m:{},t:"ロータリーまで徒歩圏"};}}},
+   {label:"引っ越す",req:{kane:9},ok:{t:"引っ越し代は痛いが、毎月が少し楽になる。駅まで徒歩3分。",d:{kane:-15},f:s=>{s.area={n:"高田馬場",c:-2,m:{},t:"ロータリーまで徒歩圏"};}}},
    {label:"今の部屋を更新する",ok:{t:"住み慣れた部屋のままにした。",d:{kane:-5}}},
   ]},
  // 人間関係
  {w:2,terms:[0,7],when:s=>!s.flags.partner,title:"他大との飲み会",text:"他大学との飲み会に誘われた。",
   choices:[
-   {label:"行く",req:{kane:3},chance:s=>pc(s.s.com*.7+s.s.men*.3,55),ok:{t:"連絡先を交換した人と、何度か会うようになった。",d:{kane:-3,men:6},f:s=>{s.flags.partner=1;s.flags.partnerT=s.T}},ng:{t:"端の席で烏龍茶を飲んでいた。",d:{kane:-3,men:-3}}},
+   {label:"行く",req:{kane:1},chance:s=>pc(s.s.com*.7+s.s.men*.3,55),ok:{t:"連絡先を交換した人と、何度か会うようになった。",d:{kane:-0.6,men:6},f:s=>{s.flags.partner=1;s.flags.partnerT=s.T}},ng:{t:"端の席で烏龍茶を飲んでいた。",d:{kane:-3,men:-3}}},
    {label:"行かない",ok:{t:"家で寝た。",d:{tai:2}}},
   ]},
  {w:2,terms:[1,7],when:s=>s.flags.partner&&s.home.n==="上京して一人暮らし",title:"同棲の話",text:"恋人から「一緒に住まない？家賃も半分になるし」と言われた。",
@@ -85,12 +85,12 @@ POOL.push(
  // 生活・お楽しみ
  {w:2,terms:[1,7],title:"海外旅行の誘い",text:"友達に春休みの台湾旅行に誘われた。",
   choices:[
-   {label:"行く",req:{kane:10},ok:{t:"夜市で食べすぎた。最高の5日間だった。",d:{kane:-10,men:10,jin:3}}},
+   {label:"行く",req:{kane:6},ok:{t:"夜市で食べすぎた。最高の5日間だった。",d:{kane:-10,men:10,jin:3}}},
    {label:"金がないので断る",ok:{t:"友達のストーリーを眺めていた。",d:{men:-3}}},
   ]},
  {w:4,terms:[7,9],title:"卒業旅行",text:"卒業旅行の行き先を決めるLINEグループが動き出した。",
   choices:[
-   {label:"ヨーロッパ周遊",req:{kane:25},ok:{t:"パリの石畳で、4年間の思い出話をした。",d:{kane:-25,men:12,jin:4}}},
+   {label:"ヨーロッパ周遊",req:{kane:15},ok:{t:"パリの石畳で、4年間の思い出話をした。",d:{kane:-25,men:12,jin:4}}},
    {label:"国内の温泉",req:{kane:6},ok:{t:"露天風呂で将来の話をした。",d:{kane:-6,men:8,jin:3}}},
    {label:"金がないので参加しない",ok:{t:"後で写真を見せてもらった。",d:{men:-4,jin:-3}}},
   ]},
