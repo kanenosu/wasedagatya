@@ -63,7 +63,7 @@ function feed(t,ds,cls,rar){
 }
 function chips(list){return `<div class="chips">${list.map(([k,v])=>`<span class="chip ${v>0?"up":"down"}">${LABEL[k]} ${v>0?"+":""}${v}${k==="kane"?"万":""}</span>`).join("")}</div>`}
 function showPanel(html){const p=$("#panel");p.innerHTML=html;document.documentElement.classList.add("noscroll");p.scrollTop=0;syncCtrl();const f=p.querySelector(".choice:not([disabled])");if(f)f.focus({preventScroll:true})}
-function bindNext(){const b=$("#nx");b.onclick=()=>{$("#panel").innerHTML="";document.documentElement.classList.remove("noscroll");S.busy=false;if(S.ending)return renderEnd();refreshHud();S.userPaused?syncCtrl():run()};b.focus({preventScroll:true})}
+function bindNext(){const b=$("#nx");b.onclick=()=>{$("#panel").innerHTML="";document.documentElement.classList.remove("noscroll");S.busy=false;if(S.ending)return renderEnd();refreshHud();saveRun();S.userPaused?syncCtrl():run()};b.focus({preventScroll:true})}
 function setLap(){$("#lap").innerHTML=`早稲田生活 <b>${S?S.n:meta.runs+1}</b> 周目`}
 function scrollTop(){try{window.scrollTo({top:0,behavior:reduce?"auto":"smooth"})}catch(e){}}
 function logBox(){
@@ -79,7 +79,7 @@ function renderHome(){
     <div class="okuma" aria-hidden="true">${OKUMA_SVG}</div>
     <h2>早稲田ガチャ</h2>
     <p class="lead">学部も、サークルも、実家の太さも選べない。<br>早稲田の4年間を、引いて生きる。</p>
-    <div class="row"><button class="btn big" id="go">入学ガチャを回す</button></div>
+    <div class="row">${(()=>{const r=loadRun();return r?`<button class="btn big" id="resume">続きから（${new Date(r.date).getFullYear()}年${new Date(r.date).getMonth()+1}月・${esc(r.name)}）</button><button class="btn ghost" id="go">新しく入学する</button>`:`<button class="btn big" id="go">入学ガチャを回す</button>`})()}</div>
     <ul class="hints">
       <li>日付は勝手に進み、大事な場面で止まる</li>
       <li>実在の科目、サークル、行事。400種類以上の出来事</li>
@@ -91,6 +91,7 @@ function renderHome(){
   ${h.length?`<section class="card hist"><h4>これまでの早稲田生活</h4><ul>${h.map(x=>`<li><span class="mono muted">${x.n}周目</span><span class="r">${esc(x.rank)}</span><span>${esc(x.fac)}・${esc(x.out)}</span></li>`).join("")}</ul>${meta.firstS?`<p class="muted" style="margin:8px 0 0;font-size:13px">初めてSランクを取ったのは ${meta.firstS} 周目</p>`:""}</section>`:""}`;
   app.insertAdjacentHTML("beforeend",`<p class="disc">このゲームはフィクションです。実在のサークル名・店名・行事名を使っていますが、特定のサークルや個人を誹謗中傷する意図はありません。20歳未満の飲酒・喫煙は法律で禁止された違法行為です。ゲーム内の処分や確率は実際の大学の規程とは異なります。</p>`);
   $("#go").onclick=newRun;
+  const rs=$("#resume");if(rs)rs.onclick=()=>{if(resumeRun()){setLap();renderLife();play();scrollTop()}else newRun()};
 }
 
 function renderGacha(){
@@ -111,6 +112,8 @@ function renderGacha(){
    <div class="setup-row">
     <span class="lbl">性別（昂揚会など、入会条件がある団体の判定にだけ使う）</span>
     <div class="sex-row">${[["m","男性"],["f","女性"],["x","答えない"]].map(([k,l])=>`<button class="kw sx" data-sx="${k}" aria-pressed="${S.sex===k}">${l}</button>`).join("")}</div>
+    <span class="lbl">4年間の目標</span>
+    <div class="kw-grid goals">${GOALS.map(g=>`<button class="kw gl" data-gl="${g.id}" aria-pressed="${S.goal===g.id}"><b>${g.n}</b><small>${g.t}</small></button>`).join("")}</div>
     <span class="lbl">難易度</span>
     <div class="sex-row">${Object.entries(DIFF).map(([k,d])=>`<button class="kw df" data-df="${k}" aria-pressed="${S.diff===k}"><b>${d.n}</b><small>${d.t}</small></button>`).join("")}</div>
     <p class="muted" style="margin:0;font-size:13px">${S.ronin?"1浪して入学。":"現役で入学。"}20歳になるまで酒とタバコは違法だ。</p>
@@ -129,6 +132,7 @@ function renderGacha(){
   $("#nm").oninput=e=>{S.name=e.target.value.trim()||"名無し";prev()};
   $("#nmr").onclick=()=>{S.name=pick(SEI)+" "+pick(MEI);$("#nm").value=S.name;prev()};
   $("#fcr").onclick=()=>{S.face=newFace();prev()};
+  app.querySelectorAll(".gl").forEach(b=>b.onclick=()=>{S.goal=meta.goal=b.dataset.gl;save(meta);app.querySelectorAll(".gl").forEach(x=>x.setAttribute("aria-pressed",x===b))});
   app.querySelectorAll(".df").forEach(b=>b.onclick=()=>{S.diff=meta.diff=b.dataset.df;save(meta);app.querySelectorAll(".df").forEach(x=>x.setAttribute("aria-pressed",x===b))});
   app.querySelectorAll(".sx").forEach(b=>b.onclick=()=>{S.sex=b.dataset.sx;app.querySelectorAll(".sx").forEach(x=>x.setAttribute("aria-pressed",x===b))});
   $("#enter").onclick=()=>{startLife();scrollTop()};
@@ -241,7 +245,7 @@ function renderGrades(){
       <p>${esc(comment)}</p>${ds.length?chips(ds):""}<div class="actions"><button class="btn" id="nx">MyWasedaを閉じる</button></div>`;
     refreshHud();
     const b=$("#nx");try{b.scrollIntoView({block:"nearest"})}catch(e){}
-    b.onclick=()=>{ov.remove();document.documentElement.classList.remove("noscroll");S.busy=false;if(S.ending)return renderEnd();refreshHud();S.userPaused?syncCtrl():run()};
+    b.onclick=()=>{ov.remove();document.documentElement.classList.remove("noscroll");S.busy=false;if(S.ending)return renderEnd();refreshHud();saveRun();S.userPaused?syncCtrl():run()};
     b.focus({preventScroll:true});
   };
   setTimeout(step,reduce?0:600);

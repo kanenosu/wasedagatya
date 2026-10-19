@@ -15,6 +15,7 @@ https://kanenosu.github.io/wasedagatya/
 | `css/style.css` | 見た目すべて（末尾にスマホ用の調整） | デザイン、スマホ表示 |
 | `js/util.js` | 乱数、確率、保存などの共通関数 | ほぼ触らない |
 | `js/data/people.js` | 名前つきの登場人物（親友・先輩・後輩・恋人）、季節ラベル、エンディングの物語文 | 人物の仕組み |
+| `js/data/goals.js` | 入学時に選ぶ4年間の目標と判定 | 目標の追加 |
 | `js/data/setup.js` | 学部、入試方式、住まい、仕送り、第二外国語、高校時代 | 入学ガチャの中身や出やすさ |
 | `js/data/circles.js` | サークル一覧（テニサー、ダンス、文化系、体育会、界隈など）と看板イベント | サークルの追加・修正 |
 | `js/data/professors.js` | 教授ガチャの種類 | 試験の難しさ |
@@ -24,6 +25,7 @@ https://kanenosu.github.io/wasedagatya/
 | `js/core/gacha.js` | サークル・幹部・ハプニングのガチャ | 抽選の仕組み |
 | `js/core/exam.js` | 期末試験の選択肢（カンニング含む） | 試験の選択肢 |
 | `js/core/job.js` | 就活の結果 | 内定の出やすさ |
+| `js/core/save.js` | 途中セーブと「続きから」 | ほぼ触らない |
 | `js/core/policy.js` | 行動方針と、選択肢のゲージ条件 | 方針の効果、選べる条件 |
 | `js/events/fixed.js` | 決まった日の選択イベント（入学式、新歓、ゼミ、就活、卒論など） | 定番イベント |
 | `js/events/random.js` | 学期ごとのランダムな選択イベント | イベント追加 |

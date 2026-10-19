@@ -69,9 +69,9 @@ const EV={
   ]},
  sils:{title:"1年間の留学",when:s=>s.fac.sils,text:"国際教養学部は留学が必須。行き先を選ぶ。",
   choices:[
-   {label:"アメリカの大学",chance:s=>pc(s.s.gaku,45),ok:{t:"授業はキツいが、英語で議論できるようになった。",d:{gaku:8,gk:14,kane:-30,men:4}},ng:{t:"ホームシックで半年ほど部屋にこもった。",d:{gk:6,kane:-30,men:-10}}},
-   {label:"アジアの大学",ok:{t:"物価が安く、旅行もしまくった。",d:{gk:10,jin:8,kane:-12}}},
-   {label:"ヨーロッパの大学",ok:{t:"週末ごとに国境を越えた。",d:{gk:10,men:8,kane:-25}}},
+   {label:"アメリカの大学",chance:s=>pc(s.s.gaku,45),ok:{t:"授業はキツいが、英語で議論できるようになった。",d:{gaku:8,gk:14,kane:-30,men:4},f:s=>s.flags.abroad=1},ng:{t:"ホームシックで半年ほど部屋にこもった。",d:{gk:6,kane:-30,men:-10},f:s=>s.flags.abroad=1}},
+   {label:"アジアの大学",ok:{t:"物価が安く、旅行もしまくった。",d:{gk:10,jin:8,kane:-12},f:s=>s.flags.abroad=1}},
+   {label:"ヨーロッパの大学",ok:{t:"週末ごとに国境を越えた。",d:{gk:10,men:8,kane:-25},f:s=>s.flags.abroad=1}},
   ]},
  summerIntern:{title:"3年の夏、サマーインターン",text:"周りが一斉に就活を始めた。LINEのアイコンがスーツ姿になっていく。",
   choices:s=>[
