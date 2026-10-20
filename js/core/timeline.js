@@ -25,7 +25,8 @@ function planTerm(T){
   for(const [id,m,d] of SCHED[T]||[])items.push({k:dkey(dateIn(T,m,d)),ev:EV[id]});
   const even=T%2===0;
   const cand=POOL.filter(e=>T>=e.terms[0]&&T<=e.terms[1]);
-  const n=T>=6?3:5;
+  // 候補のほうが多いので、全部は出ない。学期ごとに本数も少し揺らす
+  const n=T>=6?ri(2,4):ri(4,6);
   const used=new Set();
   // 毎学期ひとつは「闇」側の出来事を混ぜる
   const darkPool=cand.filter(e=>e.dark);
@@ -61,6 +62,16 @@ function newRun(){
   S={flyers:[],s0:{...s},n:meta.runs,fac,dept,track:null,lab:null,route,home,area,wealth,lang,past,brain,school,s,kane:wealth.kane+ri(0,10),flagsInit:1,cr:0,gp:0,gu:0,ay:0,T:0,mod:0,flags:{first:Math.random()<.65?1:0},circle:null,circle2:null,post:null,zemi:null,job:null,ending:null,log:[],feed:[],sched:[],today:[],prof:PROFS[4],date:new Date(BASE_Y,2,31),busy:false,recent:[],
     name:pick(SEI)+" "+pick(MEI),sid:`1${"ABCDEFGHJKLMN"[FACS.indexOf(fac)]}${String(BASE_Y%100)}${ri(1000,9999)}-${ri(0,9)}`,face:newFace(),diff:"normal",sex:"x",susp:0,people:null,ys:null,bd:BD,by:BY,ronin:RONIN,passed:[],retake:[],failedEl:[],freeN:0,tt:[],pending:null,pol:"bal",crisis:{},skip:0,teT:ri(0,1),grades:[]};
   renderGacha();
+}
+/* 入学前に学部だけ選び直す。学科・最寄り駅・学部の初期補正・学籍番号を学部に合わせて引き直し、他はそのまま */
+function changeFac(fac){
+  if(!S||S.started||fac===S.fac)return;
+  const s={...S.s0};
+  for(const k in S.fac.m)s[k]=clamp(s[k]-S.fac.m[k],0,100);
+  for(const k in fac.m)s[k]=clamp(s[k]+fac.m[k],0,100);
+  S.fac=fac;S.dept=pickDept(fac);S.area=pickStation(S.home,fac,S.school.pref);
+  S.s0={...s};S.s={...s};S.flags.facChosen=1;
+  S.sid=`1${"ABCDEFGHJKLMN"[FACS.indexOf(fac)]}${S.sid.slice(2)}`;
 }
 function startLife(){
   initPeople();yearStart();

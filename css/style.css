@@ -225,6 +225,7 @@ html.fast .feed li{animation:none}
 .setup-row{display:flex;flex-direction:column;gap:6px;min-width:0}
 .setup label,.setup .lbl{font-size:12px;letter-spacing:.12em;color:var(--muted)}
 .nm-row{display:flex;gap:6px;flex-wrap:wrap}
+.nm-row select{flex:1 1 10em;min-width:0;font:inherit;font-size:16px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
 .nm-row input{flex:1 1 10em;min-width:0;font:inherit;font-size:16px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
 .btn.sm{padding:8px 12px;font-size:13px;letter-spacing:0}
 .kw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}

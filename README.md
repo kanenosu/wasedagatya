@@ -64,6 +64,7 @@ https://kanenosu.github.io/wasedagatya/
 | `js/events/meshi.js` | ワセメシ（実在の飯屋） |
 | `js/events/dark.js` | 大学生の闇（マルチ、カルト、依存、ハラスメント、孤立、メンタル） |
 | `js/events/naitei.js` | 内定後のやらかし → 内定取り消し |
+| `js/events/bulk.js` | 追加のランダムイベント大量版（授業、サークル、バイト、恋愛、早稲田ネタ、就活、家族、趣味）。候補が多いので1周で出るのは一部 |
 
 ## イベントの書き方
 選択イベントは次の形。`random.js` の `POOL` に足せばランダムで出る。

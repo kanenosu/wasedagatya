@@ -142,6 +142,11 @@ function renderGacha(){
     <div class="nm-row"><input id="nm" maxlength="12" value="${esc(S.name)}" autocomplete="off"><button class="btn ghost sm" id="nmr" type="button">別の名前</button><button class="btn ghost sm" id="fcr" type="button">顔を引き直す</button></div>
    </div>
    <div class="setup-row">
+    <label for="facsel">学部（ここだけは自分で選べる）</label>
+    <div class="nm-row"><select id="facsel">${FACS.map((f,i)=>`<option value="${i}" ${f===S.fac?"selected":""}>${f.n}（${f.c}）</option>`).join("")}</select></div>
+    <p class="muted" style="margin:0;font-size:13px" id="facnote">${S.dept?`学科・学系：${esc(S.dept.n)}`:"学科はなし。"}　学部を変えると学科と最寄り駅も引き直す。</p>
+   </div>
+   <div class="setup-row">
     <span class="lbl">性別（昂揚会など、入会条件がある団体の判定にだけ使う）</span>
     <div class="sex-row">${[["m","男性"],["f","女性"],["x","答えない"]].map(([k,l])=>`<button class="kw sx" data-sx="${k}" aria-pressed="${S.sex===k}">${l}</button>`).join("")}</div>
     <p class="muted" style="margin:0;font-size:13px">${S.ronin?"1浪して入学。":"現役で入学。"}20歳になるまで酒とタバコは違法だ。</p>
@@ -160,6 +165,14 @@ function renderGacha(){
   $("#nm").oninput=e=>{S.name=e.target.value.trim()||"名無し";prev()};
   $("#nmr").onclick=()=>{S.name=pick(SEI)+" "+pick(MEI);$("#nm").value=S.name;prev()};
   $("#fcr").onclick=()=>{S.face=newFace();prev()};
+  $("#facsel").onchange=e=>{
+    changeFac(FACS[+e.target.value]);sfx("stop");
+    const s0=$("#sl0"),s3=$("#sl3");
+    if(s0){s0.querySelector("strong").textContent=S.fac.n+(S.dept?" "+S.dept.n:"");s0.querySelector(".tag").textContent=`${S.fac.c}キャンパス`}
+    if(s3){s3.querySelector("strong").textContent=`${S.area.n}（${S.area.line}）`;s3.querySelector(".tag").textContent=`キャンパスまで${S.area.min}分・${S.area.t}`}
+    $("#facnote").textContent=(S.dept?`学科・学系：${S.dept.n}`:"学科はなし。")+"　学部を変えると学科と最寄り駅も引き直す。";
+    prev();
+  };
   app.querySelectorAll(".sx").forEach(b=>b.onclick=()=>{S.sex=b.dataset.sx;app.querySelectorAll(".sx").forEach(x=>x.setAttribute("aria-pressed",x===b))});
   $("#enter").onclick=()=>{startLife();scrollTop()};
   $("#reroll").onclick=()=>{meta.runs--;save(meta);newRun()};
