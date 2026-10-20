@@ -54,6 +54,7 @@ https://kanenosu.github.io/wasedagatya/
 | `js/events/dilemma.js` | 手遅れになる選択肢と、どちらかを選ぶともう片方が閉じる二者択一 | 重い選択 |
 | `js/events/fate-more.js` | 不可避・奇跡の追加分 | 不可避・奇跡を足すならここ |
 | `js/main.js` | 起動 | 触らない |
+| `js/data/faculty.js` | 学部の特色：学科・学系、コース／論系／トラック選択、学部固有イベント、研究室配属 |
 | `js/ui/exam-ui.js` | 試験期間ミニゲーム（5日間で科目ごとの準備度を上げる） |
 | `js/events/shinkan.js` | 新歓のビラ制サークル選び、掛け持ち、絞り込み |
 | `js/events/vice.js` | 酒・タバコの出来事（未成年は必ず代償あり） |

@@ -129,7 +129,7 @@ function renderHome(){document.documentElement.classList.remove("hud-off");
 
 function renderGacha(){
   setLap();
-  const slots=[["学部",S.fac.n,`${S.fac.c}キャンパス`],["入試方式",S.route.n,S.route.t],["住まい",S.home.n,S.home.t],["最寄り駅",`${S.area.n}（${S.area.line}）`,`キャンパスまで${S.area.min}分・${S.area.t}`],["実家の太さ",S.wealth.n,S.wealth.t],["第二外国語",S.lang.n,S.lang.t],["出身高校",S.school.n,`${S.school.pref}${S.school.kind==="附属"?"・附属／系属":""}`],["高校時代",S.past.n,S.past.t],["地頭",S.brain.n,S.brain.t]];
+  const slots=[["学部",S.fac.n+(S.dept?" "+S.dept.n:""),`${S.fac.c}キャンパス`],["入試方式",S.route.n,S.route.t],["住まい",S.home.n,S.home.t],["最寄り駅",`${S.area.n}（${S.area.line}）`,`キャンパスまで${S.area.min}分・${S.area.t}`],["実家の太さ",S.wealth.n,S.wealth.t],["第二外国語",S.lang.n,S.lang.t],["出身高校",S.school.n,`${S.school.pref}${S.school.kind==="附属"?"・附属／系属":""}`],["高校時代",S.past.n,S.past.t],["地頭",S.brain.n,S.brain.t]];
   const pools=[FACS.map(x=>x.n),ROUTES.map(x=>x.n),HOMES.map(x=>x.n),Object.values(STATIONS).flat().map(x=>x.n),WEALTH.map(x=>x.n),LANGS.map(x=>x.n),HIGHSCHOOLS.map(x=>x.n),PASTS.map(x=>x.n),BRAINS.map(x=>x.n)];
   app.innerHTML=`
   <section class="card">

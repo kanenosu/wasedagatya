@@ -44,6 +44,9 @@ function buildTT(T){
   if(T===S.teT)add("Tutorial English",1,"必修");
   if(T>=3&&S.zemi&&S.zemi!=="なし")add(`専門演習（${S.zemi}）`,2,"必修");
   if(T>=5&&S.fac.sci)add("研究室ゼミ",2,"必修");
+  // 学科・コースの専門科目を毎学期1〜2科目
+  const spec=[...(S.track?S.track.el:[]),...(S.dept?S.dept.el:[])].filter(n=>!S.passed.includes(n)&&!list.some(o=>o.n===n)&&!S.failedEl.includes(n));
+  if(spec.length)for(const n of spec.sort(()=>Math.random()-.5).slice(0,S.track?2:1))add(n,2,"専門");
   const pool=[];
   for(const sfx of SUFFIX)for(const b of [...(FAC_EL[S.fac.s]||[]),...(FAC_EL[S.fac.s]||[]),...OPEN])pool.push(b+sfx);
   const target=creditTarget(T);

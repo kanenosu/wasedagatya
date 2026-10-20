@@ -47,7 +47,7 @@ function idHTML(){
     <div class="id-info">
      <div class="id-name">${esc(S.name)}</div>
      <dl>
-      <dt>学部</dt><dd>${S.fac.n}</dd>
+      <dt>学部</dt><dd>${S.fac.n}${S.dept?`<br><small>${esc(S.dept.n)}</small>`:""}${S.track?`<br><small>${esc(S.track.n)}</small>`:""}</dd>
       <dt>学年</dt><dd>${yr}年${S.ay>=4?"（留年）":""}・${S.fac.c}キャンパス</dd>
       <dt>出身</dt><dd>${S.school.pref}・${S.school.n.replace(/高等学校$/,"")}</dd>
       <dt>最寄り</dt><dd>${S.area.n}・${S.area.min}分</dd>

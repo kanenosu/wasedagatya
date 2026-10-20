@@ -48,7 +48,7 @@ function renderEnd(){
     <div class="verdict"><span class="muted">${head}</span><strong>「${esc(ttl)}」</strong>${firstS?`<span style="color:var(--gold);font-weight:700">${S.n}周目で初めてのSランク</span>`:rank==="S"&&meta.firstS?`<span class="muted">初Sは ${meta.firstS} 周目</span>`:""}</div>
     <p class="story">${esc(story())}</p>
     <table>
-      <tr><td>学部</td><td>${S.fac.n}（${S.fac.c}）</td></tr>
+      <tr><td>学部</td><td>${S.fac.n}（${S.fac.c}）${S.dept?`<br><small class="muted">${esc(S.dept.n)}</small>`:""}${S.track?`<br><small class="muted">${esc(S.track.n)}</small>`:""}${S.lab?`<br><small class="muted">${esc(S.lab)}</small>`:""}</td></tr>
       <tr><td>出身高校</td><td>${S.school.n}（${S.school.pref}）</td></tr>
       <tr><td>入試方式</td><td>${S.route.n}</td></tr>
       ${S.flags.teigaku||S.flags.warn?`<tr><td>処分歴</td><td>${S.flags.teigaku?`停学${S.flags.teigaku}回 `:""}${S.flags.warn?`厳重注意${S.flags.warn}回`:""}</td></tr>`:""}
