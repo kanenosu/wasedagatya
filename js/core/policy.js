@@ -4,7 +4,7 @@ const POL=[
  {id:"bal",n:"バランス",d:{},kane:0,ex:0,t:"可もなく不可もなく"},
  {id:"study",n:"勉強漬け",d:{gaku:3,jin:-2,men:-1,com:-1},kane:0,ex:5,t:"前の席に座り、飲み会は断る"},
  {id:"play",n:"遊び倒す",d:{jin:3,com:2,men:2,gaku:-2},kane:-4,ex:-5,req:{kane:5},t:"出席は最低限。金が飛ぶ"},
- {id:"work",n:"バイト漬け",d:{tai:-3,gaku:-1,jin:-1},kane:6,ex:-3,req:{tai:15},t:"週5でシフトに入る"},
+ {id:"work",n:"バイト漬け",d:{tai:-5,gaku:-1,jin:-1},kane:6,ex:-3,req:{tai:15},t:"週5でシフトに入る。体は確実に削れる"},
  {id:"save",n:"節約生活",d:{jin:-3,men:-2},kane:3,ex:0,t:"誘いを断って自炊する"},
  {id:"circle",n:"サークル全力",d:{jin:2,com:2,gk:2,gaku:-1,tai:-1},kane:-3,ex:-2,req:{circle:1},t:"部室に住んでいる"},
  {id:"job",n:"就活モード",d:{gk:2,com:1,men:-2},kane:-2,ex:-1,req:{ay:2},t:"ESと面接の日々"},

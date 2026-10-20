@@ -107,7 +107,7 @@ function tick(){
     // コミュ力は使わないと鈍る（高いときだけ）
     if(S.s.com>60&&!S.circle)md.com=(md.com||0)-1;
     // 若い体は月に少し回復する。通学時間が長いと削れる
-    if(S.s.tai<50)md.tai=(md.tai||0)+1;
+    if(S.s.tai<50&&P.id!=="work"&&P.id!=="circle")md.tai=(md.tai||0)+1;
     if(commuteTai())md.tai=(md.tai||0)-commuteTai();
     // 掛け持ちは会費と体力が二重にかかる
     if(S.circle2){md.tai=(md.tai||0)-1;S.kane=Math.round((S.kane-0.6)*10)/10}

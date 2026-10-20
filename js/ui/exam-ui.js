@@ -33,7 +33,7 @@ function renderExam(){
       <small class="xprof">${esc(r.prof)}</small></button>`).join("");
     const acts=X.done?"":`
       <button class="xa" data-a="study" ${sel.drop?"disabled":""}><b>勉強する</b><small>+12〜20／体力−2</small></button>
-      <button class="xa" data-a="night" ${sel.drop||S.s.tai<15?"disabled":""}><b>徹夜</b><small>大きく上がる／体力−7</small></button>
+      <button class="xa" data-a="night" ${sel.drop||S.s.tai<15?"disabled":""}><b>徹夜</b><small>大きく上がる。連続すると効きが落ちて体が壊れる</small></button>
       <button class="xa" data-a="kako" ${X.kako?"disabled":""}><b>過去問を回す</b><small>人脈判定・全科目／1回</small></button>
       <button class="xa" data-a="rest"><b>休む</b><small>体力+9 メンタル+5</small></button>
       <button class="xa" data-a="drop" ${sel.drop||sel.kind==="必修"||sel.kind==="再履修"?"disabled":""}><b>捨てる</b><small>${sel.kind==="必修"||sel.kind==="再履修"?"必修は不可":"落とす代わりに他+5"}</small></button>
@@ -56,8 +56,11 @@ function renderExam(){
   const bump=(r,g)=>{r.p+=g;X.flash=r.n};
   const act=a=>{
     const sel=X.rows[X.sel]||X.rows[0];
-    if(a==="study"){const g=Math.round(ri(12,20)*S.brain.grow*(S.s.men<25?.7:1));bump(sel,g);applyD({tai:-2});X.log.unshift(`「${sel.n}」を勉強した。自信度 +${g}。`);sfx("tick")}
-    else if(a==="night"){const g=ri(24,34);bump(sel,g);applyD({tai:-7,men:-2});X.log.unshift(`徹夜。「${sel.n}」の自信度 +${g}。目の下が黒い。`);if(Math.random()<.15){const o=pick(X.rows.filter(r=>r!==sel&&!r.drop));if(o){o.p-=15;X.log[0]+=`翌日の「${o.n}」で寝落ちした（−15）。`}}sfx("thud")}
+    if(a==="study"){X.nights=0;const g=Math.round(ri(12,20)*S.brain.grow*(S.s.men<25?.7:1));bump(sel,g);applyD({tai:-2});X.log.unshift(`「${sel.n}」を勉強した。自信度 +${g}。`);sfx("tick")}
+    else if(a==="night"){X.nights=(X.nights||0)+1;const cost=7+4*(X.nights-1);const g=Math.max(10,ri(24,34)-6*(X.nights-1));bump(sel,g);applyD({tai:-cost,men:-2});X.log.unshift(`徹夜${X.nights>1?`${X.nights}日目`:""}。「${sel.n}」の自信度 +${g}。体力 −${cost}。${X.nights>=3?"頭が働かない。":"目の下が黒い。"}`);
+      if(Math.random()<.15+.15*(X.nights-1)){const o=pick(X.rows.filter(r=>r!==sel&&!r.drop));if(o){o.p-=15;X.log[0]+=`翌日の「${o.n}」で寝落ちした（−15）。`}}
+      if(X.nights>=3&&S.s.tai<25){X.days--;applyD({tai:-5});X.log[0]+="限界を超えて倒れた。1日消えた。"}
+      sfx("thud")}
     else if(a==="kako"){X.kako=1;const ok=Math.random()<pc(S.s.jin,45);if(ok){const g=ri(8,14);X.rows.forEach(r=>r.p+=g);applyD({jin:2});X.log.unshift(`先輩から過去問が回ってきた。全科目の自信度 +${g}。`);sfx("good")}else{X.rows.forEach(r=>r.p+=2);applyD({men:-3});X.log.unshift("過去問を持っている人が周りにいなかった。");sfx("bad")}}
     else if(a==="rest"){applyD({tai:9,men:5});X.log.unshift("一日休んだ。だいぶ回復した。");sfx("tap")}
     else if(a==="drop"){sel.drop=1;X.rows.filter(r=>!r.drop).forEach(r=>r.p+=5);X.log.unshift(`「${sel.n}」を捨てた。他の科目の自信度 +5。`);sfx("thud");draw();return}
