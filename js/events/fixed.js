@@ -16,7 +16,7 @@ const EV={
   ]},
  rishu:{title:"履修登録",text:"MyWasedaを開いて時間割を組む。春学期の単位がここで決まる。",
   choices:[
-   {label:"先輩から楽単情報を仕入れて固める",chance:s=>pc(s.s.jin,40),ok:{t:"先輩の楽単リストは神だった。",d:{gaku:-2},f:s=>s.mod+=7},ng:{t:"楽単のはずが、担当教員が変わって鬼単になっていた。",d:{men:-4},f:s=>s.mod-=5}},
+   {label:"先輩から楽単情報を仕入れて固める",chance:s=>pc(s.s.jin,40),ok:{t:"先輩の楽単リストは神だった。",d:{gaku:-2},f:s=>{s.mod+=7;s.flags.rakutan=(s.flags.rakutan||0)+1}},ng:{t:"楽単のはずが、担当教員が変わって鬼単になっていた。",d:{men:-4},f:s=>s.mod-=5}},
    {label:"興味のある授業を素直に取る",ok:{t:"授業が面白い。大学ってこういうものか。",d:{gaku:6,men:4}}},
    {label:"1限を詰めて午後を空ける",chance:s=>pc(s.s.tai,55),ok:{t:"朝型生活に成功。午後はバイトに入れる。",d:{tai:3,kane:5}},ng:{t:"5月には1限に行けなくなっていた。",d:{men:-3},f:s=>s.mod-=8}},
   ]},

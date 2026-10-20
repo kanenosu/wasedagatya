@@ -111,7 +111,7 @@ function tick(){
     const p=pol();
     if(!reqOK(p.req)){S.pol="bal";feed(`方針「${p.n}」を続けられなくなった。バランスに戻した。`,null,"sys")}
     const P=pol();
-    const inc=(S.wealth.inc+S.home.cost+(S.area.c||0)+(S.flags.job?14:0))/8+DIFF[S.diff].kane+P.kane-(S.flags.ribo?2:0)-(S.flags.smoke?1.5:0)-(S.flags.lessmoney?1:0);
+    const inc=(S.wealth.inc+S.home.cost+(S.area.c||0)+(S.flags.job?14:0))/8+DIFF[S.diff].kane+P.kane-(S.flags.ribo?2:0)-(S.flags.smoke?1.5:0)-(S.flags.lessmoney?1:0)-0.6;
     S.kane=Math.round((S.kane+inc)*10)/10;
     const md={...P.d};if(S.flags.smoke)md.tai=(md.tai||0)-1;
     // 地頭：勉強で学力が伸びる速さ
@@ -125,6 +125,8 @@ function tick(){
     if(commuteTai())md.tai=(md.tai||0)-commuteTai();
     // 掛け持ちは会費と体力が二重にかかる
     if(S.circle2){md.tai=(md.tai||0)-1;S.kane=Math.round((S.kane-0.6)*10)/10}
+    // 勉強していない月は学力が少しずつ落ちる（60以上のときだけ）
+    if(S.s.gaku>60&&P.id!=="study"&&P.id!=="rest")md.gaku=(md.gaku||0)-1;
     // 90を超えたステータスは現状維持が難しい
     for(const [k] of STATS)if(S.s[k]>=90)md[k]=(md[k]||0)-2;
     // 人間関係は放っておくと薄れる（サークルなし・上級生ほど減りやすい）

@@ -75,10 +75,12 @@ function buildTT(T){
 function courseScore(co,b){
   const p=co.prof;
   const pm=p.m==="jin"?Math.round((S.s.jin-40)*.3):p.m==="att"?(S.mod<0?-12:3):p.m;
-  let sc=41+S.s.gaku*.32-S.ay*1.5+b+S.mod+pm+(S.fac.easy||0)+pol().ex+DIFF[S.diff].ex+S.brain.ex+(S.ay<=1?S.lang.ex:0)+(S.brain.luck?rnd(-14,14):0)+rnd(-18,22)-(S.s.men<25?10:0)-(S.s.tai<20?8:0);
+  // 厳しめ：素点を下げ、下振れを広げる。1年の楽単ぐせ（rakutan）は上級生で効いてくる
+  let sc=42+S.s.gaku*.30-S.ay*1.0+b+S.mod+pm+(S.fac.easy||0)+pol().ex+DIFF[S.diff].ex+S.brain.ex+(S.ay<=1?S.lang.ex:0)+(S.brain.luck?rnd(-14,14):0)+rnd(-22,18)-(S.s.men<25?10:0)-(S.s.tai<20?8:0)-((S.flags.rakutan||0)&&S.ay>=2?4:0);
   if(co.lang)sc+=S.lang.m*1.5;
   if(co.lab)sc+=(S.s.tai-50)*.2;
-  if(co.kind!=="選択"&&co.kind!=="全学")sc-=2;
+  if(co.kind!=="選択"&&co.kind!=="全学")sc-=3;
+  if(co.kind==="再履修")sc-=3;
   return Math.round(clamp(sc,0,100));
 }
 const gradeOf=sc=>sc>=90?"A+":sc>=80?"A":sc>=70?"B":sc>=60?"C":"F";
