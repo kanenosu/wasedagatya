@@ -67,10 +67,13 @@ function renderEnd(){
     </table>
   </section>
   <div class="share" id="share">${esc(share)}</div>
-  <div class="actions"><button class="btn" id="again">もう一周する</button><button class="btn ghost" id="copy">結果をコピー</button><button class="btn ghost" id="home">トップへ</button></div>
+  <div class="actions"><button class="btn" id="shareX">Xで共有（画像つき）</button><button class="btn ghost" id="saveImg">結果を画像で保存</button><button class="btn ghost" id="copy">文章をコピー</button></div>
+  <div class="actions"><button class="btn" id="again">もう一周する</button><button class="btn ghost" id="home">トップへ</button></div>
   ${logBox()}`;
   $("#again").onclick=()=>{newRun();scrollTop()};
   $("#home").onclick=()=>{S=null;renderHome();scrollTop()};
+  $("#shareX").onclick=()=>{sfx("tap");shareToX($("#shareX"))};
+  $("#saveImg").onclick=()=>{sfx("tap");saveShareImage($("#saveImg"))};
   $("#copy").onclick=()=>{
     const b=$("#copy");
     Promise.resolve().then(()=>navigator.clipboard.writeText(share)).then(()=>b.textContent="コピーした").catch(()=>{const r=document.createRange();r.selectNodeContents($("#share"));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent="選択したのでコピーして"});
