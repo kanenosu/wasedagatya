@@ -63,7 +63,7 @@ const EV={
   ]},
  zemi:{title:"ゼミ選考",when:s=>!s.fac.sci,text:"人気ゼミはESと面接で選考がある。どこに出す？",
   choices:[
-   {label:"人気ゼミに出す",chance:s=>pc(s.s.gaku*.5+s.s.gk*.5,55),ok:{t:"合格。周りは意識の高い人ばかりだ。",d:{gk:10,gaku:5,men:3},f:s=>s.zemi="人気ゼミ"},ng:{t:"落ちた。二次募集のゼミに拾ってもらった。",d:{men:-10},f:s=>s.zemi="二次募集のゼミ"}},
+   {label:"人気ゼミに出す",chance:s=>pc(s.s.gaku*.5+s.s.gk*.5,55),ok:{t:"合格。周りは意識の高い人ばかりだ。",d:{gk:10,gaku:5,men:3},f:s=>s.zemi=typeof zemiName==="function"?zemiName(s):"人気ゼミ"},ng:{t:"落ちた。二次募集のゼミに拾ってもらった。",d:{men:-10},f:s=>s.zemi="二次募集のゼミ"}},
    {label:"ゆるいゼミを選ぶ",ok:{t:"飲み会が本体のゼミに決まった。",d:{men:5,jin:4},f:s=>s.zemi="ゆるゼミ"}},
    {label:"ゼミに入らない",ok:{t:"時間はできたが、就活で話すネタが一つ減った。",d:{men:2,gk:-4},f:s=>s.zemi="なし"}},
   ]},
