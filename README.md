@@ -60,6 +60,7 @@ https://kanenosu.github.io/wasedagatya/
 | `js/events/vice.js` | 酒・タバコの出来事（未成年は必ず代償あり） |
 | `js/events/love.js` | 恋愛の出来事 |
 | `js/events/meshi.js` | ワセメシ（実在の飯屋） |
+| `js/events/dark.js` | 大学生の闇（マルチ、カルト、依存、ハラスメント、孤立、メンタル） |
 | `js/events/naitei.js` | 内定後のやらかし → 内定取り消し |
 
 ## イベントの書き方

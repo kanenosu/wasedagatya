@@ -25,10 +25,12 @@ function planTerm(T){
   for(const [id,m,d] of SCHED[T]||[])items.push({k:dkey(dateIn(T,m,d)),ev:EV[id]});
   const even=T%2===0;
   const cand=POOL.filter(e=>T>=e.terms[0]&&T<=e.terms[1]);
-  const n=T>=6?2:3;
+  const n=T>=6?3:5;
   const used=new Set();
+  // 毎学期ひとつは「闇」側の出来事を混ぜる
+  const darkPool=cand.filter(e=>e.dark);
   for(let i=0;i<n&&cand.length;i++){
-    const e=wpick(cand);cand.splice(cand.indexOf(e),1);
+    const e=(i===0&&T>=1&&darkPool.length)?wpick(darkPool):wpick(cand);cand.splice(cand.indexOf(e),1);
     let dt;do{dt=even?dateIn(T,ri(4,7),ri(1,28)):dateIn(T,pick([10,11,12,1]),ri(1,28))}while(used.has(dkey(dt))||(even&&dt.getMonth()+1===4&&dt.getDate()<12)||(!even&&dt.getMonth()+1===1&&dt.getDate()>20));
     used.add(dkey(dt));items.push({k:dkey(dt),ev:e});
   }

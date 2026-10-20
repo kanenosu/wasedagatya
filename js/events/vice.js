@@ -64,7 +64,7 @@ POOL.push(
  {w:2,terms:[2,9],when:s=>adult(),title:"自転車で帰る",text:"飲み会の帰り。自転車で来てしまった。押して帰ると40分。",
   choices:[
    {label:"押して帰る",ok:{t:"飲酒運転は自転車でも違法だ。40分、酔いが覚めた。",d:{tai:-2,men:2}}},
-   {label:"乗って帰る",chance:()=>.8,ok:{t:"何もなかった。何もなかったのが運でしかないと、後で知った。",d:{men:-1}},ng:{t:"警察に止められた。酒気帯びで、大学にも連絡が行った。",d:{men:-10,kane:-3},f:s=>{s.flags.warn=(s.flags.warn||0)+1}}},
+   {label:"乗って帰る",chance:()=>.8,ok:{t:"何もなかった。何もなかったのが運でしかないと、後で知った。",d:{men:-1},f:s=>s.flags.drunkride=1},ng:{t:"警察に止められた。酒気帯びで、大学にも連絡が行った。",d:{men:-10,kane:-3},f:s=>{s.flags.warn=(s.flags.warn||0)+1}}},
   ]},
  {w:2,terms:[0,9],when:s=>!!s.circle&&minor(),title:"飲みサーの噂",text:s=>`${s.circle.n}の飲み会で救急車が来た、という噂が回っている。大学が調査を始めるらしい。`,
   choices:[
