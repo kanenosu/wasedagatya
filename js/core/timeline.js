@@ -4,9 +4,9 @@ const ALLF=[...FLOW,...LIFE_FLOW];
 const SCHED={
  0:[["nyugaku",4,1],["shinkan",4,4],["rishu",4,9],["hyakuhai",5,23],["natsu",8,3]],
  1:[["wasedasai",11,1],["circleMain",12,12],["kamen",1,17]],
- 2:[["zemiPrep",4,6],["sils",9,25]],
+ 2:[["zemiPrep",4,6]],
  3:[["circleMain",10,18],["zemi",11,12],["kanbu",12,5]],
- 4:[["summerIntern",6,10]],
+ 4:[["summerIntern",6,10],["sils",4,3]],
  5:[["circleMain",10,18],["akifuyu",12,3]],
  6:[["honsenko",6,1]],
  7:[["sotsuron",12,8]],

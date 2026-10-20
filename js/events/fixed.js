@@ -67,7 +67,7 @@ const EV={
    {label:"ゆるいゼミを選ぶ",ok:{t:"飲み会が本体のゼミに決まった。",d:{men:5,jin:4},f:s=>s.zemi="ゆるゼミ"}},
    {label:"ゼミに入らない",ok:{t:"時間はできたが、就活で話すネタが一つ減った。",d:{men:2,gk:-4},f:s=>s.zemi="なし"}},
   ]},
- sils:{title:"1年間の留学",when:s=>s.fac.sils,text:"国際教養学部は留学が必須。行き先を選ぶ。",
+ sils:{title:"1年間の留学",when:s=>s.fac.sils,text:"3年目。国際教養学部のStudy Plan 1は在学5〜6学期目の留学が必須。留学中の単位は帰国後に自由選択科目として最大40単位まで認定される。行き先を選ぶ。",
   choices:[
    {label:"アメリカの大学",chance:s=>pc(s.s.gaku,45),ok:{t:"授業はキツいが、英語で議論できるようになった。",d:{gaku:8,gk:14,kane:-30,men:4},f:s=>s.flags.abroad=1},ng:{t:"ホームシックで半年ほど部屋にこもった。",d:{gk:6,kane:-30,men:-10},f:s=>s.flags.abroad=1}},
    {label:"アジアの大学",ok:{t:"物価が安く、旅行もしまくった。",d:{gk:10,jin:8,kane:-12},f:s=>s.flags.abroad=1}},
