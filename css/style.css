@@ -395,6 +395,7 @@ button,.choice,.kw{touch-action:manipulation;-webkit-tap-highlight-color:transpa
 .xa{background:var(--surface);color:var(--ink);border:1.5px solid var(--line);box-shadow:0 1px 2px rgba(0,0,0,.08);border-radius:9px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:52px}
 .xa b{font-size:13px}.xa small{font-size:10px;color:var(--muted);text-align:center;line-height:1.2}
 .xa:disabled{opacity:.45;box-shadow:none}.xa.warn{border-color:#b23a3a;color:#b23a3a}
+.xa.auto{grid-column:1/-1;border-color:var(--enji);color:var(--enji);background:var(--enji-soft)}
 .xa:not(:disabled):active{transform:scale(.97)}
 .xres{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px}
 @media (min-width:640px){.xbar-in{grid-template-columns:repeat(6,1fr)}.xin{padding-bottom:100px}}

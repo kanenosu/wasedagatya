@@ -37,7 +37,8 @@ function renderExam(){
       <button class="xa" data-a="kako" ${X.kako?"disabled":""}><b>過去問を回す</b><small>人脈判定・全科目／1回</small></button>
       <button class="xa" data-a="rest"><b>休む</b><small>体力+9 メンタル+5</small></button>
       <button class="xa" data-a="drop" ${sel.drop||sel.kind==="必修"||sel.kind==="再履修"?"disabled":""}><b>捨てる</b><small>${sel.kind==="必修"||sel.kind==="再履修"?"必修は不可":"落とす代わりに他+5"}</small></button>
-      ${left===1?`<button class="xa warn" data-a="cheat"><b>カンペ</b><small>最後の手段</small></button>`:""}`;
+      ${left===1?`<button class="xa warn" data-a="cheat"><b>カンペ</b><small>最後の手段</small></button>`:""}
+      <button class="xa auto" data-a="auto"><b>おまかせ</b><small>残り${left}日を自動で配分。必修と自信のない科目から、体力を見て休みも入れる</small></button>`;
     ov.innerHTML=`<div class="ov-inner xin">
       <div class="xhead">
       <div class="mw-bar"><span class="mw-logo">${esc(name)}</span><span class="mw-user">${X.done?"試験終了":`${X.day}日目／${X.days}日`}</span></div>
@@ -65,8 +66,31 @@ function renderExam(){
     else if(a==="rest"){applyD({tai:9,men:5});X.log.unshift("一日休んだ。だいぶ回復した。");sfx("tap")}
     else if(a==="drop"){sel.drop=1;X.rows.filter(r=>!r.drop).forEach(r=>r.p+=5);X.log.unshift(`「${sel.n}」を捨てた。他の科目の自信度 +5。`);sfx("thud");draw();return}
     else if(a==="cheat"){return finish(1)}
+    else if(a==="auto"){return autoPlan()}
     X.day++;
     if(X.day>X.days)return finish(0);
+    draw();
+  };
+  /* おまかせ：残りの日を自動で使う。過去問は最初に1回、体力が切れそうなら休む、あとは必修・再履修→自信の低い科目の順に勉強。
+     最終日に自信40未満の科目が残っていて体力に余裕があれば徹夜 */
+  const autoPlan=()=>{
+    let guard=0;const plan=[];
+    while(!X.done&&guard++<40){
+      const live=X.rows.filter(r=>!r.drop);
+      const left=X.days-X.day+1;
+      const weak=live.slice().sort((a,b)=>(a.kind==="必修"||a.kind==="再履修"?0:1)-(b.kind==="必修"||b.kind==="再履修"?0:1)||a.p-b.p)[0];
+      let a;
+      if(!X.kako&&S.s.jin>=35)a="kako";
+      else if(S.s.tai<15||(S.s.tai<25&&left>=3))a="rest";
+      else if(!weak||weak.p>=85)a="rest";
+      else if((weak.kind==="必修"||weak.kind==="再履修")&&weak.p<45&&S.s.tai>=40&&!(X.nights>=1))a="night";
+      else if(left===1&&weak.p<40&&S.s.tai>=30&&!(X.nights>=2))a="night";
+      else a="study";
+      if(weak)X.sel=X.rows.indexOf(weak);
+      plan.push(a==="kako"?"過去問":a==="rest"?"休養":a==="night"?`徹夜（${weak.n}）`:`勉強（${weak.n}）`);
+      act(a);
+    }
+    if(X.done)X.log.unshift(`おまかせで配分した：${plan.join("→")}`);
     draw();
   };
   const finish=cheat=>{
