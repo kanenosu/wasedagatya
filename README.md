@@ -20,6 +20,8 @@ https://kanenosu.github.io/wasedagatya/
 | `js/data/companies.js` | 内定先の実在企業名（業界×ランク） | 企業を足すならここ |
 | `js/data/background.js` | 背景（内部進学・指定校・1浪・地元が東京・上京・実家が遠い・仕送りなし・帰国子女）が初期ステータスとフラグに効く。学生証にタグを出す | 背景の補正 |
 | `js/data/setup.js` | 学部、入試方式、住まい、仕送り、第二外国語、高校時代 | 入学ガチャの中身や出やすさ |
+| `js/data/circles-official.js` | 早稲田大学公認サークルガイド（早稲田ウィークリー）の全団体（2026年10月取得、約430）と、公式ジャンル→ゲーム分類の対応 | 公式の団体名・一言 |
+| `js/data/circles-merge.js` | 公式一覧を CIRCLES に統合。手書き団体は公式名に揃え、公式に無いものは外す。体育会は circles.js のまま | 分類の表示名、デフォルトの補正 |
 | `js/data/circles.js` | サークル一覧（テニサー、ダンス、文化系、体育会、界隈など）と看板イベント | サークルの追加・修正 |
 | `js/data/professors.js` | 教授ガチャの種類 | 試験の難しさ |
 | `js/data/happenings.js` | レアハプニング（R・SR・SSR） | レアな出来事 |

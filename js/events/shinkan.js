@@ -1,7 +1,7 @@
-/* 新歓：5枚のビラを順番に見て、1枚ずつ「入る／入らない」だけを決める。掛け持ちは2つまで（金がかかる）。
+/* 新歓：7枚のビラを順番に見て、1枚ずつ「入る／入らない」だけを決める。掛け持ちは2つまで（金がかかる）。
    「ビラを捨てて終わり」の選択肢は無い（間違えて未所属になるのを防ぐ）。入らなかった人は秋新歓や友達の紹介で途中加入できる */
 function flyerList(){
-  const cats=CATS.map(c=>c.id).sort(()=>Math.random()-.5).slice(0,5);
+  const cats=CATS.map(c=>c.id).sort(()=>Math.random()-.5).slice(0,7);
   const out=[];
   for(const cat of cats){
     const pool=CIRCLES.filter(c=>c.cat===cat&&(!c.only||c.only(S.fac))&&(!c.sex||S.sex===c.sex)&&!out.includes(c.id));
@@ -23,12 +23,12 @@ function joinFromFlyer(c){
 }
 EV.shinkan={title:"新歓期",text:s=>`4月のキャンパスはビラと勧誘の嵐。気づけば両手にビラが${ri(40,120)}枚。気になった団体の新歓に、順番に顔を出してみる。`,
  choices:[
-  {label:"ビラをもらいに行く",sub:"5つの団体に順番に声をかけられる。1つずつ、入るか入らないか決める",ok:{t:"ビラの山から、いくつかを手に取った。",d:{jin:2},f:s=>{s.flyers=flyerList();s.flyEnd=0;s._after=()=>s.today.unshift(EV.flyer)}}},
+  {label:"ビラをもらいに行く",sub:"7つの団体に順番に声をかけられる。1つずつ、入るか入らないか決める",ok:{t:"ビラの山から、いくつかを手に取った。",d:{jin:2},f:s=>{s.flyers=flyerList();s.flyEnd=0;s._after=()=>s.today.unshift(EV.flyer)}}},
   {label:"ビラを全部断る",sub:"サークルに入らない（途中から入ることはできる）",ok:{t:"新歓期が終わると、教室で話す相手がいないことに気づいた。",d:{men:-5,gaku:6},f:s=>{s.circle=null;s.flyers=[]}}},
  ]};
 EV.flyer={when:s=>{if(s.flyDone){s.flyers.shift();s.flyDone=0}return !!curFly()},
  title:s=>curFly().n,
- text:s=>{const c=curFly(),n=s.flyers.length;return `【${CAT_N(c.cat)}】「${c.n}です！ 新歓やってます！」${c.t?` ${c.t}。`:""}${s.circle?` 今は${s.circle.n}${s.circle2?`と${s.circle2.n}`:""}に入っている。`:""}${n>1?`（${6-n}枚目／5枚。あと${n-1}枚）`:"（最後の1枚）"}`},
+ text:s=>{const c=curFly(),n=s.flyers.length;return `【${CAT_N(c.cat)}】「${c.n}です！ 新歓やってます！」${c.t?` ${c.t}。`:""}${s.circle?` 今は${s.circle.n}${s.circle2?`と${s.circle2.n}`:""}に入っている。`:""}${n>1?`（${8-n}枚目／7枚。あと${n-1}枚）`:"（最後の1枚）"}`},
  choices:s=>{const c=curFly();const full=s.circle&&s.circle2;const isTai=c.cat==="tai";return[
   ...(full?[{label:"もう2つ入っている",sub:"掛け持ちは2つまで",ok:{t:"丁重に断った。",d:{},f:s=>nextFlyer()}}]:
    isTai?[{label:s.circle?"掛け持ちで入部する":"入部する",sub:"体力勝負",chance:s=>pc(s.s.tai,c.diff||60),ok:{t:"",d:{},f:s=>{joinFromFlyer(c);s._txt=`${c.n}に入部した。${c.t}。朝練の生活が始まる。`;nextFlyer()}},ng:{t:"",d:{men:-4},f:s=>{s._txt=`${c.n}の練習に参加したが、レベルが違いすぎた。入部は見送った。`;nextFlyer()}}}]:
