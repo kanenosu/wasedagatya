@@ -15,7 +15,10 @@ function renderRecap(){
   if(S.flags.partner)verdicts.push(`${PN("lover")}と付き合っている。`);
   if(S.s.men<30)verdicts.push("心が疲れている。無理をしないこと。");
   if(S.s.jin<25)verdicts.push("人とのつながりが薄くなっている。");
-  if(!verdicts.length)verdicts.push("可もなく不可もなく。それも大学生活だ。");
+  if(typeof kyara==="function"&&kyara()==="ぼっち")verdicts.push("今年、大学で名前を呼ばれた回数は数えられる。「充実」という言葉は使わないでおく。");
+  if(!S.circle&&!S.flags.partner&&!S.flags.job&&S.s.jin<35)verdicts.push("授業に出て、帰った。それを200日。");
+  if(S.s.men<30&&S.s.jin>=50)verdicts.push("周りには人がいる。それでも、こんなに疲れている。");
+  if(!verdicts.length)verdicts.push(S.s.jin>=40?"可もなく不可もなく。それも大学生活だ。":"可もなく不可もなく。誰も見ていない1年だった。");
   const y=ys.ay+1;
   showPanel(`<section class="card event recap">
     <span class="eyebrow">${fmtLong(S.date)}・年度末</span>
