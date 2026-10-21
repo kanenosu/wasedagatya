@@ -152,7 +152,7 @@ function tick(){
   if(S.susp>0){S.susp--;if(S.susp===0){feed("停学が明けた。",null,"sys");refreshHud()}return}
   if(S.skip>0){S.skip--;if(S.skip===0)feed("退院した。",null,"sys");return}
   if(m===3&&day===31&&!S.ending&&!S.busy){S.busy=true;stop();renderRecap();return}
-  if(Math.random()<.012)return rare();
+  if(Math.random()<.005)return rare();
   if(Math.random()<.12)flow();
   if(S.s.men<=0){S.ending={type:"kyugaku"};stop();return renderEnd()}
 }
@@ -173,7 +173,7 @@ function flow(){
   refreshHud();
 }
 function rare(){
-  const rar=wpick([{r:"R",w:70},{r:"SR",w:25},{r:"SSR",w:5}]).r,h=pick(HAPPEN[rar]);
+  const rar=wpick([{r:"R",w:70},{r:"SR",w:25},{r:"SSR",w:5}]).r,pool=HAPPEN[rar].filter(h=>!h[3]||h[3](S)),h=pick(pool.length?pool:HAPPEN[rar]);
   if(h[2])h[2](S);
   const ds=applyD(h[1]);
   sfx(rar==="R"?"coin":"rare");

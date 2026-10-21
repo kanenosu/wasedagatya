@@ -27,6 +27,6 @@ function kanbuGacha(){
   else{S.post=r.n;S._txt=`${S.circle.n}の${r.n}になった。就活で話せる肩書きができた。`;applyD(r.d);log(`${S.circle.n}の${r.n}に就任`)}
 }
 function happening(){
-  const rar=wpick(RARITY).r,h=pick(HAPPEN[rar]);
+  const rar=wpick(RARITY).r,hp=HAPPEN[rar].filter(h=>!h[3]||h[3](S)),h=pick(hp.length?hp:HAPPEN[rar]);
   S._rar=rar;S._txt=h[0];S._hd=h[1];if(h[2])h[2](S);
 }
