@@ -13,7 +13,7 @@ function kyara(s){
 function socialMonthly(){
   const md={};
   if(!S.circle){
-    const cap=35+(S.flags.partner?8:0)+(S.flags.job?5:0)+(S.zemi&&S.zemi!=="なし"?7:0);
+    const cap=35+(S.flags.partner?8:0)+(S.flags.job?5:0)+(S.zemi&&S.zemi!=="なし"?7:0)+(S.flags.naibu?10:0)+(S.flags.jimoto===2?8:S.flags.jimoto?4:0);
     if(S.s.jin>cap)md.jin=-3;
     if(S.s.com>45&&!S.flags.partner&&!S.flags.job)md.com=-1;
   }else{

@@ -144,6 +144,7 @@ function renderGacha(){
    <div class="setup-row">
     <label for="facsel">学部（ここだけは自分で選べる）</label>
     <div class="nm-row"><select id="facsel">${FACS.map((f,i)=>`<option value="${i}" ${f===S.fac?"selected":""}>${f.n}（${f.c}）</option>`).join("")}</select></div>
+    <p class="muted bgline" style="margin:0;font-size:13px">背景：${(S.bg||[]).length?S.bg.map(esc).join("・"):"特になし"}（初期ステータスに効く）</p>
     <p class="muted" style="margin:0;font-size:13px" id="facnote">${S.dept?`学科・学系：${esc(S.dept.n)}`:"学科はなし。"}　学部を変えると学科と最寄り駅も引き直す。</p>
    </div>
    <div class="setup-row">

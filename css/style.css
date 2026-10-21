@@ -484,3 +484,7 @@ html.hud-off .mini{display:flex}
 .kyara{display:inline-block;font-size:11px;letter-spacing:.08em;border:1px solid var(--line);border-radius:4px;padding:1px 7px;margin:2px 0 6px;color:var(--muted)}
 .kyara.in{border-color:#5B6B8E;color:#5B6B8E}
 .kyara.yo{border-color:var(--enji);color:var(--enji)}
+
+/* 学生証の背景タグ */
+.bgtags{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 6px}
+.bgtags span{font-size:10px;letter-spacing:.04em;border:1px dashed var(--line);border-radius:4px;padding:1px 6px;color:var(--muted)}

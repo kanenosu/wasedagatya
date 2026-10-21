@@ -65,7 +65,10 @@ function newRun(){
   for(const m of [fac.m,route.m,home.m,area.m||{},past.m])for(const k in m)s[k]=clamp(s[k]+m[k],0,100);
   const sex=pick(["m","f"]);
   const BD={m:ri(1,12),d:ri(1,28)},RONIN=route.n==="一般選抜"&&Math.random()<.3?1:0,BY=BASE_Y-18-RONIN-(BD.m>=4&&!(BD.m===4&&BD.d===1)?1:0);
-  S={flyers:[],s0:{...s},n:meta.runs,fac,dept,track:null,lab:null,route,home,area,wealth,lang,past,brain,school,s,kane:wealth.kane+ri(0,10),flagsInit:1,cr:0,gp:0,gu:0,ay:0,T:0,mod:0,flags:{first:Math.random()<.65?1:0},circle:null,circle2:null,post:null,zemi:null,job:null,ending:null,log:[],feed:[],sched:[],today:[],prof:PROFS[4],date:new Date(BASE_Y,2,31),busy:false,recent:[],
+  // 背景（出身・住まい・入試・実家）が初期ステータスとフラグに効く
+  const bg=bgCompute({fac,route,home,area,school,wealth,past,lang,ronin:RONIN});
+  for(const k in bg.m)if(k in s)s[k]=clamp(s[k]+bg.m[k],0,100);
+  S={flyers:[],s0:{...s},n:meta.runs,fac,dept,track:null,lab:null,route,home,area,wealth,lang,past,brain,school,s,kane:wealth.kane+ri(0,10)+(bg.m.kane||0),flagsInit:1,cr:0,gp:0,gu:0,ay:0,T:0,mod:0,flags:{first:Math.random()<.65?1:0,...bg.flags},bg:bg.tags,circle:null,circle2:null,post:null,zemi:null,job:null,ending:null,log:[],feed:[],sched:[],today:[],prof:PROFS[4],date:new Date(BASE_Y,2,31),busy:false,recent:[],
     name:pick(SEI)+" "+pick(MEI),sid:`1${"ABCDEFGHJKLMN"[FACS.indexOf(fac)]}${String(BASE_Y%100)}${ri(1000,9999)}-${ri(0,9)}`,face:newFace(sex),diff:"normal",sex,susp:0,people:null,ys:null,bd:BD,by:BY,ronin:RONIN,passed:[],retake:[],failedEl:[],freeN:0,tt:[],pending:null,pol:"bal",crisis:{},skip:0,teT:ri(0,1),grades:[]};
   renderGacha();
 }
