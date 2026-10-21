@@ -479,3 +479,8 @@ html.hud-off .mini{display:flex}
 .endov.adscene .btn{background:#8C1D32;color:#FFFFFF}
 .endov.adscene .btn.ghost{background:transparent;color:#8C1D32;border:1.5px solid #8C1D32}
 @media (max-width:560px){.ad{grid-template-columns:1fr}.ad-cover img{max-height:46vh;object-fit:contain;background:#1a1013}.ad-name{font-size:30px}}
+
+/* 学生証のキャラ表示 */
+.kyara{display:inline-block;font-size:11px;letter-spacing:.08em;border:1px solid var(--line);border-radius:4px;padding:1px 7px;margin:2px 0 6px;color:var(--muted)}
+.kyara.in{border-color:#5B6B8E;color:#5B6B8E}
+.kyara.yo{border-color:var(--enji);color:var(--enji)}

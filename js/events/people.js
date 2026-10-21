@@ -40,7 +40,7 @@ POOL.push(
    {label:"付き合う",req:{tai:15},ok:{t:s=>`${PN("senpai")}の話は、2年後の自分の予習になった。`,d:{jin:4,gk:3,tai:-3}}},
    {label:"課題があると断る",ok:{t:"「真面目だな」と笑われた。",d:{jin:-2,gaku:2}}},
   ]},
- {w:3,terms:[1,3],title:s=>`${PN("senpai")}の卒業`,text:s=>`${PF("senpai")}が卒業する。最後にサークルの部室で飲み会がある。`,
+ {w:3,terms:[1,3],title:s=>`${PN("senpai")}の卒業`,text:s=>`${PF("senpai")}が卒業する。最後に${s.circle?"サークルの部室":"馬場の居酒屋"}で飲み会がある。`,
   choices:[
    {label:"手紙を書いて渡す",ok:{t:s=>`${PN("senpai")}は読みながら泣いていた。「困ったら連絡しろ」と言われた。`,d:{jin:6,men:5},f:s=>s.flags.ob=1}},
    {label:"普通に参加する",ok:{t:"胴上げして見送った。",d:{jin:3,men:2}}},
