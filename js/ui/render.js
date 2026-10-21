@@ -147,8 +147,8 @@ function renderGacha(){
     <p class="muted" style="margin:0;font-size:13px" id="facnote">${S.dept?`学科・学系：${esc(S.dept.n)}`:"学科はなし。"}　学部を変えると学科と最寄り駅も引き直す。</p>
    </div>
    <div class="setup-row">
-    <span class="lbl">性別（昂揚会など、入会条件がある団体の判定にだけ使う）</span>
-    <div class="sex-row">${[["m","男性"],["f","女性"],["x","答えない"]].map(([k,l])=>`<button class="kw sx" data-sx="${k}" aria-pressed="${S.sex===k}">${l}</button>`).join("")}</div>
+    <span class="lbl">性別（顔と、昂揚会・女声合唱団など入会条件がある団体の判定に使う）</span>
+    <div class="sex-row">${[["m","男性"],["f","女性"]].map(([k,l])=>`<button class="kw sx" data-sx="${k}" aria-pressed="${S.sex===k}">${l}</button>`).join("")}</div>
     <p class="muted" style="margin:0;font-size:13px">${S.ronin?"1浪して入学。":"現役で入学。"}20歳になるまで酒とタバコは違法だ。</p>
    </div>
    <div id="idprev"></div>
@@ -164,7 +164,7 @@ function renderGacha(){
   reveal();
   $("#nm").oninput=e=>{S.name=e.target.value.trim()||"名無し";prev()};
   $("#nmr").onclick=()=>{S.name=pick(SEI)+" "+pick(MEI);$("#nm").value=S.name;prev()};
-  $("#fcr").onclick=()=>{S.face=newFace();prev()};
+  $("#fcr").onclick=()=>{S.face=newFace(S.sex);prev()};
   $("#facsel").onchange=e=>{
     changeFac(FACS[+e.target.value]);sfx("stop");
     const s0=$("#sl0"),s3=$("#sl3");
@@ -173,7 +173,7 @@ function renderGacha(){
     $("#facnote").textContent=(S.dept?`学科・学系：${S.dept.n}`:"学科はなし。")+"　学部を変えると学科と最寄り駅も引き直す。";
     prev();
   };
-  app.querySelectorAll(".sx").forEach(b=>b.onclick=()=>{S.sex=b.dataset.sx;app.querySelectorAll(".sx").forEach(x=>x.setAttribute("aria-pressed",x===b))});
+  app.querySelectorAll(".sx").forEach(b=>b.onclick=()=>{S.sex=b.dataset.sx;S.face=newFace(S.sex);app.querySelectorAll(".sx").forEach(x=>x.setAttribute("aria-pressed",x===b));prev()});
   $("#enter").onclick=()=>{startLife();scrollTop()};
   $("#reroll").onclick=()=>{meta.runs--;save(meta);newRun()};
 }
