@@ -1,12 +1,14 @@
 /* 新歓：7枚のビラを順番に見て、1枚ずつ「入る／入らない」だけを決める。掛け持ちは2つまで（金がかかる）。
    「ビラを捨てて終わり」の選択肢は無い（間違えて未所属になるのを防ぐ）。入らなかった人は秋新歓や友達の紹介で途中加入できる */
+/* 4つのジャンルから7枚（2・2・2・1）。同じジャンルの中では規模の大きい団体ほど出やすい（w は所属人数から）。体育会のビラは少なめ */
+const CAT_FLYER_W={tennis:3,sports:3,dance:2,music:2,art:2,bunka:2,unei:2,intl:1.5,tech:1.5,kai:1,tai:1};
 function flyerList(){
-  const cats=CATS.map(c=>c.id).sort(()=>Math.random()-.5).slice(0,7);
-  const out=[];
-  for(const cat of cats){
-    const pool=CIRCLES.filter(c=>c.cat===cat&&(!c.only||c.only(S.fac))&&(!c.sex||S.sex===c.sex)&&!out.includes(c.id));
-    if(pool.length)out.push(wpick(pool).id);
-  }
+  const cats=[];const pool0=CATS.map(c=>({id:c.id,w:CAT_FLYER_W[c.id]||1}));
+  while(cats.length<4&&pool0.length){const c=wpick(pool0);cats.push(c.id);pool0.splice(pool0.indexOf(c),1)}
+  const out=[];const per=[2,2,2,1];
+  cats.forEach((cat,i)=>{for(let k=0;k<per[i];k++){const pool=CIRCLES.filter(c=>c.cat===cat&&(!c.only||c.only(S.fac))&&(!c.sex||S.sex===c.sex)&&!out.includes(c.id));if(pool.length)out.push(wpick(pool).id)}});
+  // 足りなければ他ジャンルから補う
+  let guard=0;while(out.length<7&&guard++<20){const pool=CIRCLES.filter(c=>c.cat!=="tai"&&(!c.only||c.only(S.fac))&&(!c.sex||S.sex===c.sex)&&!out.includes(c.id));if(!pool.length)break;out.push(wpick(pool).id)}
   return out.sort(()=>Math.random()-.5);
 }
 const CAT_N=id=>(CATS.find(c=>c.id===id)||{}).n||"";

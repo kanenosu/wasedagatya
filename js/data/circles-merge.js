@@ -43,3 +43,10 @@ for(const c of CATS){
   if(c.id==="intl"){c.n="国際交流・ボランティア";c.sub="AIESEC、模擬国連、子ども会、海外支援"}
   if(c.id==="tech"){c.n="学術・研究系";c.sub="法律サークル、政治・経済、歴史・哲学、理工の研究会"}
 }
+/* 所属人数（circles-size.js）→ 出やすさ。人数が多い団体ほどビラが来る。手書きの体育会は人数の目安を入れている */
+if(typeof CIRCLE_SIZE!=="undefined"){
+  for(const c of CIRCLES){
+    const n=c.oid?CIRCLE_SIZE[c.oid]:null;
+    if(n){c.size=n;c.w=Math.max(.4,Math.min(7,n/35));if(c.cat==="kai"&&/稲門会/.test(c.n))c.w=Math.min(c.w,.5)}
+  }
+}
