@@ -30,8 +30,13 @@ function planTerm(T){
   const used=new Set();
   // 毎学期ひとつは「闇」側の出来事を混ぜる
   const darkPool=cand.filter(e=>e.dark);
+  // サークルにいると酒の出来事が身近になる：毎学期1本は確実、もう1本も半々、残りも出やすい（sake は sake.js で付ける）
+  const sakePool=()=>cand.filter(e=>e.sake&&(!e.when||e.when(S)));
+  const sakeN=S.circle?(Math.random()<.5?2:1):0;
+  const pickW=list=>wpick(list.map(e=>({e,w:(e.w||1)*(e.sake&&S.circle?2:1)}))).e;
   for(let i=0;i<n&&cand.length;i++){
-    const e=(i===0&&T>=1&&darkPool.length)?wpick(darkPool):wpick(cand);cand.splice(cand.indexOf(e),1);
+    const sp=sakePool();
+    const e=(i===0&&T>=1&&darkPool.length)?wpick(darkPool):(i>=1&&i<=sakeN&&sp.length)?wpick(sp):pickW(cand);cand.splice(cand.indexOf(e),1);
     let dt;do{dt=even?dateIn(T,ri(4,7),ri(1,28)):dateIn(T,pick([10,11,12,1]),ri(1,28))}while(used.has(dkey(dt))||(even&&dt.getMonth()+1===4&&dt.getDate()<12)||(!even&&dt.getMonth()+1===1&&dt.getDate()>20));
     used.add(dkey(dt));items.push({k:dkey(dt),ev:e});
   }
