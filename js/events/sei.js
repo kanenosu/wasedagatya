@@ -1,0 +1,106 @@
+/* 性と恋愛の生々しい側、性被害、性加害。
+   方針：行為そのものは描写しない。被害側は、相談する選択が必ず報われ、相談先を本文に出す。
+   加害側は「線を越えるか」を問い、越えた先は必ず通報・退学・逮捕で終わる（描写はしない、美化しない）。
+   相談先：性犯罪・性暴力被害者のためのワンストップ支援センター #8891、警察相談 #9110、早稲田大学ハラスメント防止委員会 */
+const SEI_HELP="性暴力の相談：ワンストップ支援センター #8891（24時間）／警察相談 #9110／大学のハラスメント防止委員会";
+POOL.push(
+ // ===== 被害 =====
+ {w:2,terms:[0,9],when:s=>!s.flags.chikan,title:"満員電車",text:s=>`朝の${s.area.line}。満員電車で、後ろから手が触れた。偶然ではなかった。動けない。`,
+  choices:[
+   {label:"声を上げる",req:{men:25},chance:s=>pc(s.s.com,45),ok:{t:"「やめてください」。周りが振り向いた。相手は次の駅で逃げた。駅員に話し、被害届を出した。",d:{men:-6,gk:1},f:s=>s.flags.chikan=1}},
+   {label:"次の駅で降りる",ok:{t:"降りた。ホームで座り込んだ。1限は行けなかった。その路線に乗るたび、同じ車両を避けるようになった。",d:{men:-10,tai:-2},f:s=>s.flags.chikan=1}},
+   {label:"大学の相談窓口に話す",ok:{t:`学生生活課で話した。警察への付き添いも、カウンセラーの予約も、その場でつながった。\n（${SEI_HELP}）`,d:{men:-4},f:s=>{s.flags.chikan=1;s.flags.counsel=1}}},
+  ]},
+ {w:2,terms:[0,9],when:s=>!!s.circle&&!s.flags.seiHarass,title:"先輩の『相談』",text:s=>`${s.circle.n}の${PF("senpai")}に「2人で相談がある」と呼ばれた。居酒屋の個室。相談ではなかった。体に触れられ、「嫌なら辞めればいい」と言われた。`,
+  choices:[
+   {label:"その場で帰る",ok:{t:"帰った。翌日、先輩は何もなかった顔をしていた。自分だけが部室に行けなくなった。",d:{men:-10,jin:-3},f:s=>s.flags.seiHarass=1}},
+   {label:"ハラスメント防止委員会に申し立てる",ok:{t:`申し立てた。聞き取りに2か月かかった。先輩は活動停止になり、自分は「告げ口した側」として一部に扱われた。それでも、正しかった。\n（${SEI_HELP}）`,d:{men:-6,jin:-4,gk:2},f:s=>{s.flags.seiHarass=1;s.flags.counsel=1}}},
+   {label:"誰にも言わない",ok:{t:"言わなかった。先輩は次の1年生にも同じことをした。知ったのは1年後だった。",d:{men:-14},f:s=>{s.flags.seiHarass=1;later(ri(200,400),"seiHarassNext")}}},
+  ]},
+ {w:2,terms:[1,9],when:s=>s.flags.partner&&!s.flags.dv,title:"恋人の手",text:s=>`${PN("lover")}と口論になった。壁に押しつけられて、腕をつかまれた。あとで「ごめん、もうしない」と泣かれた。痣は1週間残った。`,
+  choices:[
+   {label:"別れる",ok:{t:"",d:{men:-12},f:s=>{s.flags.partner=0;s.flags.dv=1;s._txt="別れた。「変わるから」というLINEが30件来た。ブロックした。正しい判断だと分かるまで、3か月かかった。"}}},
+   {label:"許す",ok:{t:"許した。2か月後、また同じことが起きた。「もうしない」も同じだった。",d:{men:-10},f:s=>{s.flags.dv=1;later(ri(60,120),"dvAgain")}}},
+   {label:"相談する",ok:{t:`大学の相談室で話した。「それはDVです」と言われて、初めて名前がついた。別れるための段取りを一緒に考えた。\n（${SEI_HELP}）`,d:{men:-6},f:s=>{s.flags.dv=1;s.flags.counsel=1;s.flags.partner=0}}},
+  ]},
+ {w:2,terms:[1,9],when:s=>s.flags.partner&&s.flags.cherry&&!s.flags.kyoyo,title:"「嫌」が通らない夜",text:s=>`${PN("lover")}の部屋。今日はそういう気分ではない、と言った。「付き合ってるんだから」と返された。言葉が終わる前に、手が伸びてきた。`,
+  choices:[
+   {label:"はっきり拒む",req:{men:20},chance:s=>pc(s.s.men,50),ok:{t:"「嫌だと言ってる」。手が止まった。気まずい夜になった。でも、止まった。",d:{men:-5}},ng:{t:"",d:{men:-18},f:s=>{s.flags.kyoyo=1;s._txt=`止まらなかった。恋人なら許されると、向こうは思っている。自分は、そう思えなくなった。\n（${SEI_HELP}）`}}},
+   {label:"諦めて流す",ok:{t:"流した。「嫌」は、言っても聞かれないなら言わなくなる。そうやって自分が削れていく。",d:{men:-14},f:s=>s.flags.kyoyo=1}},
+   {label:"部屋を出る",ok:{t:"コートを掴んで出た。深夜の駅で、相談窓口の番号を検索した。翌日、別れを切り出した。",d:{men:-10},f:s=>{s.flags.kyoyo=1;s.flags.partner=0;s.flags.counsel=1}}},
+  ]},
+ {w:1,terms:[1,9],when:s=>s.people&&s.people.ex&&s.people.ex.length&&s.flags.cherry&&!s.flags.revenge,title:"元恋人からのメッセージ",text:"元恋人から「写真、まだ持ってるから」。付き合っていたときに撮った写真のことだ。復縁しなければ、ばらまくという。",
+  choices:[
+   {label:"警察に行く",ok:{t:"リベンジポルノ防止法。警察は動いた。元恋人は書類送検され、写真は削除させられた。手は震えたが、行ってよかった。",d:{men:-8,gk:1},f:s=>s.flags.revenge=1}},
+   {label:"要求に応じる",ok:{t:"会った。「もう一度だけ」は3回続いた。写真はまだ向こうにある。",d:{men:-16},f:s=>{s.flags.revenge=1;later(ri(60,150),"revengeAgain")}}},
+   {label:"無視する",chance:()=>.6,ok:{t:"無視した。脅しだけだった。それでも、スマホが鳴るたびに体が強張る日が続いた。",d:{men:-8},f:s=>s.flags.revenge=1},ng:{t:"",d:{men:-20,jin:-10},f:s=>{s.flags.revenge=1;s._txt="ばらまかれた。サークルの全員が知った。大学と警察に行き、投稿は消えたが、見た人の記憶は消えない。"}}},
+  ]},
+ // ===== 生々しい恋愛 =====
+ {w:2,terms:[1,9],when:s=>s.flags.cherry&&!s.flags.partner&&!s.flags.sefure,title:"体だけの関係",text:s=>`${s.circle?"サークルの":"バイト先の"}知り合いと、恋人ではないまま、週に1度会うようになった。お互い「付き合ってない」と確認し合っている。`,
+  choices:[
+   {label:"続ける",ok:{t:"続けた。楽だった。相手に恋人ができた日、自分だけが傷ついた。",d:{men:-6,jin:1},f:s=>{s.flags.sefure=1;later(ri(90,200),"sefureEnd")}}},
+   {label:"ちゃんと付き合いたいと言う",chance:()=>.4,ok:{t:"「いいよ」。関係に名前がついた。",d:{men:8},f:s=>{s.flags.partner=1;s.flags.partnerT=s.T}},ng:{t:"「そういうのじゃない」。それきり、会わなくなった。",d:{men:-10}}},
+   {label:"終わらせる",ok:{t:"終わらせた。寂しさと、自分を取り戻した感じが半々だった。",d:{men:-2}}},
+  ]},
+ {w:2,terms:[1,9],when:s=>s.flags.cherry,title:"検査結果",text:"下腹部の違和感が続いて、クリニックに行った。性感染症の検査。結果は1週間後。",
+  choices:[
+   {label:"結果を聞きに行く",chance:()=>.6,ok:{t:"陰性だった。待合室の1週間が、人生で一番長かった。",d:{men:3}},ng:{t:s=>`陽性。クラミジア。薬で治るが、相手に伝えないといけない。${s.flags.partner?PN("lover")+"に話した。":"元相手に連絡した。"}「え？」の沈黙が長かった。`,d:{men:-10,kane:-0.6,tai:-2}}},
+   {label:"行かない",ok:{t:"行かなかった。症状は消えた。消えただけで、治ったかは分からない。",d:{men:-5,tai:-3}}},
+  ]},
+ {w:1,terms:[1,9],when:s=>s.flags.cherry&&(s.flags.partner||s.flags.sefure),title:"検査薬",text:s=>`${s.sex==="f"?"生理が2週間遅れている。":`${PN("lover")}から「生理が来ない」と連絡が来た。`}ドラッグストアで検査薬を買った。レジで目を合わせられなかった。`,
+  choices:[
+   {label:"2人で結果を見る",chance:()=>.7,ok:{t:"陰性。2人で床に座り込んだ。その夜、初めて避妊の話をちゃんとした。",d:{men:-4,jin:2}},ng:{t:s=>`陽性。産婦人科、親、お金、学業。全部が一度に来た。${s.flags.partner?"2人で":"1人で"}決めることになった。`,d:{men:-18,kane:-3},f:s=>{s.flags.ninshin=1;later(45,"ninshinAfter")}}},
+   {label:"1人で見る",chance:()=>.7,ok:{t:"陰性。誰にも言わなかった。言わなくてよかった、と言い聞かせた。",d:{men:-6}},ng:{t:"陽性。1人で産婦人科を調べた。相手には、まだ言えていない。",d:{men:-20,kane:-3},f:s=>{s.flags.ninshin=1;later(45,"ninshinAfter")}}},
+  ]},
+ {w:1,terms:[2,9],when:s=>!s.flags.partner&&s.flags.cherry&&!s.flags.kikon,title:"指輪",text:"バイト先の常連と飲みに行くようになった。3回目で、相手の左手に指輪の跡があるのに気づいた。向こうは隠さなくなった。",
+  choices:[
+   {label:"続ける",ok:{t:"続けた。「離婚する」は半年言われ続けた。配偶者から内容証明が届いたのは、1年後だった。",d:{men:-6,kane:-5},f:s=>{s.flags.kikon=1;later(ri(200,360),"kikonEnd")}}},
+   {label:"終わらせる",ok:{t:"終わらせた。向こうは「大人になれよ」と言った。大人になりたくないと思った。",d:{men:-5},f:s=>s.flags.kikon=1}},
+  ]},
+ // ===== 加害側：線を越えるか =====
+ {w:2,terms:[1,9],when:s=>adult()&&!s.flags.doi,title:"酔った相手",text:s=>`飲み会のあと、${s.circle?"サークルの":"知り合いの"}相手を家まで送った。相手は歩けないほど酔っている。部屋に入って、ベッドに寝かせた。向こうは目を閉じている。`,
+  choices:[
+   {label:"水を置いて帰る",ok:{t:"水を置いて、鍵をかけて帰った。翌日「ありがとう、何もなかったよね」と来た。「何もなかった」と返せる自分でよかった。",d:{men:3,jin:2},f:s=>s.flags.doi=1}},
+   {label:"同意がないなら、何もしない",ok:{t:"そもそも、同意できる状態じゃない。帰った。当たり前のことを、当たり前にやった。",d:{men:2},f:s=>s.flags.doi=1}},
+   {label:"「嫌がってないから」と考える",ok:{t:"",d:{},f:s=>{s.flags.doi=1;s.ending={type:"kagai"};s._txt="それは同意ではない。1週間後、相手は警察と大学に行った。学生生活課からの呼び出し、事情聴取、そして退学処分。自分がしたことに、言い訳の余地はなかった。"}}},
+  ]},
+ {w:2,terms:[1,9],when:s=>s.people&&s.people.ex&&s.people.ex.length&&!s.flags.stalkSelf,title:"元恋人の家の前",text:s=>`別れて1か月。${s.people.ex[s.people.ex.length-1].n}のことが頭から離れない。気づいたら、家の前にいた。灯りがついている。`,
+  choices:[
+   {label:"帰る",ok:{t:"帰った。帰る途中で、自分が何をしていたのか分かって怖くなった。番号を消した。",d:{men:-4},f:s=>s.flags.stalkSelf=1}},
+   {label:"友達に電話する",req:{jin:20},ok:{t:s=>`${PF("friend")}に電話した。「今すぐそこを離れろ」。離れた。翌日、保健センターに行った。`,d:{men:-2,jin:2},f:s=>{s.flags.stalkSelf=1;s.flags.counsel=1}}},
+   {label:"インターホンを押す",ok:{t:"押した。出なかった。翌日も行った。1週間後、警察から電話が来た。ストーカー規制法の警告。大学にも連絡が行き、サークルは除名になった。",d:{men:-15,jin:-15},f:s=>{s.flags.stalkSelf=1;s.flags.warn=(s.flags.warn||0)+1;if(s.circle){log(`${s.circle.n}を除名`);s.circle=null;s.post=null}later(60,"stalkSelfAfter")}}},
+  ]},
+ {w:2,terms:[0,9],when:s=>!s.flags.partner&&!s.flags.shitsukoi,title:"既読がつかない相手に",text:"気になっている人にLINEを送った。既読がつかない。もう一度送った。3回目を打ちかけている。",
+  choices:[
+   {label:"送らない",ok:{t:"送らなかった。既読は3日後についた。返事はなかった。それが返事だった。",d:{men:-4},f:s=>s.flags.shitsukoi=1}},
+   {label:"送る",chance:()=>.5,ok:{t:"「ごめん忙しくて」。それ以上は続かなかった。",d:{men:-3},f:s=>s.flags.shitsukoi=1},ng:{t:"5通目で「怖い」と言われた。共通の友達から「やめなよ」と連絡が来た。やめた。やめられたのは、言われたからだ。",d:{men:-8,jin:-5},f:s=>s.flags.shitsukoi=1}},
+  ]},
+);
+LATER.seiHarassNext=s=>({t:s.circle?`${s.circle.n}の1年生が、あの先輩に同じことをされたと聞いた。あのとき言っていれば、と考えてしまう。`:"あの先輩が、新しい1年生に同じことをしたと聞いた。",d:{men:-8}});
+LATER.dvAgain=s=>s.flags.partner?{ev:{title:"2回目",text:`${PN("lover")}が、また手を上げた。今度は「お前が怒らせた」と言った。`,choices:[
+  {label:"今度こそ別れる",ok:{t:"",d:{men:-10},f:s=>{s.flags.partner=0;s._txt="別れた。友達の家に泊まり、連絡先を全部ブロックした。1か月後、ようやく眠れるようになった。"}}},
+  {label:"相談する",ok:{t:`相談室で話した。「あなたのせいではない」。別れるための計画を立て、警察にも相談記録を残した。\n（${SEI_HELP}）`,d:{men:-5},f:s=>{s.flags.partner=0;s.flags.counsel=1}}},
+  {label:"まだ耐える",ok:{t:"耐えた。耐えるほど、出口が見えなくなる。",d:{men:-14}}},
+ ]}}:null;
+LATER.revengeAgain=s=>({t:"元恋人からまた連絡。「会わないなら送る」。今度は警察に行った。もっと早く行けばよかった。",d:{men:-6}});
+LATER.sefureEnd=s=>({t:"週1で会っていた相手から「彼氏（彼女）できたから」。名前のなかった関係は、名前のないまま終わった。",d:{men:-6},f:s=>s.flags.sefure=0});
+LATER.ninshinAfter=s=>({ev:{title:"決めなければいけない",text:"産婦人科。選択肢は2つ。どちらも、20歳の自分には重すぎる。親に言うかどうかも、まだ決めていない。",choices:[
+  {label:"親に話す",ok:{t:"親は怒らなかった。泣いた。一緒に病院に行った。決めたことは、ここには書かない。",d:{men:-8,kane:-5},f:s=>s.flags.ninshin=0}},
+  {label:"2人で決める",ok:{t:"2人で決めた。決めたあと、2人の関係は少し変わった。良いか悪いかは、まだ分からない。",d:{men:-8,kane:-8},f:s=>s.flags.ninshin=0}},
+  {label:"相談窓口に行く",ok:{t:"大学の保健センターから、専門の相談窓口につないでもらった。1人で抱えなくていい、と初めて思えた。",d:{men:-4,kane:-3},f:s=>{s.flags.ninshin=0;s.flags.counsel=1}}},
+ ]}});
+LATER.kikonEnd=s=>({t:"配偶者から内容証明。慰謝料の請求。親に話し、弁護士に相談した。大学の掲示板に、匿名で書かれた。",d:{men:-12,kane:-10,jin:-6},f:s=>s.flags.kikon=2});
+LATER.stalkSelfAfter=s=>({t:"警察の警告から2か月。元恋人の名前を、まだ検索してしまう。保健センターの予約を取った。",d:{men:-3},f:s=>s.flags.counsel=1});
+Object.assign(ENDINGS,{kagai:{title:"加害者になった人",head:"性暴力の加害で通報され、退学処分になった",out:"退学（性暴力加害）",rank:"E"}});
+const _epilogueSei=epilogue;
+epilogue=function(){if(S.ending.type==="kagai")return "退学後、示談と裁判が1年続いた。相手の人生を壊したことは、何年経っても消えない。大学の友達とは、全員と縁が切れた。";return _epilogueSei()};
+LIFE_FLOW.push(
+ {c:s=>s.flags.chikan,t:"電車で、ドアの近くに立つ癖がついた。",d:{men:-1}},
+ {c:s=>s.flags.seiHarass,w:2,t:"あの先輩の名前がグループLINEに出るたび、画面を閉じる。",d:{men:-2}},
+ {c:s=>s.flags.dv,t:"大きな声を聞くと、体が先に反応する。",d:{men:-2}},
+ {c:s=>s.flags.kyoyo,t:"「嫌」と言えなかった夜のことを、誰にも話していない。",d:{men:-2}},
+ {c:s=>s.flags.revenge,t:"スマホの通知音を変えた。前の音を聞くと息が止まる。",d:{men:-1}},
+ {c:s=>s.flags.sefure,t:"週1で会う相手の、本名の漢字を知らない。",d:{}},
+ {c:s=>s.flags.kikon===2,t:"バイト先を辞めた。常連の顔を見るのが無理だった。",d:{kane:-1}},
+ {c:s=>s.flags.stalkSelf,t:"元恋人のSNSを開きそうになって、スマホを机に置いた。",d:{men:-1}},
+);
